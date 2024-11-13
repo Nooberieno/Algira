@@ -62,14 +62,3 @@
         setup_bindings(view, open_file)
     })
 </script>
-
-<div id='editor'></div>
-
-<style>
-    #editor{
-        flex-grow: 1;
-        border: none;
-        padding: 0;
-        margin: 0;
-    }
-</style>
