@@ -9,6 +9,7 @@
     import { open } from "@tauri-apps/plugin-dialog";
     import { setup_bindings } from "../utils/keybinds";
     import { change_language } from "../utils/language"
+    import { light_theme, dark_theme } from "../utils/theme";
 
     // language import for codemirror
     import { javascript } from "@codemirror/lang-javascript";
@@ -17,7 +18,8 @@
 
     let view:EditorView;
     let current_filepath: string;
-    const language_compartment: Compartment=  new Compartment;
+    const language_compartment: Compartment =  new Compartment;
+    const theme_compartment: Compartment = new Compartment;
 
     onMount(() => {
         const init_text = "console.log('Hello World!');";
@@ -28,15 +30,7 @@
                     basicSetup,
                     language_compartment.of(javascript()),
                     keymap.of(defaultKeymap),
-                    EditorView.theme({
-                        "&": {
-                            height: "100%",
-                            width: "100%"
-                        },
-                        ".cm-scroller": {
-                            overflow: "auto"
-                        }
-                    })
+                    theme_compartment.of(dark_theme)
                 ],
             }),
             parent: document.getElementById('editor')!
