@@ -1,27 +1,23 @@
 <script lang='ts'>
     import { onMount } from "svelte";
-    import { EditorState } from "@codemirror/state";
+    import { EditorState, Compartment, type Extension } from "@codemirror/state";
     import { EditorView } from "codemirror";
     import { defaultKeymap } from "@codemirror/commands";
-    import { keymap } from "@codemirror/view";
+    import { keymap, placeholder } from "@codemirror/view";
     import { basicSetup } from "codemirror";
     import { read_file } from "../utils/filesystem";
     import { open } from "@tauri-apps/plugin-dialog";
     import { setup_bindings } from "../utils/keybinds";
+    import { change_language } from "../utils/language"
 
     // language import for codemirror
     import { javascript } from "@codemirror/lang-javascript";
-    import { python } from "@codemirror/lang-python";
-    import { rust } from "@codemirror/lang-rust";
-    import { html } from "@codemirror/lang-html";
-    import { css } from "@codemirror/lang-css";
-    import { cpp } from "@codemirror/lang-cpp";
-    import { markdown } from "@codemirror/lang-markdown";
-  
   
    
 
     let view:EditorView;
+    let current_filepath: string;
+    const language_compartment: Compartment=  new Compartment;
 
     onMount(() => {
         const init_text = "console.log('Hello World!);'";
@@ -30,7 +26,7 @@
                 doc: init_text,
                 extensions: [
                     basicSetup,
-                    javascript(),
+                    language_compartment.of(javascript()),
                     keymap.of(defaultKeymap)
                 ],
             }),
@@ -45,9 +41,18 @@
             if (file_path) {
                 const text = await read_file(file_path as string);
                 if (text){
+                    current_filepath = file_path
                     view.dispatch({
                     changes: { from: 0, to: view.state.doc.length, insert: text}
                 })
+                if (current_filepath){
+                    let lang_func:Extension|null = change_language(current_filepath)
+                    if (lang_func){
+                    view.dispatch({
+                    effects: language_compartment.reconfigure(lang_func)
+            })
+            } 
+        }
                 }
             }
         }
