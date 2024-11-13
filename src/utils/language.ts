@@ -1,4 +1,4 @@
-import { javascript } from "@codemirror/lang-javascript"
+import { javascript, typescriptLanguage } from "@codemirror/lang-javascript"
 import { python } from "@codemirror/lang-python"
 import { rust } from "@codemirror/lang-rust";
 import { html } from "@codemirror/lang-html";
@@ -15,7 +15,9 @@ function get_language_by_extension (file_path: string) {
         "html": "html",
         "css": "css",
         "md": "markdown",
-        "cpp": "C++"
+        "cpp": "C++",
+        "ts": "typescript",
+        "jsx": "jsx"
     }
     const extension = file_path.split(".").pop()
     console.log(extension)
@@ -31,29 +33,25 @@ export function change_language(file_path: string){
     if (lang === null){
         return null
     }
-    let lang_func:Extension
     switch(lang){
         case "javascript":
-            lang_func = javascript()
-            return lang_func
+            return javascript()
         case "python":
-            lang_func = python()
-            return lang_func
+            return python()
         case "rust":
-            lang_func = rust()
-            return lang_func
+            return rust()
         case "html":
-            lang_func = html()
-            return lang_func
+            return html()            
         case "css": 
-            lang_func = css()
-            return lang_func
+            return css()
         case "C++":
-            lang_func = cpp()
-            return lang_func
+            return cpp()
         case "markdown":
-            lang_func = markdown()
-            return lang_func
+            return markdown()
+        case "typescript":
+            return javascript({typescript: true})
+        case "jsx":
+            return javascript({jsx: true})
     }
     return null
 }

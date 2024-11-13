@@ -20,14 +20,23 @@
     const language_compartment: Compartment=  new Compartment;
 
     onMount(() => {
-        const init_text = "console.log('Hello World!);'";
+        const init_text = "console.log('Hello World!');";
         view = new EditorView({
             state: EditorState.create({
                 doc: init_text,
                 extensions: [
                     basicSetup,
                     language_compartment.of(javascript()),
-                    keymap.of(defaultKeymap)
+                    keymap.of(defaultKeymap),
+                    EditorView.theme({
+                        "&": {
+                            height: "100%",
+                            width: "100%"
+                        },
+                        ".cm-scroller": {
+                            overflow: "auto"
+                        }
+                    })
                 ],
             }),
             parent: document.getElementById('editor')!
@@ -64,7 +73,9 @@
 
 <style>
     #editor{
-        height: 100%;
-        border: 1px solid #ccc;
+        flex-grow: 1;
+        border: none;
+        padding: 0;
+        margin: 0;
     }
 </style>
