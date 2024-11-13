@@ -3,23 +3,23 @@
     import { EditorState, Compartment, type Extension } from "@codemirror/state";
     import { EditorView } from "codemirror";
     import { defaultKeymap } from "@codemirror/commands";
-    import { keymap, placeholder } from "@codemirror/view";
+    import { keymap } from "@codemirror/view";
     import { basicSetup } from "codemirror";
-    import { read_file } from "../utils/filesystem";
+    import { read_file, stat_file, write_file } from "../utils/filesystem";
     import { open } from "@tauri-apps/plugin-dialog";
-    import { setup_bindings } from "../utils/keybinds";
+    import { open_dialog_bindings, save_existing_file } from "../utils/keybinds";
     import { change_language } from "../utils/language"
     import { light_theme, dark_theme } from "../utils/theme";
 
     // language import for codemirror
-    import { javascript } from "@codemirror/lang-javascript";
-  
+    import { javascript } from "@codemirror/lang-javascript";  
    
 
     let view:EditorView;
     let current_filepath: string;
     const language_compartment: Compartment =  new Compartment;
     const theme_compartment: Compartment = new Compartment;
+    let time:Date
 
     onMount(() => {
         const init_text = "console.log('Hello World!');";
@@ -53,12 +53,33 @@
                     if (lang_func){
                     view.dispatch({
                     effects: language_compartment.reconfigure(lang_func)
-            })
-            } 
-        }
+                            })
+                        } 
+                    }
+                    let stat = await stat_file(current_filepath as string)
+                    if (stat) {
+                        if (stat.mtime){
+                            console.log(stat.mtime)
+                            time = stat.mtime
+                        }
+                    }
                 }
             }
         }
-        setup_bindings(view, open_file)
+        open_dialog_bindings(view, open_file)
+
+        const save_file = async () => {
+            let stat = await stat_file(current_filepath as string)
+            if (stat){
+                if(stat.mtime){
+                    if (stat.mtime !== time){
+                        //TODO give a textbox asking if the user wants to override the existing file
+                    }
+                }
+                
+            }
+            write_file(current_filepath as string, view.state.doc.toString())
+        }
+        save_existing_file(view, save_file)
     })
 </script>
