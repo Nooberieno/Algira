@@ -1,6 +1,7 @@
 <script>
   import AlgiraEditor from '$lib/Editor.svelte'
   import { invoke } from '@tauri-apps/api/core';
+  import '../style/style.css'
 </script>
 
 <main>
