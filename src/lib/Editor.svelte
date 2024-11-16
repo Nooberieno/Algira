@@ -2,14 +2,15 @@
     import { onMount } from "svelte";
     import { EditorState, Compartment, type Extension } from "@codemirror/state";
     import { EditorView } from "codemirror";
-    import { defaultKeymap } from "@codemirror/commands";
+    import { indentWithTab } from "@codemirror/commands";
     import { keymap } from "@codemirror/view";
     import { basicSetup } from "codemirror";
     import { read_file, write_file } from "../utils/filesystem";
     import { open, save } from "@tauri-apps/plugin-dialog";
     import { open_dialog_bindings, save_existing_file } from "../utils/keybinds";
-    import { change_language } from "../utils/language"
-    import { light_theme, dark_theme } from "../utils/theme";  
+    import { change_language } from "../utils/language" 
+    import { autocompletion } from "@codemirror/autocomplete";
+    import { oneDark } from '@codemirror/theme-one-dark'
    
 
     let view:EditorView;
@@ -25,8 +26,9 @@
                 extensions: [
                     basicSetup,
                     language_compartment.of([]),
-                    keymap.of(defaultKeymap),
-                    theme_compartment.of(dark_theme)
+                    keymap.of([indentWithTab]),
+                    autocompletion(),
+                    theme_compartment.of(oneDark),
                 ],
             }),
             parent: document.getElementById('editor')!

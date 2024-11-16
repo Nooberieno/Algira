@@ -1,11 +1,10 @@
-import { javascript, typescriptLanguage } from "@codemirror/lang-javascript"
+import { javascript } from "@codemirror/lang-javascript"
 import { python } from "@codemirror/lang-python"
 import { rust } from "@codemirror/lang-rust";
 import { html } from "@codemirror/lang-html";
 import { css } from "@codemirror/lang-css";
 import { cpp } from "@codemirror/lang-cpp";
 import { markdown } from "@codemirror/lang-markdown";
-import type { Extension } from "@codemirror/state";
 
 function get_language_by_extension (file_path: string) {
     const extension_map: { [key: string]: string } = {

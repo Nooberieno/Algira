@@ -1,4 +1,4 @@
-import { readTextFile, stat, writeTextFile } from "@tauri-apps/plugin-fs";
+import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 
 export const read_file = async (file_path: string) => {
     try {
