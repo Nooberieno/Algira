@@ -17,7 +17,6 @@
     let current_filepath: string;
     const language_compartment: Compartment =  new Compartment;
     const theme_compartment: Compartment = new Compartment;
-    let last_modified: number = 0;
 
     onMount(() => {
         view = new EditorView({
