@@ -12,7 +12,7 @@ export const read_file = async (file_path: string) => {
 
 export const write_file = async(file_path: string, contents: string) => {
     try{
-        writeTextFile(file_path, contents)
+        await writeTextFile(file_path, contents)
     }catch (error){
         console.error("Error writing to file")
     }

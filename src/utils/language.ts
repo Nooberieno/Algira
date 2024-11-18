@@ -1,10 +1,3 @@
-import { javascript } from "@codemirror/lang-javascript"
-import { python } from "@codemirror/lang-python"
-import { rust } from "@codemirror/lang-rust";
-import { html } from "@codemirror/lang-html";
-import { css } from "@codemirror/lang-css";
-import { cpp } from "@codemirror/lang-cpp";
-import { markdown } from "@codemirror/lang-markdown";
 
 function get_language_by_extension (file_path: string) {
     const extension_map: { [key: string]: string } = {
@@ -26,26 +19,33 @@ function get_language_by_extension (file_path: string) {
     return null
 }
 
-export function change_language(file_path: string){
+export async function change_language(file_path: string){
     const lang = get_language_by_extension(file_path)
     console.log(lang)
     if (lang === null){
         return null
     }
+    const { javascript } = await import('@codemirror/lang-javascript')
     switch(lang){
         case "javascript":
             return javascript()
         case "python":
+            const { python } = await import('@codemirror/lang-python')
             return python()
         case "rust":
+            const { rust } = await import('@codemirror/lang-rust')
             return rust()
         case "html":
+            const { html } = await import('@codemirror/lang-html')
             return html()            
-        case "css": 
+        case "css":
+            const { css } = await import('@codemirror/lang-css') 
             return css()
         case "C++":
+            const { cpp } = await import('@codemirror/lang-cpp')
             return cpp()
         case "markdown":
+            const { markdown } = await import('@codemirror/lang-markdown')
             return markdown()
         case "typescript":
             return javascript({typescript: true})

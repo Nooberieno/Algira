@@ -2,14 +2,11 @@
     import { onMount } from "svelte";
     import { EditorState, Compartment, type Extension } from "@codemirror/state";
     import { EditorView } from "codemirror";
-    import { indentWithTab } from "@codemirror/commands";
-    import { keymap } from "@codemirror/view";
     import { basicSetup } from "codemirror";
     import { read_file, write_file } from "../utils/filesystem";
     import { open, save } from "@tauri-apps/plugin-dialog";
     import { open_dialog_bindings, save_existing_file } from "../utils/keybinds";
     import { change_language } from "../utils/language" 
-    import { autocompletion } from "@codemirror/autocomplete";
     import { oneDark } from '@codemirror/theme-one-dark'
    
 
@@ -18,20 +15,19 @@
     const language_compartment: Compartment =  new Compartment;
     const theme_compartment: Compartment = new Compartment;
 
-    onMount(() => {
-        view = new EditorView({
+    view = new EditorView({
             state: EditorState.create({
                 doc: '',
                 extensions: [
                     basicSetup,
                     language_compartment.of([]),
-                    keymap.of([indentWithTab]),
-                    autocompletion(),
                     theme_compartment.of(oneDark),
                 ],
             }),
             parent: document.getElementById('editor')!
         });
+
+    onMount(() => {
 
         const open_file = async () => {
             const file_path = await open({
@@ -46,7 +42,7 @@
                     changes: { from: 0, to: view.state.doc.length, insert: text}
                 })
                 if (current_filepath){
-                    let lang_func:Extension|null = change_language(current_filepath)
+                    let lang_func:Extension|null = await change_language(current_filepath)
                     if (lang_func){
                     view.dispatch({
                     effects: language_compartment.reconfigure(lang_func)
@@ -67,7 +63,7 @@
                 })
                 if (file_path != null){
                     write_file(file_path as string, view.state.doc.toString())
-                    let lang_func:Extension|null = change_language(file_path)
+                    let lang_func:Extension|null = await change_language(file_path)
                     if (lang_func){
                     view.dispatch({
                     effects: language_compartment.reconfigure(lang_func)
