@@ -8,7 +8,6 @@
     import { open_dialog_bindings, save_existing_file } from "../utils/keybinds";
     import { change_language } from "../utils/language" 
     import { oneDark } from '@codemirror/theme-one-dark'
-   
 
     let view:EditorView;
     let current_filepath: string;

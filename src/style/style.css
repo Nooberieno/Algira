@@ -55,5 +55,54 @@ html, body {
     color: #fff;
 }
 
-  
-  
+.cm-completionIcon-keyword::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\eb62" !important;
+}
+
+.cm-completionIcon-function::after, .cm-completionIcon-method::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\ea8c" !important;
+}
+
+.cm-completionIcon-class::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\eb5b" !important;
+}
+
+.cm-completionIcon-interface::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\eb61" !important;
+}
+
+.cm-completionIcon-variable::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\ea88" !important;
+}
+
+.cm-completionIcon-constant::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\eb5d" !important;
+}
+
+.cm-completionIcon-type::after {
+    font-family: 'Hack Nerd Font', monospace;
+    font-size: 75%;
+    align-content: center;
+    content: "\f121" !important;
+}
+
+.cm-completionIcon-enum::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\ea95" !important;
+}
+
+.cm-completionIcon-property::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\eb65" !important;
+}
+
+.cm-completionIcon-namespace::after {
+    font-family: 'Hack Nerd Font', monospace;
+    content: "\ea8b" !important;
+}
