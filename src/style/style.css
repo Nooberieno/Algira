@@ -5,17 +5,42 @@ html, body {
     overflow: auto;
 }
 
-.test{
-    width: 20px;
+.sidebar{
+    position: relative;
+    width: 250px;
     height: 100%;
     align-self: flex-start;
+    background-color: #1D1F25;
+    color: #abb2bf;
 }
+
+.sidebar-buttons{
+    width: 50px;
+}
+
+.sidebar-item-content{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    padding: 0;
+    width: 200px;
+    height: 100%;
+    background-color: #22252c;
+    color: #abb2bf;
+    align-content: center;
+    /* transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-item-content.active {
+    transform: translateX(0);*/
+} 
 
 #editor{
     padding: 0;
     flex-grow: 1;
     height: 100%;
-    align-self: center;
 }
 
 .cm-editor {
