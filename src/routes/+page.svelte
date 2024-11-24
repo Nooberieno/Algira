@@ -4,13 +4,17 @@
 </script>
 
 <main>
-  <AlgiraEditor />
+  <div class="test"> je moeder</div>
+  <div id="editor">
+    <AlgiraEditor />
+  </div>
 </main>
 
 <style>
   main{
     padding: none;
-    max-width: 800 px;
+    max-width: 100%;
     margin: 0 auto;
+    height: 100%;
   }
 </style>
