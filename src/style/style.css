@@ -6,17 +6,16 @@ html, body {
 }
 
 .test{
-    left: 10px;
-    width: 250px;
+    width: 20px;
     height: 100%;
-    z-index: 1;
+    align-self: flex-start;
 }
 
 #editor{
-    position: fixed;
+    padding: 0;
+    flex-grow: 1;
     height: 100%;
-    width: 100%;
-    z-index: 0;
+    align-self: center;
 }
 
 .cm-editor {

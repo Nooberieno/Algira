@@ -12,9 +12,9 @@
 
 <style>
   main{
+    display: flex;
     padding: none;
     max-width: 100%;
-    margin: 0 auto;
     height: 100%;
   }
 </style>
