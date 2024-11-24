@@ -14,7 +14,8 @@
     const language_compartment: Compartment =  new Compartment;
     const theme_compartment: Compartment = new Compartment;
 
-    view = new EditorView({
+    onMount(() => {
+        view = new EditorView({
             state: EditorState.create({
                 doc: '',
                 extensions: [
@@ -25,8 +26,6 @@
             }),
             parent: document.getElementById('editor')!
         });
-
-    onMount(() => {
 
         const open_file = async () => {
             const file_path = await open({
@@ -73,5 +72,11 @@
             }
         }
         save_existing_file(view, save_file)
-    })
+
+        return () => {
+            if (view){
+                view.destroy()
+            }
+        };
+    });
 </script>
