@@ -13,7 +13,7 @@
     <div class="sidebar-button">yooo
       <button onclick={toggle_sidebar}>toggle</button>
     </div>
-    <div class="sidebar-item-content">git content i guess</div>
+    <div class="sidebar-item-content">sidebar content</div>
   </div>
   <div id="editor">
     <AlgiraEditor />
