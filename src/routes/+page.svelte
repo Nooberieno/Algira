@@ -1,20 +1,11 @@
 <script>
   import AlgiraEditor from '$lib/Editor.svelte'
+  import Sidebar from '$lib/Sidebar.svelte'
   import '../style/style.css'
-
-  function toggle_sidebar(){
-    const sidebar = document.querySelector(".sidebar")
-    sidebar?.classList.toggle("expanded")
-  }
 </script>
 
 <main>
-  <div class="sidebar">
-    <div class="sidebar-button">yooo
-      <button onclick={toggle_sidebar}>toggle</button>
-    </div>
-    <div class="sidebar-item-content">sidebar content</div>
-  </div>
+  <Sidebar />
   <div id="editor">
     <AlgiraEditor />
   </div>
