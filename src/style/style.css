@@ -11,26 +11,25 @@ html, body {
     width: 50px;
     height: 100%;
     align-self: flex-start;
-    background-color: #1D1F25;
-    color: #abb2bf;
-    transition: width 0.3s ease-in;
-    z-index: 4;
-}
-
-.sidebar.expanded{
-    width: 250px;
+    transition: width 0.2s ease-in;
+    background-color: #22252c;
 }
 
 .sidebar-button{
+    background-color: #1D1F25;
+    color: #abb2bf;
     position: absolute;
     width: 50px;
+    height: 100%;
     z-index: 2;
 }
 
 .sidebar-item-content{
+    font-family: "Hack Nerd Font";
     position: absolute;
     right: 0;
     bottom: 0;
+    left: 50px;
     top: 0;
     padding: 0;
     width: 200px;
@@ -38,16 +37,18 @@ html, body {
     background-color: #22252c;
     color: #abb2bf;
     align-content: top;
-    -webkit-transform: translateX(-50px);
-    transform: translateX(-50px);
+    -webkit-transform: translateX(-250px);
+    transform: translateX(-250px);
     transition: transform 0.2s ease-in;
     z-index: 1;
 }
 
+.sidebar.expanded{
+    width: 250px;
+}
 .sidebar.expanded .sidebar-item-content {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-    z-index: 3;
+    -webkit-transform: translateX(0px);
+    transform: translateX(0px);
 } 
 
 #editor{
