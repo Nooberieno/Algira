@@ -6,13 +6,14 @@
     import { read_file, write_file } from "../utils/filesystem";
     import { open, save } from "@tauri-apps/plugin-dialog";
     import { open_dialog_bindings, save_existing_file } from "../utils/keybinds";
-    import { change_language } from "../utils/language" 
+    import { change_language, get_language_by_extension } from "../utils/language" 
     import { oneDark } from '@codemirror/theme-one-dark'
 
     let view:EditorView;
     let current_filepath: string;
     const language_compartment: Compartment =  new Compartment;
     const theme_compartment: Compartment = new Compartment;
+
 
     onMount(() => {
         view = new EditorView({
@@ -40,7 +41,7 @@
                     changes: { from: 0, to: view.state.doc.length, insert: text}
                 })
                 if (current_filepath){
-                    let lang_func:Extension|null = await change_language(current_filepath)
+                    let lang_func:Extension|null = await change_language(get_language_by_extension(current_filepath))
                     if (lang_func){
                     view.dispatch({
                     effects: language_compartment.reconfigure(lang_func)

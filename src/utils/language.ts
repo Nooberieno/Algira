@@ -1,5 +1,5 @@
 
-function get_language_by_extension (file_path: string) {
+export function get_language_by_extension (file_path: string) {
     const extension_map: { [key: string]: string } = {
         "js": "javascript",
         "py": "python",
@@ -19,12 +19,9 @@ function get_language_by_extension (file_path: string) {
     return null
 }
 
-export async function change_language(file_path: string){
-    const lang = get_language_by_extension(file_path)
-    console.log(lang)
-    if (lang === null){
+export async function change_language(lang: string | null){
+    if (lang == null)
         return null
-    }
     const { javascript } = await import('@codemirror/lang-javascript')
     switch(lang){
         case "javascript":
