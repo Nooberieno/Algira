@@ -10,16 +10,3 @@
     <AlgiraEditor />
   </div>
 </main>
-
-<style>
-  main{
-    font-family: "Hack Nerd Font" monospace;
-    position: absolute;
-    display: flex;
-    padding: none;
-    max-width: 100%;
-    height: 100%;
-    width: 100%;
-    flex-direction: row;
-  }
-</style>
