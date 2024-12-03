@@ -1,5 +1,6 @@
 <script lang='ts'>
     import '../style/cm_styles.css'
+    import type { Unsubscriber } from 'svelte/store';
     import { onMount } from "svelte";
     import { EditorState, Compartment, type Extension } from "@codemirror/state";
     import { EditorView } from "codemirror";
@@ -14,7 +15,7 @@
     let current_filepath: string;
     const language_compartment: Compartment =  new Compartment;
     const theme_compartment: Compartment = new Compartment;
-    let unsubscribe
+    let unsubscribe: Unsubscriber
 
 
     onMount(() => {
@@ -86,6 +87,7 @@
             if (view){
                 view.destroy()
             }
+            unsubscribe()
         };
     });
 </script>
