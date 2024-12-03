@@ -9,6 +9,9 @@
 }
 
 .sidebar-buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-color: #1D1F25;
     color: #abb2bf;
     position: absolute;
@@ -39,8 +42,7 @@
 }
 
 .sidebar-button.down{
-    position: relative;
-    top: 35rem;
+    position: static;
 }
 
 .sidebar-item-content{
