@@ -46,6 +46,7 @@
 .sidebar-item-content{
     font-family: "Hack Nerd Font";
     position: absolute;
+    text-align: center;
     right: 0;
     bottom: 0;
     left: 50px;
