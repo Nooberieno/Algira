@@ -1,4 +1,5 @@
 <script lang='ts'>
+    import '../style/cm_styles.css'
     import { onMount } from "svelte";
     import { EditorState, Compartment, type Extension } from "@codemirror/state";
     import { EditorView } from "codemirror";
