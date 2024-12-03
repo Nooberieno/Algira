@@ -46,6 +46,11 @@ html, body {
     color: #abb2bf;
 }
 
+.sidebar-button.down{
+    position: relative;
+    top: 37rem;
+}
+
 .sidebar-item-content{
     font-family: "Hack Nerd Font";
     position: absolute;
