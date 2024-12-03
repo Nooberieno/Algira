@@ -1,3 +1,4 @@
+import { writable } from 'svelte/store'
 
 export function get_language_by_extension (file_path: string) {
     const extension_map: { [key: string]: string } = {
@@ -51,3 +52,5 @@ export async function change_language(lang: string | null){
     }
     return null
 }
+
+export const current_lang = writable<string|null>(null)

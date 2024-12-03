@@ -7,13 +7,14 @@
     import { read_file, write_file } from "../utils/filesystem";
     import { open, save } from "@tauri-apps/plugin-dialog";
     import { open_dialog_bindings, save_existing_file } from "../utils/keybinds";
-    import { change_language, get_language_by_extension } from "../utils/language" 
+    import { change_language, current_lang, get_language_by_extension } from "../utils/language" 
     import { oneDark } from '@codemirror/theme-one-dark'
 
     let view:EditorView;
     let current_filepath: string;
     const language_compartment: Compartment =  new Compartment;
     const theme_compartment: Compartment = new Compartment;
+    let unsubscribe
 
 
     onMount(() => {
@@ -28,6 +29,17 @@
             }),
             parent: document.getElementById('editor')!
         });
+
+        unsubscribe = current_lang.subscribe(async (lang) => {
+            if (lang) {
+                let lang_func: Extension | null = await change_language(lang)
+                if (lang_func){
+                    view.dispatch({
+                        effects: language_compartment.reconfigure(lang_func)
+                    })
+                }
+            }
+        })
 
         const open_file = async () => {
             const file_path = await open({
@@ -63,12 +75,7 @@
                 })
                 if (file_path != null){
                     write_file(file_path as string, view.state.doc.toString())
-                    let lang_func:Extension|null = await change_language(file_path)
-                    if (lang_func){
-                    view.dispatch({
-                    effects: language_compartment.reconfigure(lang_func)
-                        })
-                    }
+                    current_lang.set(get_language_by_extension(file_path))
                     current_filepath = file_path
                 }
             }
