@@ -16,7 +16,7 @@
 <div class="sidebar">
   <div class="sidebar-buttons">
     <div class="sidebar-buttons-top">
-      <button class="sidebar-button" onclick={toggle_sidebar}>&#xea83;</button>
+      <button class="sidebar-button" onclick={() => {toggle_sidebar(); SidebarContent = Directory}}>&#xea83;</button>
       <button class="sidebar-button" onclick={toggle_sidebar}>&#xea68;</button>
       <button class="sidebar-button" onclick={toggle_sidebar}>&#xeae6;</button>
       <button class="sidebar-button" onclick={toggle_sidebar}>&#xebdc;</button>
