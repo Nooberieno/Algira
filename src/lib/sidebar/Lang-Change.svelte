@@ -1,6 +1,8 @@
 <script lang="ts">
-    import { change_language, current_lang } from "../../utils/language";
+    //style sheet
     import "../../style/sidebar/content.css"
+    //Imported utils functionality
+    import { current_lang } from "../../utils/language";
 
     function update_lang_extension(new_lang: string){
         current_lang.set(new_lang)

@@ -1,8 +1,11 @@
 <script lang="ts">
-    import LangChange from "./sidebar/Lang-Change.svelte"
-    import Directory from "./sidebar/Directory.svelte"
-    import '../style/sidebar/general.css'
-    import type { Component } from "svelte";
+  // Style sheet
+  import '../style/sidebar/general.css';
+  
+  import type { Component } from "svelte";
+  //Component imports that will dedicate the content of the sidebar based on what button is active
+  import LangChange from "./sidebar/Lang-Change.svelte";
+  import Directory from "./sidebar/Directory.svelte";
 
     let SidebarContent = $state<Component>()
 

@@ -1,9 +1,13 @@
 <script lang="ts">
+    //Style Sheet
+    import "../../style/sidebar/directory.css";
+
     import { onMount } from "svelte";
-    import { current_file_path, load_dir_structure } from "../../utils/filesystem";
+    //Imported types
     import type { DirEntry } from "@tauri-apps/plugin-fs";
+    //Imported utility functions/functionailty
+    import { current_file_path, load_dir_structure } from "../../utils/filesystem";
     import { open_dir_dialog } from "../../utils/dialog";
-    import "../../style/sidebar/directory.css"
 
     let path = $state('')
     let files = $state<DirEntry[]>()
