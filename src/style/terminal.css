@@ -1,0 +1,39 @@
+.terminal {
+    background-color: #000;
+    color: #fff;
+    font-family: monospace;
+    padding: 10px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    transition: height 0.3s ease;
+  }
+
+  .terminal.expanded{
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  
+  .output {
+    flex-grow: 1;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+  
+  .input-line {
+    display: flex;
+    align-items: center;
+  }
+  
+  .prompt {
+    margin-right: 5px;
+  }
+  
+  input {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-family: inherit;
+    flex-grow: 1;
+  }
