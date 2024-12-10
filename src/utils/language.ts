@@ -10,7 +10,8 @@ export function get_language_by_extension (file_path: string) {
         "md": "markdown",
         "cpp": "C++",
         "ts": "typescript",
-        "jsx": "jsx"
+        "jsx": "jsx",
+        "tsx": "tsx"
     }
     const extension = file_path.split(".").pop()
     console.log(extension)
@@ -49,6 +50,8 @@ export async function change_language(lang: string | null){
             return javascript({typescript: true})
         case "jsx":
             return javascript({jsx: true})
+        case "tsx":
+            return javascript({jsx: true, typescript: true})
     }
     return null
 }
