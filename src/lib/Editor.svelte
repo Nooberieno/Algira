@@ -1,10 +1,12 @@
 <script lang='ts'>
     //Style sheets
     import '../style/cm_styles.css';
-    //Library imports
+    //Type Imports
     import type { Unsubscriber } from 'svelte/store';
+    import type { Extension } from '@codemirror/state';
+    //Library imports
     import { onMount } from "svelte";
-    import { EditorState, Compartment, type Extension } from "@codemirror/state";
+    import { EditorState, Compartment } from "@codemirror/state";
     import { EditorView } from "codemirror";
     import { basicSetup } from "codemirror";
     import { oneDark } from '@codemirror/theme-one-dark';
@@ -50,7 +52,6 @@
                 const text = await read_file(path as string);
                 current_lang.set(get_language_by_extension(path))
                 if (text) {
-                    console.log("Content loaded successfully", text);
                     view.dispatch({
                         changes: { from: 0, to: view.state.doc.length, insert: text }
                     });
@@ -61,23 +62,10 @@
         const open_file = async () => {
             const file_path = await open_file_dialog();
             if (file_path) {
-                const text = await read_file(file_path as string);
-                if (text) {
-                    console.log("Content loaded successfully", text);
                     current_file_path.set(file_path);
-                    view.dispatch({
-                        changes: { from: 0, to: view.state.doc.length, insert: text }
-                    });
                 }
-                if (file_path) {
-                    let lang_func: string | null = get_language_by_extension(file_path);
-                    if (lang_func) {
-                        current_lang.set(lang_func);
-                    }
-                }
-            }
-        };
-        open_dialog_bindings(view, open_file);
+        }
+        open_dialog_bindings(open_file);
 
         const save_file = async () => {
             let file_path: string | null = null
@@ -93,7 +81,7 @@
                 }
             }
         };
-        save_existing_file(view, save_file);
+        save_existing_file(save_file);
 
         return () => {
             if (view) {
