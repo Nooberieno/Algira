@@ -21,6 +21,7 @@
     let current_tab: number = $state(0)
     let untitled: number = $state(1)
     let tabs: string[] = $state([`untitled-0`])
+    let paths: Map<string, string> = new Map();
     let tab_count = $state(tabs.length)
     const language_compartment: Compartment = new Compartment();
     const theme_compartment: Compartment = new Compartment();
@@ -40,7 +41,15 @@
                 editor.dom.style.display = i === index ? 'block' : 'none'
             })
             current_tab = index
-            
+            const path_check = paths.has(tabs[current_tab])
+            if (path_check){
+                const value = paths.get(tabs[current_tab])
+                if (value){
+                    current_file_path.set(value)
+                }
+            }else{
+                current_file_path.set(null)
+            }
         }
 
     const create_editor_from_tab = (index: number) => {
@@ -109,7 +118,10 @@
                 console.log(filename)
                 const text = await read_file(file_path as string);
                 current_lang.set(get_language_by_extension(file_path))
-                if (filename){ tabs[current_tab] = filename}
+                if (filename){
+                     tabs[current_tab] = filename
+                     paths.set(filename, file_path)
+                    }
                 if (text) {
                     editors[current_tab].dispatch({
                         changes: { from: 0, to: editors[current_tab].state.doc.length, insert: text }
