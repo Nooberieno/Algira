@@ -19,6 +19,8 @@
     <button class="content-button" onclick={() => update_lang_extension("markdown")}>Markdown</button>
     <button class="content-button" onclick={() => update_lang_extension("typescript")}>Typescript</button>
     <button class="content-button" onclick={() => update_lang_extension("jsx")}>jsx</button>
+    <button class="content-button" onclick={() => update_lang_extension("tsx")}>tsx</button>
+
 
 
 </div>
