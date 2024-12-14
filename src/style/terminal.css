@@ -23,6 +23,10 @@
   }
   
   .input-line {
+    display: none;
+  }
+
+  .terminal.expanded .input-line{
     display: flex;
     align-items: center;
   }
