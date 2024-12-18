@@ -36,6 +36,40 @@
         setTimeout(() => create_editor_from_tab(tab_count - 1), 0)
     }
 
+    function close_tab(index: number){
+        console.log("before closing:", tabs, editors)
+        if (editors[index]){
+            editors[index].destroy()
+        }
+        editors.splice(index, 1)
+        tabs.splice(index, 1)
+        if (tabs.length === 0){
+            add_tab()
+            current_tab = 0
+        }else{
+            current_tab = Math.min(current_tab, tabs.length - 1)
+            if (!editors[current_tab]){
+                console.log("Creating editor for tab:", current_tab)
+                create_editor_from_tab(current_tab)
+            }
+        }
+        console.log(current_tab)
+        switch_tab(current_tab)
+
+        if (tabs[current_tab]){
+            const path_check = paths.has(tabs[current_tab])
+            if (path_check){
+                const value = paths.get(tabs[current_tab])
+                current_file_path.set(value ?? null)
+            }else{
+                current_file_path.set(null)
+            }
+        }else{
+            current_file_path.set(null)
+        }
+        console.log("after closing:", tabs, editors)
+    }
+
     const switch_tab = (index: number) => {
             editors.forEach((editor, i) => {
                 editor.dom.style.display = i === index ? 'block' : 'none'
@@ -44,9 +78,7 @@
             const path_check = paths.has(tabs[current_tab])
             if (path_check){
                 const value = paths.get(tabs[current_tab])
-                if (value){
-                    current_file_path.set(value)
-                }
+                current_file_path.set(value ?? null)
             }else{
                 current_file_path.set(null)
             }
@@ -171,7 +203,10 @@
 
 <div class="tab-bar">
     {#each tabs as tab, index}
-      <button  onclick={() => {switch_tab(index)}} class={`tab ${current_tab === index ? 'active' : ''}`} id={`tab-${index}`}>{tab}</button>
+    <div class="tab-container">
+        <button  onclick={() => {switch_tab(index)}} class={`tab ${current_tab === index ? 'active' : ''}`} id={`tab-${index}`}>{tab}</button>
+        <button class="close-tab" onclick={() => close_tab(index)} >&times;</button>
+    </div>
     {/each}
     <button onclick={() => {add_tab()}} class='tab-bar'>&xoplus;</button>
   </div>
