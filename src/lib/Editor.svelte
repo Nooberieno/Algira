@@ -1,6 +1,7 @@
 <script lang='ts'>
     //Style sheets
-    import '../style/cm_styles.css';
+    import '../style/editor/cm_styles.css';
+    import '../style/editor/tab.css'
     //Type Imports
     import { get, type Unsubscriber } from 'svelte/store';
     import type { Extension } from '@codemirror/state';
@@ -170,7 +171,7 @@
 
 <div class="tab-bar">
     {#each tabs as tab}
-    <div class="tab-container">
+    <div class= {`tab-container ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`}>
         <button onclick={() => set_active_tab(tab)} class={`tab ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`} id={`tab-${tab.id}`}>{tab.name}</button>
         <button class="close-tabs" onclick={() => close_tab(tab)}>x</button>
     </div>

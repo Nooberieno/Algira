@@ -1,0 +1,26 @@
+.tab-bar{
+    font-family: "Hack Nerd Font", monospace;
+    background-color: #22252c;
+    color: #abb2bf;
+}
+
+.tab-container{
+    display: inline-block;
+    padding: 10px;
+    border: 2px solid #353a42;
+
+
+}
+
+.tab {
+    display: inline-block;
+    padding: 10px;
+    border-bottom: 2px solid #333;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+.tab-container.active{
+    border-bottom-color: #abb2bf;
+  }

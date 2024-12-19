@@ -17,23 +17,6 @@
     position: relative;
 }
 
-.tab-bar{
-    font-family: "Hack Nerd Font", monospace;
-    background-color: #22252c;
-    color: #abb2bf;
-}
-
-.tab {
-    display: inline-block;
-    padding: 10px;
-    border-bottom: 2px solid #333;
-    cursor: pointer;
-  }
-
-.tab.active {
-    border-bottom-color: #ccc;
-  }
-
 .cm-editor {
     position: absolute;
     top: 0;
