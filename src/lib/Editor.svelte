@@ -3,16 +3,16 @@
     import '../style/editor/cm_styles.css';
     import '../style/editor/tab.css'
     //Type Imports
-    import { get, type Unsubscriber } from 'svelte/store';
+    import type { Unsubscriber } from 'svelte/store';
     import type { Extension } from '@codemirror/state';
     //Library imports
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
+    import { get } from 'svelte/store';
     import { EditorState, Compartment } from "@codemirror/state";
     import { EditorView } from "codemirror";
     import { basicSetup } from "codemirror";
     import { oneDark } from '@codemirror/theme-one-dark';
     import { path } from '@tauri-apps/api'
-    import { tick } from 'svelte';
     //Utility functionality
     import { read_file, write_file, current_file_path } from "../utils/filesystem";
     import { open_file_dialog, save_file_dialog } from '../utils/dialog';
