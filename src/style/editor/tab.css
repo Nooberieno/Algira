@@ -7,20 +7,50 @@
 .tab-container{
     display: inline-block;
     padding: 10px;
-    border: 2px solid #353a42;
-
-
-}
-
-.tab {
+    border: 2px solid #22252c;
+    cursor: pointer;
+  }
+  
+  .tab {
+    font-family: inherit;
     display: inline-block;
     padding: 10px;
-    border-bottom: 2px solid #333;
+    border-bottom: 1px solid #333;
     cursor: pointer;
     background: none;
     border: none;
+    color: #abb2bf;
+  }
+
+  .tab.active{
+    font-style: italic;
   }
 
 .tab-container.active{
     border-bottom-color: #abb2bf;
+    background-color: #282c34;
   }
+
+.close-tab{
+  background: none;
+  border: none;
+  font-family: inherit;
+  color: #abb2bf;
+}
+
+.close-tab:hover{
+  cursor: pointer;
+  color: #ccc;
+}
+
+.add-tab{
+  font-family: inherit;
+  background: none;
+  border: none;
+  color: #abb2bf;
+  cursor: pointer;
+}
+
+.add-tab:hover{
+  color: #ccc;
+}

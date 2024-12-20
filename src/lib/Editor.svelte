@@ -173,10 +173,10 @@
     {#each tabs as tab}
     <div class= {`tab-container ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`}>
         <button onclick={() => set_active_tab(tab)} class={`tab ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`} id={`tab-${tab.id}`}>{tab.name}</button>
-        <button class="close-tabs" onclick={() => close_tab(tab)}>x</button>
+        <button class="close-tab" onclick={() => close_tab(tab)}>x</button>
     </div>
     {/each}
-    <button onclick={() => create_tab()} class="tab-bar">+</button>
+    <button onclick={() => create_tab()} class="add-tab">+</button>
 </div>
 
 {#each tabs as tab (tab.id)}
