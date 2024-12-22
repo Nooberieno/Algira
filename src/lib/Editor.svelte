@@ -69,6 +69,11 @@
         const index = tabs.findIndex((t) => t.id === tab.id)
         if (index !== -1){
             active_tab_index = index
+            if (tab.path === undefined){
+                current_file_path.set(null)
+            }else{
+                current_file_path.set(tab.path)
+            }
         }else{
             console.log("Tab not found: ", tab)
         }
@@ -88,9 +93,10 @@
     }
     
     if (index === active_tab_index) {
-        active_tab_index = Math.min(index, tabs.length - 1)
+        set_active_tab(tabs[Math.min(index, tabs.length - 1)])
     } else if (index < active_tab_index) {
-        active_tab_index--
+        const temp_index = active_tab_index - 1
+        set_active_tab(tabs[temp_index])
     }
     const editor = editors.get(tab.id)
     if (editor) {
@@ -163,10 +169,11 @@
             if (tabs.length === 1){
                 return
             }else if (active_tab_index === tabs.length - 1){
-                active_tab_index = 0
+                set_active_tab(tabs[0])
                 return
             }else{
-                active_tab_index++
+                const temp_index = active_tab_index + 1
+                set_active_tab(tabs[temp_index])
             }
         }
         tab_switch_bind(tab_keyboard)
