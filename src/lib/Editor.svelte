@@ -16,7 +16,7 @@
     //Utility functionality
     import { read_file, write_file, current_file_path } from "../utils/filesystem";
     import { open_file_dialog, save_file_dialog } from '../utils/dialog';
-    import { open_dialog_bindings, save_existing_file } from "../utils/keybinds";
+    import { open_dialog_bindings, save_existing_file, tab_switch_bind } from "../utils/keybinds";
     import { change_language, current_lang, get_language_by_extension } from "../utils/language"; 
 
     interface Tab {
@@ -158,6 +158,18 @@
             }
         };
         save_existing_file(save_file);
+
+        const tab_keyboard = () => {
+            if (tabs.length === 1){
+                return
+            }else if (active_tab_index === tabs.length - 1){
+                active_tab_index = 0
+                return
+            }else{
+                active_tab_index++
+            }
+        }
+        tab_switch_bind(tab_keyboard)
 
         return () => {
             if (editors){
