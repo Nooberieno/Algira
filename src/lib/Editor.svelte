@@ -171,9 +171,14 @@
 
 <div class="tab-bar">
     {#each tabs as tab}
-    <div class= {`tab-container ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`}>
-        <button onclick={() => set_active_tab(tab)} class={`tab ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`} id={`tab-${tab.id}`}>{tab.name}</button>
-        <button class="close-tab" onclick={() => close_tab(tab)}>x</button>
+    <div 
+    class={`tab-container ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`} 
+    role="button" 
+    tabindex="0" 
+    onclick={() => set_active_tab(tab)}
+    onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') set_active_tab(tab); }}>
+        <span class={`tab ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`} id={`tab-${tab.id}`}>{tab.name}</span>
+        <button class="close-tab" onclick={(e) => { e.stopPropagation(); close_tab(tab); }}>x</button>
     </div>
     {/each}
     <button onclick={() => create_tab()} class="add-tab">+</button>

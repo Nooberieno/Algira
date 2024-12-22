@@ -8,15 +8,12 @@
     display: inline-block;
     padding: 10px;
     border: 2px solid #22252c;
-    cursor: pointer;
   }
   
   .tab {
     font-family: inherit;
     display: inline-block;
     padding: 10px;
-    border-bottom: 1px solid #333;
-    cursor: pointer;
     background: none;
     border: none;
     color: #abb2bf;
@@ -25,6 +22,10 @@
   .tab.active{
     font-style: italic;
   }
+
+.tab-container:hover{
+  cursor: pointer;
+}
 
 .tab-container.active{
     border-bottom-color: #abb2bf;
@@ -41,6 +42,8 @@
 .close-tab:hover{
   cursor: pointer;
   color: #ccc;
+  background-color: #353a41;
+  border-radius: 5px;
 }
 
 .add-tab{
@@ -53,4 +56,6 @@
 
 .add-tab:hover{
   color: #ccc;
+  background-color: #353a41;
+  border-radius: 5px;
 }
