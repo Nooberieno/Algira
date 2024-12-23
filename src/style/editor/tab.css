@@ -59,3 +59,11 @@
   background-color: #353a41;
   border-radius: 5px;
 }
+
+.tab-container svg {
+  width: 1.2rem; /* Match font size */
+  height: 1.2rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  fill: currentColor; /* Inherit text color */
+}

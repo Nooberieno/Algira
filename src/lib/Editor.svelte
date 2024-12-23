@@ -18,6 +18,7 @@
     import { open_file_dialog, save_file_dialog } from '../utils/dialog';
     import { open_dialog_bindings, save_existing_file, tab_switch_bind } from "../utils/keybinds";
     import { change_language, current_lang, get_language_by_extension } from "../utils/language"; 
+  import { get_file_icon } from '../utils/tab';
 
     interface Tab {
         id: string
@@ -196,6 +197,11 @@
     tabindex="0" 
     onclick={() => set_active_tab(tab)}
     onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') set_active_tab(tab); }}>
+        {#if get_file_icon(get_language_by_extension(tab.path)).type === "svg"}
+            {@html get_file_icon(get_language_by_extension(tab.path)).value}
+        {:else}
+            <span class="tab-icon">{get_file_icon(get_language_by_extension(tab.path)).value}</span>
+        {/if}
         <span class={`tab ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`} id={`tab-${tab.id}`}>{tab.name}</span>
         <button class="close-tab" onclick={(e) => { e.stopPropagation(); close_tab(tab); }}>x</button>
     </div>

@@ -1,6 +1,9 @@
 import { writable } from 'svelte/store'
 
-export function get_language_by_extension (file_path: string) {
+export function get_language_by_extension (file_path: string | undefined) {
+    if (file_path === undefined){
+        return null
+    }
     const extension_map: { [key: string]: string } = {
         "js": "javascript",
         "py": "python",
