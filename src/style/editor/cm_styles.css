@@ -1,7 +1,19 @@
 #editor{
     flex-grow: 1;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
+    position: relative;
+}
+
+.editor{
+    display: none;
+
+}
+.editor.active{
+    display: block;
+    flex-grow: 1;
+    height: 100%;
+    overflow: auto;
     position: relative;
 }
 

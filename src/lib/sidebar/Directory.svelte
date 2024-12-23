@@ -39,7 +39,7 @@
         <h2>{path}</h2>
         <ul>
             {#each files as file}
-              <button onclick={() => handle_element_click(file)}>
+              <button class="content-button" onclick={() => handle_element_click(file)}>
                 {file.name} {file.isDirectory ? 'folder': 'file'}
               </button>  
             {/each}
