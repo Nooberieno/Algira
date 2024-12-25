@@ -18,14 +18,43 @@
     import { open_file_dialog, save_file_dialog } from '../utils/dialog';
     import { open_dialog_bindings, save_existing_file, tab_switch_bind } from "../utils/keybinds";
     import { change_language, current_lang, get_language_by_extension } from "../utils/language"; 
-  import { tab_from_path } from '../utils/tab';
+    import { tab_from_path } from '../utils/tab';
 
     interface Tab {
         id: string
         name: string
+        modified: boolean
         path?: string
     }
 
+    //Custom extensions for CodeMirror editor
+    const focus_tracker = EditorView.updateListener.of((update) => {
+    let lastCursorPos: number | null = null;
+    if (update.focusChanged) {
+        if (update.view.hasFocus) {
+            if (lastCursorPos !== null) {
+                update.view.dispatch({
+                    selection: { anchor: lastCursorPos },
+                });
+            }
+        }
+    }
+    if (update.selectionSet) {
+        lastCursorPos = update.state.selection.main.head;
+    }
+});
+
+    const mod_notifier = EditorView.updateListener.of((update) => {
+        if (update.docChanged){
+            const tab = tabs[active_tab_index]
+            if (tab && !tab.modified){
+                tab.modified = true
+                tabs = [...tabs]
+            }
+        }
+    })
+
+    //Variable declarations
     let active_tab_index = $state(0)
     let editors: Map<string, EditorView> = $state(new Map)
     let tabs: Tab[] = $state([])
@@ -42,21 +71,6 @@
             console.error("Parent element doesnt exist")
         }
         
-        const focusTracker = EditorView.updateListener.of((update) => {
-        let lastCursorPos: number | null = null;
-        if (update.focusChanged) {
-            if (update.view.hasFocus) {
-                if (lastCursorPos !== null) {
-                    update.view.dispatch({
-                        selection: { anchor: lastCursorPos },
-                    });
-                }
-            }
-        }
-        if (update.selectionSet) {
-            lastCursorPos = update.state.selection.main.head;
-        }
-    });
 
         const editor = new EditorView({
             state: EditorState.create({
@@ -65,7 +79,8 @@
                     basicSetup,
                     language_compartment.of([]),
                     theme_compartment.of(oneDark),
-                    focusTracker
+                    focus_tracker,
+                    mod_notifier
                 ]
             }),
             parent: document.getElementById(`editor-${id}`)!
@@ -76,7 +91,8 @@
     async function create_tab(){
         const new_tab: Tab = {
             id: crypto.randomUUID(),
-            name: `untitled-${untitled}`
+            name: `untitled-${untitled}`,
+            modified: false
         }
         untitled++
         tabs.push(new_tab)
@@ -144,7 +160,8 @@
                 const new_tab: Tab = {
                     id: crypto.randomUUID(),
                     name: "",
-                    path: path
+                    path: path,
+                    modified: false
                 }
                 tabs.push(new_tab)
                 await tick()
@@ -158,6 +175,7 @@
             if (lang) {
                 let lang_func: Extension | null = await change_language(lang);
                 if (lang_func && editor) {
+                    await tick()
                     editor.dispatch({
                         effects: language_compartment.reconfigure(lang_func)
                     });
@@ -189,6 +207,7 @@
             const file_path = await open_file_dialog();
             if (file_path) {
                     current_file_path.set(file_path);
+                    tabs[active_tab_index].modified = false
                 }
         }
         open_dialog_bindings(open_file);
@@ -198,11 +217,15 @@
             const editor = editors.get(tabs[active_tab_index].id)
             if (file_path && editor) {
                 write_file(file_path as string, editor.state.doc.toString());
+                tabs[active_tab_index].modified = false
+                tabs = [...tabs]
             } else {
                 file_path = await save_file_dialog();
                 if (file_path && editor) {
                     write_file(file_path as string, editor.state.doc.toString());
                     current_file_path.set(file_path);
+                    tabs[active_tab_index].modified = false
+                    tabs = [...tabs]
                 }
             }
         };
@@ -240,6 +263,7 @@
     onclick={() => set_active_tab(tab)}
     onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') set_active_tab(tab); }}>
         <span class={`tab ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`} id={`tab-${tab.id}`}>{tab.name}</span>
+        <span class="tab-modified">{tab.modified ? "\uf06a": ""}</span>
         <button class="close-tab" onclick={(e) => { e.stopPropagation(); close_tab(tab); }}>x</button>
     </div>
     {/each}
