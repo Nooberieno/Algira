@@ -18,6 +18,7 @@
     import { open_file_dialog, save_file_dialog } from '../utils/dialog';
     import { open_dialog_bindings, save_existing_file, tab_switch_bind } from "../utils/keybinds";
     import { change_language, current_lang, get_language_by_extension } from "../utils/language"; 
+  import { tab_from_path } from '../utils/tab';
 
     interface Tab {
         id: string
@@ -33,6 +34,7 @@
     const theme_compartment: Compartment = new Compartment();
     let unsubscribe_lang: Unsubscriber;
     let unsubscribe_file: Unsubscriber;
+    let unsubscribe_tab: Unsubscriber;
 
     function create_editor(id: string){
         const parent_element = document.getElementById(`editor-${id}`)
@@ -109,6 +111,22 @@
 
     onMount(() => {
         create_tab()
+
+        unsubscribe_tab = tab_from_path.subscribe(async (path) => {
+            if (path === ""){
+                return
+            }else{
+                const new_tab: Tab = {
+                    id: crypto.randomUUID(),
+                    name: "",
+                    path: path
+                }
+                tabs.push(new_tab)
+                await tick()
+                create_editor(new_tab.id)
+                set_active_tab(new_tab)
+            }
+        })
 
         unsubscribe_lang = current_lang.subscribe(async (lang) => {
             const editor = editors.get(tabs[active_tab_index].id)

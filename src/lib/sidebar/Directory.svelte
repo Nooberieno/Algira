@@ -8,6 +8,7 @@
     //Imported utility functions/functionailty
     import { current_file_path, load_dir_structure } from "../../utils/filesystem";
     import { open_dir_dialog } from "../../utils/dialog";
+  import { tab_from_path } from "../../utils/tab";
 
     let path = $state('')
     let files = $state<DirEntry[]>()
@@ -18,7 +19,7 @@
         if (element.isDirectory){
             load_dir_structure(full_path)
         }else{
-            current_file_path.set(full_path)
+            tab_from_path.set(full_path)
         }
     }
 
