@@ -41,6 +41,23 @@
         if (!parent_element){
             console.error("Parent element doesnt exist")
         }
+        
+        const focusTracker = EditorView.updateListener.of((update) => {
+        let lastCursorPos: number | null = null;
+        if (update.focusChanged) {
+            if (update.view.hasFocus) {
+                if (lastCursorPos !== null) {
+                    update.view.dispatch({
+                        selection: { anchor: lastCursorPos },
+                    });
+                }
+            }
+        }
+        if (update.selectionSet) {
+            lastCursorPos = update.state.selection.main.head;
+        }
+    });
+
         const editor = new EditorView({
             state: EditorState.create({
                 doc: '',
@@ -48,6 +65,7 @@
                     basicSetup,
                     language_compartment.of([]),
                     theme_compartment.of(oneDark),
+                    focusTracker
                 ]
             }),
             parent: document.getElementById(`editor-${id}`)!
@@ -67,7 +85,7 @@
         set_active_tab(new_tab)
     }
 
-    function set_active_tab(tab: Tab){
+    async function set_active_tab(tab: Tab){
         const index = tabs.findIndex((t) => t.id === tab.id)
         if (index !== -1){
             active_tab_index = index
@@ -75,6 +93,13 @@
                 current_file_path.set(null)
             }else{
                 current_file_path.set(tab.path)
+            }
+            await tick()
+            const editor = editors.get(tab.id)
+            if (editor){
+                editor.focus()
+            }else{
+                console.log("Did not find editor")
             }
         }else{
             console.log("Tab not found: ", tab)
