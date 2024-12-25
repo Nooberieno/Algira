@@ -44,8 +44,9 @@
     }
 });
 
+    let suppress_mod_notifer: boolean = false //Suppressor to make sure that opening a file doesnt count as modifying it
     const mod_notifier = EditorView.updateListener.of((update) => {
-        if (update.docChanged){
+        if (update.docChanged && !suppress_mod_notifer){
             const tab = tabs[active_tab_index]
             if (tab && !tab.modified){
                 tab.modified = true
@@ -185,20 +186,23 @@
 
         unsubscribe_file = current_file_path.subscribe(async (file_path) => {
             console.log("path updated to: ", file_path);
+            const active_tab: Tab = tabs[active_tab_index]
             const editor = editors.get(tabs[active_tab_index].id)
             if (file_path) {
                 const filename = await path.basename(file_path)
                 console.log(filename)
                 const text = await read_file(file_path as string);
                 current_lang.set(get_language_by_extension(file_path))
-                if (filename){
+                if (filename !== active_tab.name && active_tab.path !== file_path){
                     tabs[active_tab_index].name  = filename
                     tabs[active_tab_index].path = file_path
+                    if (text && editor) {
+                        suppress_mod_notifer = true
+                        editor.dispatch({
+                            changes: { from: 0, to: editor.state.doc.length, insert: text }
+                        });
+                        suppress_mod_notifer = false
                     }
-                if (text && editor) {
-                    editor.dispatch({
-                        changes: { from: 0, to: editor.state.doc.length, insert: text }
-                    });
                 }
             }
         });
@@ -206,8 +210,15 @@
         const open_file = async () => {
             const file_path = await open_file_dialog();
             if (file_path) {
-                    current_file_path.set(file_path);
-                    tabs[active_tab_index].modified = false
+                    const tab = tabs.find((t) => t.path === file_path)
+                    if (tab){
+                        set_active_tab(tab)
+                    }else{
+                        current_file_path.set(file_path);
+                        await tick()
+                        tabs[active_tab_index].modified = false
+                        tabs = [...tabs]
+                    }
                 }
         }
         open_dialog_bindings(open_file);
