@@ -24,6 +24,7 @@
         id: string
         name: string
         modified: boolean
+        saving?: boolean
         path?: string
     }
 
@@ -215,7 +216,6 @@
                         set_active_tab(tab)
                     }else{
                         current_file_path.set(file_path);
-                        await tick()
                         tabs[active_tab_index].modified = false
                         tabs = [...tabs]
                     }
@@ -227,16 +227,26 @@
             let file_path: string | null = get(current_file_path)
             const editor = editors.get(tabs[active_tab_index].id)
             if (file_path && editor) {
-                write_file(file_path as string, editor.state.doc.toString());
                 tabs[active_tab_index].modified = false
+                tabs[active_tab_index].saving = true
                 tabs = [...tabs]
+                await write_file(file_path as string, editor.state.doc.toString());
+                setTimeout(() => {
+                        tabs[active_tab_index].saving = false
+                        tabs = [...tabs]                        
+                    }, 500);
             } else {
                 file_path = await save_file_dialog();
                 if (file_path && editor) {
-                    write_file(file_path as string, editor.state.doc.toString());
-                    current_file_path.set(file_path);
                     tabs[active_tab_index].modified = false
+                    tabs[active_tab_index].saving = true
                     tabs = [...tabs]
+                    await write_file(file_path as string, editor.state.doc.toString());
+                    current_file_path.set(file_path)
+                    setTimeout(() => {
+                        tabs[active_tab_index].saving = false
+                        tabs = [...tabs]                        
+                    }, 500);
                 }
             }
         };
@@ -274,7 +284,15 @@
     onclick={() => set_active_tab(tab)}
     onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') set_active_tab(tab); }}>
         <span class={`tab ${active_tab_index === tabs.indexOf(tab) ? "active" : ""}`} id={`tab-${tab.id}`}>{tab.name}</span>
-        <span class="tab-modified">{tab.modified ? "\uf06a": ""}</span>
+        <span class="tab-modified" id={`tabmodified-${tab.id}`}>
+            {#if tab.modified}
+                {"\uf06a"}
+            {:else if tab.saving}
+                {"\ueba4"}
+            {:else}
+                {""}
+            {/if}
+        </span>
         <button class="close-tab" onclick={(e) => { e.stopPropagation(); close_tab(tab); }}>x</button>
     </div>
     {/each}

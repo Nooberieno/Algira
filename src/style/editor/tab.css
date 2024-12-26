@@ -59,3 +59,9 @@
   background-color: #353a41;
   border-radius: 5px;
 }
+
+.tab-modified {
+  color: #56b6c2;
+  margin-left: 5px;
+  font-weight: bold;
+}
