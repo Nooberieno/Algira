@@ -1,16 +1,7 @@
-<script>
-  import AlgiraEditor from '$lib/Editor.svelte'
-  import Sidebar from '$lib/Sidebar.svelte'
-  import Terminal from '$lib/Terminal.svelte';
-  import '../style/style.css'
+<script lang="ts">
+  import Editor from "$lib/Editor.svelte";
 </script>
 
-<main>
-  <Sidebar />
-  <div class="container">
-    <div id="editor">
-      <AlgiraEditor />
-    </div>
-    <Terminal />
-  </div>
+<main class="container">
+  <Editor/>
 </main>
