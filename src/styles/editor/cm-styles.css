@@ -7,7 +7,7 @@ html, body {
     flex-direction: row;
 } 
 
-#editor{
+.editor{
     padding: 0;
     flex-grow: 1;
     height: 100vh;

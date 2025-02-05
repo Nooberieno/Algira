@@ -1,4 +1,8 @@
 import { writable } from "svelte/store";
+import type { Component } from "svelte";
+import type { EditorState } from "@codemirror/state";
+
+import Editor from "../components/Editor.svelte";
 
 export interface Tab {
     id: string,
@@ -6,6 +10,7 @@ export interface Tab {
     path?: string,
     language?: string,
     element: any
+    state?: EditorState
 }
 
 export const tabs = writable<Tab[]>([])
@@ -38,7 +43,6 @@ export function createTab(tab_element: any) {
     const newTab = {
         id: crypto.randomUUID(),
         title: `Untitled`,
-        modified: false,
         element: tab_element,
     };
     tabs.update((t) => [...t, newTab]);
