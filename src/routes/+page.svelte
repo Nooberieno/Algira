@@ -1,7 +1,8 @@
 <script lang="ts">
-  import Editor from "$lib/Editor.svelte";
+  import Editor from "../components/Editor.svelte";
+  import TabBar from "../components/TabBar.svelte";
 </script>
 
 <main class="container">
-  <Editor/>
+  <TabBar></TabBar>
 </main>
