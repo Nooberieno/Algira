@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { tabs, active_id, setActiveTab, closeTab, createTab } from '../lib/tabs';
+    import { tabs, active_id, setActiveTab, closeTab, createTab } from '../lib/tabs.svelte';
     import Editor from './Editor.svelte';
     import "../styles/tab.css"
 
 </script>
 
 <div class="tab-bar">
-    {#each $tabs as tab (tab.id)}
+    {#each tabs as tab (tab.id)}
     <div 
         class="tab-container" 
         class:active={$active_id === tab.id} 

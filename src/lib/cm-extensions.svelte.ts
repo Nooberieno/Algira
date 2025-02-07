@@ -19,6 +19,6 @@ const focus_tracker: Extension = EditorView.updateListener.of((update) => {
     }
 })
 
-export const global_extensions = writable<Extension[]>([focus_tracker, oneDark, basicSetup])
+export const global_extensions: Extension[] = $state([focus_tracker, oneDark, basicSetup])
 
-export const active_extensions = writable<Record<string, Extension[]>>({})
+export const active_extensions: Record<string, Extension[]> = $state({})
