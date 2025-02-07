@@ -1,36 +1,36 @@
 .tab-bar{
-    font-family: "Hack Nerd Font", monospace;
-    background-color: #22252c;
-    color: #abb2bf;
+  font-family: "Hack Nerd Font", monospace;
+  background-color: #22252c;
+  color: #abb2bf;
 }
 
 .tab-container{
-    display: inline-block;
-    padding: 10px;
-    border: 2px solid #22252c;
-  }
+  display: inline-block;
+  padding: 10px;
+  border: 2px solid #22252c;
+}
   
-  .tab {
-    font-family: inherit;
-    display: inline-block;
-    padding: 10px;
-    background: none;
-    border: none;
-    color: #abb2bf;
-  }
+.tab {
+  font-family: inherit;
+  display: inline-block;
+  padding: 10px;
+  background: none;
+  border: none;
+  color: #abb2bf;
+}
 
-  .tab.active{
-    font-style: italic;
-  }
+.tab.active{
+  font-style: italic;
+}
 
 .tab-container:hover{
   cursor: pointer;
 }
 
 .tab-container.active{
-    border-bottom-color: #abb2bf;
-    background-color: #282c34;
-  }
+  border-bottom-color: #abb2bf;
+  background-color: #282c34;
+}
 
 .close-tab{
   background: none;

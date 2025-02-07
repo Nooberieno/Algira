@@ -6,7 +6,7 @@
 <div class="tab-content">
     {#each $tabs as tab (tab.id)}
     <div class="tab-component {tab.id === $active_id ? 'active' : ''}">
-        <svelte:component this={tab.element} />
+        <tab.element tab_id={tab.id}></tab.element>
     </div>
     {/each}
 </div>

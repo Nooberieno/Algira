@@ -9,7 +9,7 @@ export interface Tab {
     title: string,
     path?: string,
     language?: string,
-    element: any
+    element: Component
     state?: EditorState
 }
 
