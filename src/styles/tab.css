@@ -1,5 +1,4 @@
 .tab-bar{
-  font-family: "Hack Nerd Font", monospace;
   background-color: #22252c;
   color: #abb2bf;
 }
@@ -11,7 +10,6 @@
 }
   
 .tab {
-  font-family: inherit;
   display: inline-block;
   padding: 10px;
   background: none;

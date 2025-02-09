@@ -19,10 +19,6 @@ html, body {
     height: 100vh;
 }
 
-.cm-content {
-    font-family: 'Hack Nerd Font', monospace;
-}
-
 .cm-tooltip-autocomplete {
     background-color: #353a42;
     color: #abb2bf;
@@ -30,7 +26,6 @@ html, body {
 }
 
 .cm-tooltip-autocomplete .cm-completionLabel {
-    font-family: 'Hack Nerd Font', monospace;
     color: #e5c07b;
 }
 
@@ -59,53 +54,154 @@ html, body {
 }
 
 .cm-completionIcon-keyword::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\eb62" !important;
 }
 
 .cm-completionIcon-function::after, .cm-completionIcon-method::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\ea8c" !important;
 }
 
 .cm-completionIcon-class::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\eb5b" !important;
 }
 
 .cm-completionIcon-interface::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\eb61" !important;
 }
 
 .cm-completionIcon-variable::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\ea88" !important;
 }
 
 .cm-completionIcon-constant::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\eb5d" !important;
 }
 
 .cm-completionIcon-type::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     font-size: 75%;
     align-content: center;
     content: "\f121" !important;
 }
 
 .cm-completionIcon-enum::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\ea95" !important;
 }
 
 .cm-completionIcon-property::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\eb65" !important;
 }
 
 .cm-completionIcon-namespace::after {
-    font-family: 'Hack Nerd Font', monospace;
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
     content: "\ea8b" !important;
+}
+
+@font-face {
+    font-family: "Hack Nerd";
+    src: url("../../assets/fonts/hack/HackNerdFontMono-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Hack Nerd";
+    src: url("../../assets/fonts/hack/HackNerdFontMono-Italic.ttf");
+    font-style: italic;
 }

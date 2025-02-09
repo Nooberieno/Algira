@@ -3,7 +3,6 @@ import type { Extension } from "@codemirror/state";
 import { EditorView } from "codemirror";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { basicSetup } from "codemirror";
-import { writable } from "svelte/store";
 
 
 
