@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import type { Component } from "svelte";
+import { active_extensions } from "./cm-extensions.svelte";
 
 export interface Tab {
     id: string,
@@ -17,10 +18,11 @@ export function setActiveTab(tabId: string) {
     active_id.set(tabId);
 }
 
-export function closeTab(tabId: string) {
-    const index = tabs.findIndex((t) => t.id === tabId);
+export function closeTab(tab_id: string) {
+    const index = tabs.findIndex((t) => t.id === tab_id);
     if (index === -1) return tabs;
     tabs.splice(index, 1);
+    delete active_extensions[tab_id]
 
     if (tabs.length > 0) {
         active_id.set(tabs[Math.min(index, tabs.length - 1)].id);

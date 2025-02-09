@@ -14,7 +14,7 @@
     let view: EditorView
     let editor_container: HTMLDivElement
 
-    let editor_extensions: Extension[] = [...(active_extensions[tab_id] || []), ...global_extensions]
+    let editor_extensions: Set<Extension> = new Set<Extension>([...(active_extensions[tab_id] || []), ...global_extensions])
 
     onMount(() => {
 
@@ -23,7 +23,7 @@
         view = new EditorView({
             state: EditorState.create({
                 doc: '',
-                extensions: [editor_extensions]
+                extensions: [...editor_extensions]
             }),
             parent: editor_container
         })
