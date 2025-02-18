@@ -7,6 +7,9 @@
     import { EditorState } from "@codemirror/state";
     import { EditorView} from "codemirror";
 
+    import { open_file_with_dialog } from "$lib/keybinds.svelte";
+    import { open_new_file } from "$lib/filesystem.svelte";
+
     import { active_extensions, global_extensions } from "$lib/cm-extensions.svelte";
 
     let { tab_id }: { tab_id: string} = $props()
@@ -27,7 +30,9 @@
             }),
             parent: editor_container
         })
+        open_file_with_dialog(view, tab_id, open_new_file)
     })
+
 
     onDestroy(() =>{
         view.destroy()
