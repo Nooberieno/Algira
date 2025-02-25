@@ -7,7 +7,7 @@
     import { EditorState } from "@codemirror/state";
     import { EditorView} from "codemirror";
 
-    import { open_file_with_dialog } from "$lib/keybinds.svelte";
+    import { AlgiraKeymap, setup_keymap_listener } from "$lib/keymap.svelte";
     import { open_new_file } from "$lib/filesystem.svelte";
 
     import { active_extensions, global_extensions } from "$lib/cm-extensions.svelte";
@@ -30,7 +30,14 @@
             }),
             parent: editor_container
         })
-        open_file_with_dialog(view, tab_id, open_new_file)
+        AlgiraKeymap.add_keybinding({
+            key: "control-o",
+            run: (view, tab_id) => {
+                open_new_file(view, tab_id)
+                return true
+            }
+        })
+        setup_keymap_listener(view, tab_id)
     })
 
 
