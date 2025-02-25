@@ -15,6 +15,36 @@ body{
     background-color: #22252c;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #2c313a; /* highlightBackground */
+    border-radius: 5px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #3E4451; /* selection */
+    border-radius: 5px;
+    border: 2px solid #2c313a; /* highlightBackground */
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #abb2bf; 
+  }
+  
+  /* Corner */
+  ::-webkit-scrollbar-corner {
+    background: #282c34; /* background */
+  }
+  
+
 @font-face {
     font-family: "Hack Mono";
     src: url("../assets/fonts/hack/HackNerdFontMono-Regular.ttf");
