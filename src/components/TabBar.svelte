@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { tabs, active_id, setActiveTab, closeTab, createTab } from '../lib/tabs.svelte';
-    import Editor from './Editor.svelte';
     import "../styles/tab.css"
 
+    import { tabs, active_id, setActiveTab, closeTab, createTab } from '../lib/tabs.svelte';
+    import Editor from './Editor.svelte';
 </script>
 
 <div class="tab-bar">

@@ -8,9 +8,9 @@ import { get } from "svelte/store";
 import { active_id, tabs, setActiveTab } from "./tabs.svelte";
 
 export const open_new_file = async(view: EditorView, tab_id: string) => {
-    if(tab_id !== get(active_id)){
-        return
-    }
+    // if(tab_id !== get(active_id)){
+    //     return
+    // }
     const file_path = await open({
         multiple: false,
         title: "Open file",

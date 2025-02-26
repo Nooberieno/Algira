@@ -32,61 +32,77 @@ function get_platform(){
 const current_platform: PlatformName = get_platform()
 
 class KeyMapManager{
-    private keybindings: KeyBinding[] = []
+    private keybindings: Map<string, KeyBinding> = new Map<string, KeyBinding>()
 
     private normalize_keyname(key_name: string, platform: PlatformName): string{
         const parts = key_name.split(/-(?!$)/)
-        let result = parts[parts.length - 1]
+        let result = parts.pop() || ""
         if (result == "Space") result = " "
-        let alt, ctrl, shift, meta
-        for(let i = 0; i < parts.length - 1; i++){
-            const mod = parts[i]
-            if(/^(cmd|meta|m)$/i.test(mod)) meta = true 
-            else if (/^(c|ctrl|control)$/i.test(mod)) ctrl = true
-            else if (/^s(hift)?$/i.test(mod)) shift = true
-            else if (/^mod$/i.test(mod)) { if (platform == "mac") meta = true; else ctrl = true }
-            else throw new Error("Unrecognized modifier name: " + mod)
+
+        const modifiers = new Set()
+        for(const mod of parts){
+            switch(mod.toLowerCase()){
+                case "cmd": case "meta": case "m":
+                    modifiers.add("Meta"); break
+                case "alt": case "a":
+                    modifiers.add("Alt"); break
+                case "ctrl": case "control": case "c":
+                    modifiers.add("Ctrl"); break
+                case "shift": case "s":
+                    modifiers.add("Shift"); break
+                case "mod":
+                    modifiers.add(platform === "mac" ? "Meta" : "Ctrl"); break
+                default:
+                    throw new Error("Unrecognized modifier name: " + mod)
+            }
         }
-        if (alt) result = "Alt-" + result
-        if (ctrl) result = "Ctrl-" + result
-        if (meta) result = "Meta-" + result
-        if (shift) result = "Shift-" + result
-        return result
+        return [...modifiers, result].join("-")
     }
 
     add_keybinding(binding: KeyBinding){
-        if(binding.key) binding.key = this.normalize_keyname(binding.key, current_platform)
-        this.keybindings.push(binding)
-        this.keybindings.sort((a,b) => (b.priority || 0) - (a.priority || 0));
+        const key = binding[current_platform] || binding.key
+        if (!key) return
+
+        const normalized_key = this.normalize_keyname(key, current_platform)
+        this.keybindings.set(normalized_key, binding)
+        
     }
 
     remove_keybinding(key: string){
-        this.keybindings = this.keybindings.filter(binding => binding.key !== key)
+        this.keybindings.delete(this.normalize_keyname(key, current_platform))
     }
 
 
-    handle_event = (event: KeyboardEvent, view: EditorView, tab_id: string) => {
+    // handle_event = (event: KeyboardEvent) => {
+    //     const key = this.modifiers(event)
+    //     const binding = this.keybindings.get(key)
+
+    //     if (!binding) return
+
+    //     const handled = event.shiftKey && binding.shift ? binding.shift : binding.run ? binding.run() : false
+
+    //     if(handled !== false){
+    //         if(binding.prevent_default) event.preventDefault()
+    //         if(binding.stop_propagation) event.stopPropagation()
+    //     }
+    // }
+
+    handle_editor_event = (event: KeyboardEvent, view: EditorView, tab_id: string) => {
         const key = this.modifiers(event)
-        const binding = this.keybindings.find(binding => binding.key === key || binding[current_platform] === key)
+        const binding = this.keybindings.get(key)
 
-        if(binding){
-            let handled = false
-            if(event.shiftKey && binding.shift){
-                handled = binding.shift(view, tab_id)
-            }else if(binding.run){
-                handled = binding.run(view, tab_id)
-            }
+        if (!binding) return
 
-            if(handled !== false){
-                if(binding.prevent_default) event.preventDefault()
-                if(binding.stop_propagation) event.stopPropagation()
-            }
+        const handled = event.shiftKey && binding.shift ? binding.shift : binding.run ? binding.run(view, tab_id) : false
+
+        if(handled !== false){
+            if(binding.prevent_default) event.preventDefault()
+            if(binding.stop_propagation) event.stopPropagation()
         }
-
     }
 
     private modifiers(event: KeyboardEvent): string {
-        let key = event.key.toLowerCase()
+        let key = event.key === "Tab" ? "Tab" : event.key.toLowerCase() // Fix for Tab key
         if(event.ctrlKey) key = `Ctrl-${key}`
         if(event.shiftKey) key = `Shift-${key}`
         if(event.altKey) key = `Alt-${key}`
@@ -97,11 +113,20 @@ class KeyMapManager{
 
 export const AlgiraKeymap = new KeyMapManager()
 
-export const setup_keymap_listener = (view: EditorView, tab_id: string) => {
-    const handler = (event: KeyboardEvent) => AlgiraKeymap.handle_event(event, view, tab_id)
-    window.addEventListener("keydown", handler)
+export const setup_editor_keymap_listener = (view: EditorView, tab_id: string) => {
+    const handler = (event: KeyboardEvent) => AlgiraKeymap.handle_editor_event(event, view, tab_id)
+    view.dom.addEventListener("keydown", handler)
 
     return() => {
-        window.removeEventListener("keydown", handler)
+        view.dom.removeEventListener("keydown", handler)
     }
 }
+
+// export const setup_keymap_listener = () => {
+//     const handler = (event: KeyboardEvent) => AlgiraKeymap.handle_event(event)
+//     window.addEventListener("keydown", handler)
+ 
+//     return() => {
+//         window.addEventListener("keydown", handler)
+//     }
+// }

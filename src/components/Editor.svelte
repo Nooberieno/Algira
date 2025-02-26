@@ -7,7 +7,7 @@
     import { EditorState } from "@codemirror/state";
     import { EditorView} from "codemirror";
 
-    import { AlgiraKeymap, setup_keymap_listener } from "$lib/keymap.svelte";
+    import { AlgiraKeymap, setup_editor_keymap_listener } from "$lib/keymap.svelte";
     import { open_new_file } from "$lib/filesystem.svelte";
 
     import { active_extensions, global_extensions } from "$lib/cm-extensions.svelte";
@@ -37,7 +37,7 @@
                 return true
             }
         })
-        setup_keymap_listener(view, tab_id)
+        setup_editor_keymap_listener(view, tab_id)
     })
 
 

@@ -1,6 +1,10 @@
-import { writable } from "svelte/store";
 import type { Component } from "svelte";
+
+import { writable, get } from "svelte/store";
+
+
 import { active_extensions } from "./cm-extensions.svelte";
+import { AlgiraKeymap } from "./keymap.svelte";
 
 export interface Tab {
     id: string,
@@ -15,7 +19,7 @@ export const tabs: Tab[] = $state([])
 export const active_id = writable<string>()
 
 export function setActiveTab(tabId: string) {
-    active_id.set(tabId);
+    active_id.update(() => tabId);
 }
 
 export function closeTab(tab_id: string) {
@@ -40,3 +44,26 @@ export function createTab(tab_element: any) {
     tabs.push(new_tab)
     active_id.set(new_tab.id);
 }
+
+export function tab_switcher(){
+    if(tabs.length === 1) return
+    else if(get(active_id) === tabs[tabs.length - 1].id){
+        setActiveTab(tabs[0].id)
+        return
+    }else{
+        const tab = tabs.find((t) => t.id === get(active_id))
+        if(tab){
+            const index = tabs.indexOf(tab)
+            setActiveTab(tabs[index + 1].id)
+        }
+    }
+}
+
+AlgiraKeymap.add_keybinding({
+    key: "Ctrl-Tab",
+    run: () => {
+        tab_switcher()
+        return true
+    },
+    prevent_default: true
+})
