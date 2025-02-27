@@ -5,7 +5,7 @@ import { readTextFile } from "@tauri-apps/plugin-fs";
 import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
-import { active_id, tabs, setActiveTab } from "./tabs.svelte";
+import { active_id, tabs, set_active_tab } from "./tabs.svelte";
 
 export const open_new_file = async(view: EditorView) => {
     console.log("Opening file")
@@ -17,7 +17,7 @@ export const open_new_file = async(view: EditorView) => {
     if(file_path){
         let tab = tabs.find((t) => file_path === t.path)
         if (tab){
-            setActiveTab(tab.id)
+            set_active_tab(tab.id)
         }
         tab = tabs.find((t) => get(active_id) === t.id)
         const filename = await path.basename(file_path)

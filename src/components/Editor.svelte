@@ -35,4 +35,4 @@
     })
 </script>
 
-<div bind:this={editor_container} class="editor"></div>
+<div bind:this={editor_container} id={`editor-${tab_id}`} class="editor"></div>

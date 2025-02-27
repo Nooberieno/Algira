@@ -1,7 +1,6 @@
-import type { Component } from "svelte";
+import { tick, type Component } from "svelte";
 
 import { writable, get } from "svelte/store";
-
 
 import { active_extensions } from "./cm-extensions.svelte";
 import { AlgiraKeymap } from "./keymap.svelte";
@@ -18,11 +17,14 @@ export const tabs: Tab[] = $state([])
 
 export const active_id = writable<string>()
 
-export function setActiveTab(tabId: string) {
-    active_id.update(() => tabId);
+export async function set_active_tab(tab_id: string) {
+    active_id.update(() => tab_id);
+    await tick()
+    const editor_element = document.querySelector(`#editor-${tab_id}`)
+    if(editor_element instanceof HTMLElement) editor_element.focus()
 }
 
-export function closeTab(tab_id: string) {
+export function close_tab(tab_id: string) {
     const index = tabs.findIndex((t) => t.id === tab_id);
     if (index === -1) return tabs;
     tabs.splice(index, 1);
@@ -35,7 +37,7 @@ export function closeTab(tab_id: string) {
     }
 }
 
-export function createTab(tab_element: any) {
+export function create_tab(tab_element: any) {
     const new_tab = {
         id: crypto.randomUUID(),
         title: `Untitled`,
@@ -49,13 +51,13 @@ export function tab_switcher(){
     console.log(get(active_id))
     if(tabs.length === 1) return
     else if(get(active_id) === tabs[tabs.length - 1].id){
-        setActiveTab(tabs[0].id)
+        set_active_tab(tabs[0].id)
         return
     }else{
         const tab = tabs.find((t) => t.id === get(active_id))
         if(tab){
             const index = tabs.indexOf(tab)
-            setActiveTab(tabs[index + 1].id)
+            set_active_tab(tabs[index + 1].id)
         }
     }
 }
