@@ -3,6 +3,10 @@ import type { Extension } from "@codemirror/state";
 import { EditorView } from "codemirror";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { basicSetup } from "codemirror";
+import { keymap } from "@codemirror/view"
+import { defaultKeymap } from "@codemirror/commands";
+
+import { AlgiraEditorKeymap } from "./add-cm-keybinds.svelte";
 
 
 
@@ -18,7 +22,7 @@ const focus_tracker: Extension = EditorView.updateListener.of((update) => {
     }
 })
 
-export const global_extensions: Extension[] = $state([focus_tracker, oneDark, basicSetup,])
+export const global_extensions: Extension[] = $state([focus_tracker, oneDark, basicSetup, keymap.of([...defaultKeymap, ...AlgiraEditorKeymap])])
 
 export const active_extensions: Record<string, Extension[]> = $state({})
 

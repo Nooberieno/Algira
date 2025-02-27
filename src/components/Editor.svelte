@@ -7,9 +7,6 @@
     import { EditorState } from "@codemirror/state";
     import { EditorView} from "codemirror";
 
-    import { AlgiraKeymap, setup_editor_keymap_listener } from "$lib/keymap.svelte";
-    import { open_new_file } from "$lib/filesystem.svelte";
-
     import { active_extensions, global_extensions } from "$lib/cm-extensions.svelte";
 
     let { tab_id }: { tab_id: string} = $props()
@@ -30,14 +27,6 @@
             }),
             parent: editor_container
         })
-        AlgiraKeymap.add_keybinding({
-            key: "control-o",
-            run: (view, tab_id) => {
-                open_new_file(view, tab_id)
-                return true
-            }
-        })
-        setup_editor_keymap_listener(view, tab_id)
     })
 
 

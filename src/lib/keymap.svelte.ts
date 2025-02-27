@@ -6,9 +6,9 @@ export type KeyBinding = {
     mac?: string,
     win?: string,
     linux?: string,
-    run?: (view: EditorView, tab_id: string) => boolean,
-    shift?: (view: EditorView, tab_id: string) => boolean,
-    priority?: number,
+    run?: () => boolean,
+    shift?: () => boolean,
+    scope?: string,
     prevent_default?: boolean,
     stop_propagation?: boolean
 }
@@ -73,27 +73,13 @@ class KeyMapManager{
     }
 
 
-    // handle_event = (event: KeyboardEvent) => {
-    //     const key = this.modifiers(event)
-    //     const binding = this.keybindings.get(key)
-
-    //     if (!binding) return
-
-    //     const handled = event.shiftKey && binding.shift ? binding.shift : binding.run ? binding.run() : false
-
-    //     if(handled !== false){
-    //         if(binding.prevent_default) event.preventDefault()
-    //         if(binding.stop_propagation) event.stopPropagation()
-    //     }
-    // }
-
-    handle_editor_event = (event: KeyboardEvent, view: EditorView, tab_id: string) => {
+    handle_event = (event: KeyboardEvent) => {
         const key = this.modifiers(event)
         const binding = this.keybindings.get(key)
 
         if (!binding) return
 
-        const handled = event.shiftKey && binding.shift ? binding.shift : binding.run ? binding.run(view, tab_id) : false
+        const handled = event.shiftKey && binding.shift ? binding.shift : binding.run ? binding.run() : false
 
         if(handled !== false){
             if(binding.prevent_default) event.preventDefault()
@@ -113,20 +99,11 @@ class KeyMapManager{
 
 export const AlgiraKeymap = new KeyMapManager()
 
-export const setup_editor_keymap_listener = (view: EditorView, tab_id: string) => {
-    const handler = (event: KeyboardEvent) => AlgiraKeymap.handle_editor_event(event, view, tab_id)
-    view.dom.addEventListener("keydown", handler)
-
+export const setup_keymap_listener = () => {
+    const handler = (event: KeyboardEvent) => AlgiraKeymap.handle_event(event)
+    window.addEventListener("keydown", handler)
+ 
     return() => {
-        view.dom.removeEventListener("keydown", handler)
+        window.addEventListener("keydown", handler)
     }
 }
-
-// export const setup_keymap_listener = () => {
-//     const handler = (event: KeyboardEvent) => AlgiraKeymap.handle_event(event)
-//     window.addEventListener("keydown", handler)
- 
-//     return() => {
-//         window.addEventListener("keydown", handler)
-//     }
-// }

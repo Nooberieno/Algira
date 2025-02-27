@@ -1,8 +1,15 @@
 <script lang="ts">
     import "../styles/tab.css"
+    
+    import { onMount } from "svelte";
 
     import { tabs, active_id, setActiveTab, closeTab, createTab } from '../lib/tabs.svelte';
+    import { setup_keymap_listener } from "$lib/keymap.svelte";
     import Editor from './Editor.svelte';
+
+    onMount(() => {
+        setup_keymap_listener()
+    })
 </script>
 
 <div class="tab-bar">

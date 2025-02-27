@@ -46,6 +46,7 @@ export function createTab(tab_element: any) {
 }
 
 export function tab_switcher(){
+    console.log(get(active_id))
     if(tabs.length === 1) return
     else if(get(active_id) === tabs[tabs.length - 1].id){
         setActiveTab(tabs[0].id)
