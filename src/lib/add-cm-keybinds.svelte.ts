@@ -1,7 +1,8 @@
-import { EditorView, keymap } from "@codemirror/view"
+import { EditorView } from "@codemirror/view"
 
-import { open_new_file } from "./filesystem.svelte"
+import { open_new_file, save_text_file } from "./filesystem.svelte"
 
 export const AlgiraEditorKeymap = [
-    {key: "Ctrl-o", run: (view: EditorView) => {open_new_file(view); return true}}
+    {key: "Ctrl-o", run: (view: EditorView) => {open_new_file(view); return true}},
+    {key: "Ctrl-s", run: (view: EditorView) => {save_text_file(view)}}
 ]

@@ -1,7 +1,7 @@
 import type { EditorView } from "codemirror";
 
-import { open } from "@tauri-apps/plugin-dialog";
-import { readTextFile } from "@tauri-apps/plugin-fs";
+import { open, save } from "@tauri-apps/plugin-dialog";
+import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
@@ -33,4 +33,25 @@ export const open_new_file = async(view: EditorView) => {
 
         }
     }
+}
+
+export const save_text_file = async(view: EditorView) => {
+    console.log("Saving file")
+    const tab = tabs.find((t) => t.id === get(active_id))
+    if(!tab) return false
+    if(tab.path){
+        await writeTextFile(tab.path, view.state.doc.toString())
+        return true
+    }else{
+        const file_path = await save({
+            title: "Save as"
+        })
+        if(file_path){
+            tab.title = await path.basename(file_path)
+            tab.path = file_path
+            await writeTextFile(file_path, view.state.doc.toString())
+            return true
+        }
+    }
+    return false
 }
