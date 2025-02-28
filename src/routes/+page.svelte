@@ -7,6 +7,7 @@
   import TabBar from "../components/TabBar.svelte";
   import TabContent from "../components/TabContent.svelte";
 
+  import "../lib/keybindings/algira-keybinds.svelte"
   import { create_tab } from "../lib/ui/tabs.svelte";
   import { setup_keymap_listener } from "../lib/keybindings/keymap.svelte";
 

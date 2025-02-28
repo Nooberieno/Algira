@@ -3,7 +3,6 @@ import { tick, type Component } from "svelte";
 import { writable, get } from "svelte/store";
 
 import { active_extensions } from "../utils/cm-extensions.svelte";
-import { AlgiraKeymap } from "../keybindings/keymap.svelte";
 
 export interface Tab {
     id: string,
@@ -58,12 +57,3 @@ export function tab_switcher(){
         }
     }
 }
-
-AlgiraKeymap.add_keybinding({
-    key: "Ctrl-Tab",
-    run: () => {
-        tab_switcher()
-        return true
-    },
-    prevent_default: true
-})
