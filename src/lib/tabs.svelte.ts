@@ -17,11 +17,8 @@ export const tabs: Tab[] = $state([])
 
 export const active_id = writable<string>()
 
-export async function set_active_tab(tab_id: string) {
+export function set_active_tab(tab_id: string) {
     active_id.update(() => tab_id);
-    await tick()
-    const editor_element = document.querySelector(`#editor-${tab_id}`)
-    if(editor_element instanceof HTMLElement) editor_element.focus()
 }
 
 export function close_tab(tab_id: string) {
