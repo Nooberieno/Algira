@@ -6,7 +6,7 @@ import { basicSetup } from "codemirror";
 import { keymap } from "@codemirror/view"
 import { defaultKeymap } from "@codemirror/commands";
 
-import { AlgiraEditorKeymap } from "./add-cm-keybinds.svelte";
+import { AlgiraEditorKeymap } from "../keybindings/add-cm-keybinds.svelte";
 
 
 

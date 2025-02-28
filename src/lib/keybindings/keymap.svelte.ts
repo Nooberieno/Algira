@@ -1,4 +1,3 @@
-import type { EditorView } from "codemirror"
 import { platform } from "@tauri-apps/plugin-os"
 
 export type KeyBinding = {

@@ -5,7 +5,7 @@ import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
-import { active_id, tabs, set_active_tab } from "./tabs.svelte";
+import { active_id, tabs, set_active_tab } from "../ui/tabs.svelte";
 
 export const open_new_file = async(view: EditorView) => {
     console.log("Opening file")

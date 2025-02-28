@@ -8,8 +8,8 @@
     import { EditorState } from "@codemirror/state";
     import { EditorView} from "codemirror";
 
-    import { active_extensions, global_extensions } from "$lib/cm-extensions.svelte";
-    import { active_id } from "$lib/tabs.svelte";
+    import { active_extensions, global_extensions } from "$lib/utils/cm-extensions.svelte";
+    import { active_id } from "$lib/ui/tabs.svelte";
 
     let { tab_id }: { tab_id: string} = $props()
 

@@ -2,8 +2,8 @@ import { tick, type Component } from "svelte";
 
 import { writable, get } from "svelte/store";
 
-import { active_extensions } from "./cm-extensions.svelte";
-import { AlgiraKeymap } from "./keymap.svelte";
+import { active_extensions } from "../utils/cm-extensions.svelte";
+import { AlgiraKeymap } from "../keybindings/keymap.svelte";
 
 export interface Tab {
     id: string,

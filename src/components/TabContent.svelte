@@ -1,6 +1,6 @@
 <script lang="ts">
     import "../styles/tab.css"
-    import { tabs, active_id } from "../lib/tabs.svelte";
+    import { tabs, active_id } from "../lib/ui/tabs.svelte";
 </script>
 
 <div class="tab-content">
