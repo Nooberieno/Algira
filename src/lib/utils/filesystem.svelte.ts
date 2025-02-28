@@ -6,6 +6,7 @@ import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
 import { active_id, tabs, set_active_tab } from "../ui/tabs.svelte";
+import { get_language_from_file_extension } from "./lang.svelte";
 
 export const open_new_file = async(view: EditorView) => {
     console.log("Opening file")
@@ -26,6 +27,8 @@ export const open_new_file = async(view: EditorView) => {
             if(tab){
                 tab.title = filename
                 tab.path = file_path
+                tab.language = get_language_from_file_extension(file_path)
+                console.log(tab.language)
                 view.dispatch({
                     changes: {from: 0, to: view.state.doc.length, insert: text}
                 })
@@ -49,6 +52,8 @@ export const save_text_file = async(view: EditorView) => {
         if(file_path){
             tab.title = await path.basename(file_path)
             tab.path = file_path
+            tab.language = get_language_from_file_extension(file_path)
+            console.log(tab.language)
             await writeTextFile(file_path, view.state.doc.toString())
             return true
         }

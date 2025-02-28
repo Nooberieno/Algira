@@ -10,8 +10,10 @@
   import "../lib/keybindings/algira-keybinds.svelte"
   import { create_tab } from "../lib/ui/tabs.svelte";
   import { setup_keymap_listener } from "../lib/keybindings/keymap.svelte";
+  import { add_file_extension_with_language } from "$lib/utils/lang.svelte";
 
   create_tab(Editor)
+  add_file_extension_with_language("py", "python")
 
   onMount(() => {
     setup_keymap_listener()
