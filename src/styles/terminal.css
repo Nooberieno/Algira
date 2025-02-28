@@ -1,0 +1,18 @@
+#terminal{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+    z-index: 420;
+    background-color: black;
+    transition: height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+    opacity: 1;
+}
+
+.hidden{
+    height: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+}

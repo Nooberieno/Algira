@@ -6,6 +6,7 @@
   import Editor from "../components/Editor.svelte";
   import TabBar from "../components/TabBar.svelte";
   import TabContent from "../components/TabContent.svelte";
+  import Terminal from "../components/Terminal.svelte";
 
   import "../lib/keybindings/algira-keybinds.svelte"
   import { create_tab } from "../lib/ui/tabs.svelte";
@@ -23,4 +24,5 @@
 <main class="container">
   <TabBar></TabBar>
   <TabContent></TabContent>
+  <Terminal></Terminal>
 </main>
