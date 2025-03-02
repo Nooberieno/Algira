@@ -6,13 +6,24 @@
     padding: 10px;
     z-index: 420;
     background-color: black;
-    transition: height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+    display: block;
+    transition: display 0.3s ease, opacity 0.3s ease;
     overflow: hidden;
     opacity: 1;
 }
 
 .hidden{
-    height: 0 !important;
-    padding: 0 !important;
+    display: none;
     opacity: 0 !important;
+}
+
+@font-face {
+    font-family: "Hack Mono";
+    src: url("../assets/fonts/hack/HackNerdFontMono-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Hack Mono";
+    src: url("../assets/fonts/hack/HackNerdFontMono-Italic.ttf");
+    font-style: italic;
 }

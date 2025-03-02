@@ -196,12 +196,12 @@ html, body {
 }
 
 @font-face {
-    font-family: "Hack Nerd";
+    font-family: "Hack Mono";
     src: url("../../assets/fonts/hack/HackNerdFontMono-Regular.ttf");
 }
 
 @font-face {
-    font-family: "Hack Nerd";
+    font-family: "Hack Mono";
     src: url("../../assets/fonts/hack/HackNerdFontMono-Italic.ttf");
     font-style: italic;
 }
