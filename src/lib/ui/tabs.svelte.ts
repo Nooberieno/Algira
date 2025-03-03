@@ -44,16 +44,17 @@ export function create_tab(tab_element: any) {
 }
 
 export function tab_switcher(){
-    console.log(get(active_id))
-    if(tabs.length === 1) return
+    if(tabs.length === 1) return false
     else if(get(active_id) === tabs[tabs.length - 1].id){
         set_active_tab(tabs[0].id)
-        return
+        return true
     }else{
         const tab = tabs.find((t) => t.id === get(active_id))
         if(tab){
             const index = tabs.indexOf(tab)
             set_active_tab(tabs[index + 1].id)
+            return true
         }
+        return false
     }
 }

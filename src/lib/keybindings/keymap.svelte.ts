@@ -86,6 +86,10 @@ class KeyMapManager{
         }
     }
 
+    register_keymap(keymap: readonly KeyBinding[]){
+        keymap.forEach((keybind) => this.add_keybinding(keybind))
+    }
+
     private modifiers(event: KeyboardEvent): string {
         let key = event.key === "Tab" ? "Tab" : event.key.toLowerCase() // Fix for Tab key
         if(event.ctrlKey) key = `Ctrl-${key}`
@@ -96,10 +100,10 @@ class KeyMapManager{
     }
 }
 
-export const AlgiraKeymap = new KeyMapManager()
+export const AlgiraKeymapManager = new KeyMapManager()
 
 export const setup_keymap_listener = () => {
-    const handler = (event: KeyboardEvent) => AlgiraKeymap.handle_event(event)
+    const handler = (event: KeyboardEvent) => AlgiraKeymapManager.handle_event(event)
     window.addEventListener("keydown", handler)
  
     return() => {

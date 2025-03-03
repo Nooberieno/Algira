@@ -13,28 +13,29 @@ export const open_new_file = async(view: EditorView) => {
     const file_path = await open({
         multiple: false,
         title: "Open file",
-        directory: false
+        directory: false,
+        filters: [{name: "All files", extensions: ["*"]}],
+        recursive: true
     })
-    if(file_path){
-        let tab = tabs.find((t) => file_path === t.path)
-        if (tab){
-            set_active_tab(tab.id)
+    if(!file_path) return false
+    let tab = tabs.find((t) => file_path === t.path)
+    if (tab){
+        set_active_tab(tab.id)
+    }
+    tab = tabs.find((t) => get(active_id) === t.id)
+    const filename = await path.basename(file_path)
+    if(filename !== tab?.title){
+        const text = await readTextFile(file_path)
+        if(tab){
+            tab.title = filename
+            tab.path = file_path
+            tab.language = get_language_from_file_extension(file_path)
+            console.log(tab.language)
+            view.dispatch({
+                changes: {from: 0, to: view.state.doc.length, insert: text}
+            })
         }
-        tab = tabs.find((t) => get(active_id) === t.id)
-        const filename = await path.basename(file_path)
-        if(filename !== tab?.title){
-            const text = await readTextFile(file_path)
-            if(tab){
-                tab.title = filename
-                tab.path = file_path
-                tab.language = get_language_from_file_extension(file_path)
-                console.log(tab.language)
-                view.dispatch({
-                    changes: {from: 0, to: view.state.doc.length, insert: text}
-                })
-            }
 
-        }
     }
 }
 
