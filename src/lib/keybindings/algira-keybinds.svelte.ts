@@ -1,11 +1,9 @@
 import type { KeyBinding } from "./keymap.svelte";
 
-import { AlgiraKeymapManager } from "./keymap.svelte";
-
 import { tab_switcher } from "../ui/tabs.svelte";
 import { toggle_terminal } from "../ui/terminal.svelte";
 
-const AlgiraKeymap: readonly KeyBinding[] = [
+export const AlgiraKeymap: readonly KeyBinding[] = [
     {
         key: "Ctrl-Tab",
         run: tab_switcher,
@@ -17,5 +15,3 @@ const AlgiraKeymap: readonly KeyBinding[] = [
         prevent_default: true
     }
 ]
-
-AlgiraKeymapManager.register_keymap(AlgiraKeymap)

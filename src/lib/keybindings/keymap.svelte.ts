@@ -90,6 +90,14 @@ class KeyMapManager{
         keymap.forEach((keybind) => this.add_keybinding(keybind))
     }
 
+    unregister_keymap(keymap: readonly KeyBinding[]){
+        keymap.forEach((keybind) => {
+            const key = keybind[current_platform] || keybind.key
+            if(!key) return
+            this.remove_keybinding(key)
+        })
+    }
+
     private modifiers(event: KeyboardEvent): string {
         let key = event.key === "Tab" ? "Tab" : event.key.toLowerCase() // Fix for Tab key
         if(event.ctrlKey) key = `Ctrl-${key}`
