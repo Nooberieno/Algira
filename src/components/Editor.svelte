@@ -9,6 +9,7 @@
     import { EditorView} from "codemirror";
 
     import { active_extensions, global_extensions } from "$lib/utils/cm-extensions.svelte";
+    import { register_editor, unregister_editor } from "$lib/utils/editors.svelte";
     import { active_id } from "$lib/ui/tabs.svelte";
 
     let { tab_id }: { tab_id: string} = $props()
@@ -35,6 +36,7 @@
             }),
             parent: editor_container
         })
+        register_editor(tab_id, view)
         focus_editor()
 
         unsub_id = active_id.subscribe((id) => {
@@ -45,6 +47,7 @@
 
 
     onDestroy(() =>{
+        unregister_editor(tab_id)
         view.destroy()
         if(unsub_id) unsub_id
     })

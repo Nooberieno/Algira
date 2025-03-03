@@ -14,7 +14,7 @@ export interface Tab {
 
 export const tabs: Tab[] = $state([])
 
-export const active_id = writable<string>()
+export const active_id = writable<string>("")
 
 export function set_active_tab(tab_id: string) {
     active_id.update(() => tab_id);
@@ -29,7 +29,7 @@ export function close_tab(tab_id: string) {
     if (tabs.length > 0) {
         active_id.set(tabs[Math.min(index, tabs.length - 1)].id);
     } else {
-        active_id.set("0");
+        active_id.set("");
     }
 }
 

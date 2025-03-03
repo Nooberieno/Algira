@@ -1,7 +1,7 @@
 import { AlgiraKeymap } from "./keymap.svelte";
 
 import { tab_switcher } from "../ui/tabs.svelte";
-import { toggle_terminal } from "$lib/utils/terminal.svelte";
+import { toggle_terminal } from "../ui/terminal.svelte";
 
 AlgiraKeymap.add_keybinding({
     key: "Ctrl-Tab",

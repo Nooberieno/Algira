@@ -2,8 +2,8 @@
     import "../../node_modules/@xterm/xterm/css/xterm.css"
     import "../styles/terminal.css"
 
-    import { onMount, tick } from "svelte";
-    import { Terminal } from "@xterm/xterm";
+    import { onMount } from "svelte";
+    import { term } from "../lib/ui/terminal.svelte"
     import { FitAddon } from "@xterm/addon-fit"
     import { invoke } from "@tauri-apps/api/core";
 
@@ -11,19 +11,12 @@
 
     onMount(() => {
         const fit = new FitAddon()
-        const term = new Terminal({
-            cursorBlink: true,
-            fontFamily: "Hack Mono",
-            fontSize: 10,
-            fontWeight: "normal",
-        });
         term.loadAddon(fit)
         term.open(term_container)
 
         async function fit_terminal(){
             await new Promise(resolve => setTimeout(resolve, 0))
             fit.fit()
-            // console.log(term.rows, term.cols)
             await invoke("pty_resize", {rows: term.rows, cols: term.cols})
         }
 
