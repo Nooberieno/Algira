@@ -5,7 +5,7 @@
     import type { Unsubscriber } from "svelte/store";
 
     import { onMount, onDestroy, tick } from "svelte";
-    import { EditorState } from "@codemirror/state";
+    import { EditorState, StateEffect } from "@codemirror/state";
     import { EditorView} from "codemirror";
 
     import { active_extensions, global_extensions } from "$lib/utils/cm-extensions.svelte";
@@ -18,7 +18,7 @@
     let editor_container: HTMLDivElement
     let unsub_id: Unsubscriber
 
-    let editor_extensions: Set<Extension> = new Set<Extension>([...(active_extensions[tab_id] || []), ...global_extensions])
+    const editor_extensions: Set<Extension> = new Set<Extension>([...(active_extensions[tab_id] || []), ...global_extensions])
 
     async function focus_editor(){
         if(view){
@@ -26,6 +26,16 @@
             view.focus()
         }
     }
+
+    $effect(() => {
+        const editor_extensions: Set<Extension> = new Set<Extension>([...(active_extensions[tab_id] || []), ...global_extensions])
+
+        if(view){
+            view.dispatch({
+                effects: StateEffect.appendConfig.of([...editor_extensions])
+            })
+        }
+    })
 
     onMount(() => {
         console.log(tab_id)
