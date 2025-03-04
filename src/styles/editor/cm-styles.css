@@ -2,7 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: row;
 } 
@@ -17,6 +17,7 @@ html, body {
 .cm-editor {
     width: 100vw;
     height: 100vh;
+    overflow: auto;
 }
 
 .cm-tooltip-autocomplete {
