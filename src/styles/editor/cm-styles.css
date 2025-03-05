@@ -21,37 +21,37 @@ html, body {
 }
 
 .cm-tooltip-autocomplete {
-    background-color: #353a42;
-    color: #abb2bf;
-    border: 1px solid #2c313a;
+    background-color: var(--surface-tooltip);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-highlight);
 }
 
 .cm-tooltip-autocomplete .cm-completionLabel {
-    color: #e5c07b;
+    color: var(--syntax-type);
 }
 
 .cm-tooltip-autocomplete .cm-completionDetail {
-    color: #7d8799;
+    color: var(--text-comment);
 }
 
 .cm-tooltip-autocomplete .cm-completionMatchedText {
-    color: #fff;
+    color: var(--syntax-invalid);
 }
 
 .cm-tooltip-autocomplete .cm-completionActive {
-    background-color: #7d8799;
-    color: #fff;
+    background-color: var(--text-comment);
+    color: var(--syntax-invalid);
     font-weight: bold;
 }
 
 .cm-tooltip.cm-tooltip-autocomplete > ul > li {
-    background-color: #21252b;
-    color: #abb2bf;
+    background-color: var(--surface-dark);
+    color: var(--text-primary);
 }
 
 .cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected] {
-    background-color: #2c313a;
-    color: #fff;
+    background-color: var(--interactive-border);
+    color: var(--syntax-invalid);
 }
 
 .cm-completionIcon-keyword::after {
