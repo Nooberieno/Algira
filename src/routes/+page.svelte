@@ -8,6 +8,7 @@
   import TabBar from "../components/TabBar.svelte";
   import TabContent from "../components/TabContent.svelte";
   import Terminal from "../components/Terminal.svelte";
+  import Sidebar from "../components/Sidebar.svelte";
 
   import { create_tab } from "../lib/ui/tabs.svelte";
   import { setup_keymap_listener } from "../lib/keybindings/keymap.svelte";
@@ -28,8 +29,11 @@
   })
 </script>
 
-<main class="container">
-  <TabBar></TabBar>
-  <TabContent></TabContent>
-  <Terminal></Terminal>
-</main>
+<div class="app-container">
+  <Sidebar></Sidebar>
+  <main class="container">
+    <TabBar></TabBar>
+    <TabContent></TabContent>
+    <Terminal></Terminal>
+  </main>
+</div>

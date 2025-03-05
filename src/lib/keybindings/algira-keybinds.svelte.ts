@@ -1,7 +1,7 @@
 import type { KeyBinding } from "./keymap.svelte";
 
 import { tab_switcher } from "../ui/tabs.svelte";
-import { toggle_terminal } from "../ui/terminal.svelte";
+import { toggle_terminal_focus } from "../ui/terminal.svelte";
 
 export const AlgiraKeymap: readonly KeyBinding[] = [
     {
@@ -11,7 +11,7 @@ export const AlgiraKeymap: readonly KeyBinding[] = [
     },
     {
         key: "Ctrl-`",
-        run: toggle_terminal,
+        run: toggle_terminal_focus,
         prevent_default: true
     }
 ]

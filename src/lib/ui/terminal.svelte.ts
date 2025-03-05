@@ -11,7 +11,7 @@ export const term = new Terminal({
     fontWeight: "normal",
 });
 
-export function toggle_terminal(){
+export function toggle_terminal_focus(){
     const terminal_container = document.getElementById("terminal")
     if(!terminal_container) return false
 
@@ -28,4 +28,18 @@ export function toggle_terminal(){
         }
     }
     return true
+}
+
+export function toggle_terminal_simple(){
+    const terminal_container = document.getElementById("terminal")
+    if(!terminal_container) return false
+
+    if(terminal_container.classList.contains("hidden")){
+        terminal_container.classList.remove("hidden")
+        term.focus()
+    }else{
+        terminal_container.classList.add("hidden")
+        const editor = editor_views.get(get(active_id))
+        if(editor) editor.focus()
+    }
 }
