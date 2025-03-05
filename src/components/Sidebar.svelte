@@ -3,6 +3,8 @@
     
     import type { Component } from "svelte";
 
+    import Directory from "./sidebar/Directory.svelte";
+
     import { toggle_terminal_simple } from '$lib/ui/terminal.svelte';
   
     let SidebarContent = $state<Component>()
@@ -30,7 +32,7 @@
   <div class="sidebar">
     <div class="sidebar-buttons">
       <div class="sidebar-buttons-top">
-        <!-- place top buttons here -->
+        <button class="sidebar-button" onclick={() => {toggle_sidebar(Directory)}}>&#xea83;</button>
       </div>
       <div class="sidebar-buttons-top">
         <button class="sidebar-button down" onclick={toggle_terminal_simple}>&#xea85</button>

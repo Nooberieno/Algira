@@ -22,19 +22,19 @@
 }
 
 .sidebar-button{
+    font-family: Hack Mono;
     background: none;
     border: none;
     padding: 0;
     color: var(--text-secondary);
     font-family: inherit;
     font-size: 35px;
-    margin-left: auto;
-    margin-right: auto;
     text-align: center;
-    width: 35px;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .sidebar-button:focus{

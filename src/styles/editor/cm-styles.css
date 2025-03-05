@@ -195,14 +195,3 @@ html, body {
     -webkit-text-size-adjust: 100%;
     content: "\ea8b" !important;
 }
-
-@font-face {
-    font-family: "Hack Mono";
-    src: url("../../assets/fonts/hack/HackNerdFontMono-Regular.ttf");
-}
-
-@font-face {
-    font-family: "Hack Mono";
-    src: url("../../assets/fonts/hack/HackNerdFontMono-Italic.ttf");
-    font-style: italic;
-}

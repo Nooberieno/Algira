@@ -1,12 +1,14 @@
 import type { EditorView } from "codemirror";
+import type { FileEntry } from "$lib/ui/directory.svelte";
 
 import { open, save } from "@tauri-apps/plugin-dialog";
-import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
+import { readTextFile, writeTextFile, readDir } from "@tauri-apps/plugin-fs";
 import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
 import { active_id, tabs, set_active_tab } from "../ui/tabs.svelte";
 import { get_language_from_file_extension, language_handler } from "./lang.svelte";
+import { working_directory } from "$lib/ui/directory.svelte";
 
 export const open_new_file = async(view: EditorView) => {
     console.log("Opening file")
@@ -60,4 +62,38 @@ export const save_text_file = async(view: EditorView) => {
         }
     }
     return false
+}
+
+export const open_new_working_directory = async() => {
+    console.log("Opening new working directory")
+    const dir = await open({
+        directory: true,
+        multiple: false,
+        title: "Open folder"
+    })
+    if(!dir) return false
+    working_directory.update(() => dir)
+}
+
+export async function load_directory(directory_path: string){
+    try{
+        const entries = await readDir(directory_path)
+        const items: FileEntry[] = []
+        for(const entry of entries){
+            const item_path = await path.join(directory_path, entry.name)
+            items.push({
+                name: entry.name,
+                path: item_path,
+                is_directory: entry.isDirectory,
+                is_collapsed: true
+            })
+        }
+        return items.sort((a, b) => {
+            if(a.is_directory === b.is_directory) return a.name.localeCompare(b.name)
+            return a.is_directory ? -1: 1
+        })
+    } catch(error){
+        console.error("Error loading directory: ", error)
+        return []
+    }
 }
