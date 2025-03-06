@@ -1,10 +1,20 @@
 .tab-bar{
   background-color: var(--surface-secondary);
-  color: #abb2bf;
+  color: var(--text-primary);
+  top: 0;
+  display: flex;
+  position: sticky;
+  overflow-x: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: fit-content;
+  max-height: max-content;
 }
 
-.tab-container{
-  display: inline-block;
+.tab-container {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Prevent tabs from shrinking */
   padding: 10px;
   border: 2px solid var(--surface-secondary);
 }
@@ -50,6 +60,9 @@
   border: none;
   color: var(--text-primary);
   cursor: pointer;
+  position: sticky;
+  right: 0;
+  flex-shrink: 0;
 }
 
 .add-tab:hover{
@@ -66,6 +79,9 @@
 
 .tab-component{
   display: none;
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
 
 .tab-component.active{
