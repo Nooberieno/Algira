@@ -15,9 +15,19 @@ pub struct TermState {
 
 #[tauri::command]
 pub async fn create_shell_process(state: State<'_, TermState>) -> Result<(), String>{
-    let mut cmd = CommandBuilder::new("bash");
-    cmd.env("PTY", "xterm-256-color");
-
+    let cmd = {
+        #[cfg(not(target_os = "windows"))]{
+            let mut cmd = CommandBuilder::new("bash");
+            cmd.env("TERM", "xterm-256-color");
+            cmd
+        }
+        #[cfg(target_os = "windows")]{
+            let mut cmd = CommandBuilder::new("powershell.exe");
+            cmd.env("TERM", "cygwin");
+            cmd
+        }
+    };
+    
     let mut child = state.pty_pair.lock().await.slave.spawn_command(cmd).map_err(|e| e.to_string())?;
 
     thread::spawn(move || {
