@@ -1,0 +1,199 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+} 
+
+.editor{
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.cm-editor {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.cm-tooltip-autocomplete {
+    background-color: var(--surface-tooltip);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-highlight);
+}
+
+.cm-tooltip-autocomplete .cm-completionLabel {
+    color: var(--syntax-type);
+}
+
+.cm-tooltip-autocomplete .cm-completionDetail {
+    color: var(--text-comment);
+}
+
+.cm-tooltip-autocomplete .cm-completionMatchedText {
+    color: var(--syntax-invalid);
+}
+
+.cm-tooltip-autocomplete .cm-completionActive {
+    background-color: var(--text-comment);
+    color: var(--syntax-invalid);
+    font-weight: bold;
+}
+
+.cm-tooltip.cm-tooltip-autocomplete > ul > li {
+    background-color: var(--surface-dark);
+    color: var(--text-primary);
+}
+
+.cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected] {
+    background-color: var(--interactive-border);
+    color: var(--syntax-invalid);
+}
+
+.cm-completionIcon-keyword::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\eb62" !important;
+}
+
+.cm-completionIcon-function::after, .cm-completionIcon-method::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\ea8c" !important;
+}
+
+.cm-completionIcon-class::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\eb5b" !important;
+}
+
+.cm-completionIcon-interface::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\eb61" !important;
+}
+
+.cm-completionIcon-variable::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\ea88" !important;
+}
+
+.cm-completionIcon-constant::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\eb5d" !important;
+}
+
+.cm-completionIcon-type::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    font-size: 75%;
+    align-content: center;
+    content: "\f121" !important;
+}
+
+.cm-completionIcon-enum::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\ea95" !important;
+}
+
+.cm-completionIcon-property::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\eb65" !important;
+}
+
+.cm-completionIcon-namespace::after {
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    content: "\ea8b" !important;
+}

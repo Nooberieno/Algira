@@ -7,10 +7,17 @@
   ],
   "permissions": [
     "core:default",
-    "shell:allow-open",
+    "opener:default",
     "dialog:default",
-    "fs:allow-stat",
-    "fs:allow-app-write",
-    "fs:default"
+    "fs:default",
+    "fs:allow-read-dir",
+    "fs:allow-read",
+    "fs:allow-write-text-file",
+    {
+      "identifier": "fs:scope",
+      "allow": ["**/*"]
+    },
+    "os:default",
+    "shell:default"
   ]
 }

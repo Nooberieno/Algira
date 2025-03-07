@@ -1,0 +1,28 @@
+.directory-item{
+    font-family: inherit;
+    font-size: 12px;
+    padding: 5px;
+    text-align: left;
+    overflow-y: auto;
+}
+
+.pl-4{
+    padding-left: 1rem;
+}
+
+.directory-item span[role="button"]{
+    display: block;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.directory-item span[role="button"]:hover{
+    background-color: var(--interactive-hover);
+    border-radius: 3px;
+}
+
+.directory-item span[role="button"]::first-letter{
+    font-size: 14px;
+    margin-right: 4px;
+    color: var(--syntax-types);
+}

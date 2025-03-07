@@ -1,0 +1,117 @@
+:root{
+    font-family: Hack Mono;
+    font-size: 16px;
+    line-height: 24px;
+
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+
+    /* Base Surface Colors */  
+    --surface-primary: #282c34;      /* Main background */
+    --surface-secondary: #22252c;    /* Sidebar/secondary panels */
+    --surface-tertiary: #1d1f25;     /* Deepest backgrounds */
+    --surface-tooltip: #353a42;      /* Tooltips/popovers */
+    --surface-highlight: #2c313a;    /* Highlighted areas */
+    --surface-dark: #21252b;         /* Dark panels */
+  
+    /* Text Colors */
+    --text-primary: #abb2bf;         /* Primary text */
+    --text-secondary: #7a8490;       /* Secondary/muted text */
+    --text-comment: #7d8799;          /* Comments, subdued text */
+    
+    /* Syntax Highlighting */
+    --syntax-types: #e5c07b;       /* Types, classes, namespaces */
+    --syntax-properties: #e06c75;        /* Properties, deleted */
+    --syntax-operators: #56b6c2;         /* Operators, URLs */
+    --syntax-strings: #98c379;         /* Strings */
+    --syntax-functions: #61afef;       /* Functions */
+    --syntax-constants: #d19a66;      /* Constants */
+    --syntax-keywords: #c678dd;       /* Keywords */
+    --syntax-invalid: #ffffff;      /* Invalid code */
+  
+    /* UI Element Colors */
+    --accent-cursor: #528bff;       /* Cursor */
+    --accent-selection: #3E4451;    /* Selection background */
+    --accent-highlight: #6699ff0b;  /* Active line */ 
+    --accent-match: #72a1ff59;      /* Search matches */
+  
+    /* Interactive Element Colors */
+    --interactive-hover: #353a41;    /* Hover states */
+    --interactive-active: #56b6c2;   /* Active indicators */
+    --interactive-border: #2c313a;   /* Borders */
+  
+    /* Terminal Colors */
+    --terminal-background: #000000;  /* Terminal background */
+}
+
+body{
+    background-color: var(--surface-secondary);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--surface-highlight); /* highlightBackground */
+    border-radius: 5px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent-selection); /* selection */
+    border-radius: 5px;
+    border: 2px solid var(--surface-highlight); /* highlightBackground */
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-primary); 
+  }
+  
+  /* Corner */
+  ::-webkit-scrollbar-corner {
+    background: var(--surface-primary); /* background */
+  }
+  
+.container{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+  position: relative;
+}
+
+.app-container{
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.tab-content{
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+
+@font-face {
+    font-family: "Hack Mono";
+    src: url("../assets/fonts/hack/HackNerdFontMono-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Hack Mono";
+    src: url("../assets/fonts/hack/HackNerdFontMono-Italic.ttf");
+    font-style: italic;
+}
