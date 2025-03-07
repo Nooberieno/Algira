@@ -14,7 +14,7 @@
 .tab-container {
   display: flex;
   align-items: center;
-  flex-shrink: 0; /* Prevent tabs from shrinking */
+  flex-shrink: 0;
   padding: 10px;
   border: 2px solid var(--surface-secondary);
 }
@@ -60,8 +60,6 @@
   border: none;
   color: var(--text-primary);
   cursor: pointer;
-  position: sticky;
-  right: 0;
   flex-shrink: 0;
 }
 

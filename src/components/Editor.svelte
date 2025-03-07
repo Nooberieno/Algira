@@ -9,7 +9,7 @@
     import { EditorView} from "codemirror";
 
     import { active_extensions, global_extensions } from "$lib/utils/cm-extensions.svelte";
-    import { register_editor, unregister_editor } from "$lib/utils/editors.svelte";
+    import { register_editor, unregister_editor } from "$lib/ui/editors.svelte";
     import { active_id } from "$lib/ui/tabs.svelte";
 
     let { tab_id }: { tab_id: string} = $props()

@@ -5,7 +5,7 @@ import { get } from "svelte/store";
 import { tick } from "svelte";
 
 import { active_id } from "./tabs.svelte";
-import { editor_views } from "$lib/utils/editors.svelte";
+import { editor_views } from "$lib/ui/editors.svelte";
 
 export const term = new Terminal({
     cursorBlink: true,

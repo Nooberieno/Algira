@@ -1,15 +1,19 @@
-import type { Component } from "svelte";
-
 import { writable, get } from "svelte/store";
+import { tick } from "svelte";
+
+import Editor from "../../components/Editor.svelte";
 
 import { active_extensions } from "../utils/cm-extensions.svelte";
+import { get_language_from_file_extension, check_language, language_handler } from "$lib/utils/lang.svelte";
+import { extract_tab_info } from "$lib/utils/filesystem.svelte";
+import { content_to_doc, editor_views } from "./editors.svelte";
 
 export interface Tab {
     id: string,
     title: string,
     path?: string,
     language?: string,
-    element: Component
+    element: any
 }
 
 export const tabs: Tab[] = $state([])
@@ -33,7 +37,7 @@ export function close_tab(tab_id: string) {
     }
 }
 
-export function create_tab(tab_element: any) {
+export function create_new_tab(tab_element: any) {
     const new_tab = {
         id: crypto.randomUUID(),
         title: `Untitled`,
@@ -56,5 +60,43 @@ export function tab_switcher(){
             return true
         }
         return false
+    }
+}
+
+export function update_tab_info(tab: Tab, title: string, path: string = "", language: string | undefined = undefined){
+    tab.title = title
+    if((!tab.path || tab.path !== path) && path){
+        tab.path = path
+    }
+    if(language && check_language(language)) tab.language = language
+    else if(tab.path){
+        tab.language = get_language_from_file_extension(tab.path)
+    }
+}
+
+export async function create_tab_from_file(file_path: string){
+    let tab = tabs.find((t) => file_path === t.path)
+    console.log(tab?.path, tab?.id)
+    if(tab){
+        set_active_tab(tab.id)
+        return
+    } 
+    const file_data = await extract_tab_info(file_path)
+    const new_tab: Tab = ({
+        id: crypto.randomUUID(),
+        title: file_data.filename,
+        path: file_path,
+        language: file_data.language,
+        element: Editor
+    })
+    tabs.push(new_tab)
+    set_active_tab(new_tab.id)
+
+    await tick()
+
+    const editor = editor_views.get(new_tab.id)
+    if(editor){
+        language_handler(new_tab.id, new_tab.language)
+        content_to_doc(editor, file_data.content)
     }
 }

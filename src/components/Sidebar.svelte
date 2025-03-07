@@ -3,7 +3,7 @@
     
     import type { Component } from "svelte";
 
-    import Directory from "./sidebar/Directory.svelte";
+    import Directory from "./sidebar/Directory/Directory.svelte";
 
     import { toggle_terminal_simple } from '$lib/ui/terminal.svelte';
   

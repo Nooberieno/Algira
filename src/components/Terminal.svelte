@@ -7,8 +7,6 @@
     
     import { term, fit, init_shell, fit_terminal, write_to_pty, read_from_pty } from "../lib/ui/terminal.svelte"
 
-    let term_container: HTMLDivElement
-
     onMount(async () => {
         term.loadAddon(fit)
 
@@ -19,4 +17,4 @@
     })
 </script>
 
-<div bind:this={term_container} id="terminal" class="terminal hidden"></div>
+<div id="terminal" class="terminal hidden"></div>

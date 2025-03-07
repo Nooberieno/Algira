@@ -10,13 +10,13 @@
   import Terminal from "../components/Terminal.svelte";
   import Sidebar from "../components/Sidebar.svelte";
 
-  import { create_tab } from "../lib/ui/tabs.svelte";
+  import { create_new_tab } from "../lib/ui/tabs.svelte";
   import { setup_keymap_listener } from "../lib/keybindings/keymap.svelte";
   import { register_language } from "$lib/utils/lang.svelte";
   import { AlgiraKeymap } from "../lib/keybindings/algira-keybinds.svelte";
   import { AlgiraKeymapManager } from "../lib/keybindings/keymap.svelte";
 
-  create_tab(Editor)
+  create_new_tab(Editor)
   register_language("py", "python", python())
   
   onMount(() => {

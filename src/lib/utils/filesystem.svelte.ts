@@ -6,9 +6,10 @@ import { readTextFile, writeTextFile, readDir } from "@tauri-apps/plugin-fs";
 import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
-import { active_id, tabs, set_active_tab } from "../ui/tabs.svelte";
+import { active_id, tabs, set_active_tab, update_tab_info } from "../ui/tabs.svelte";
 import { get_language_from_file_extension, language_handler } from "./lang.svelte";
 import { working_directory } from "$lib/ui/directory.svelte";
+import { content_to_doc } from "../ui/editors.svelte";
 
 export const open_new_file = async(view: EditorView) => {
     console.log("Opening file")
@@ -21,20 +22,17 @@ export const open_new_file = async(view: EditorView) => {
     let tab = tabs.find((t) => file_path === t.path)
     if (tab){
         set_active_tab(tab.id)
+        return true
     }
     tab = tabs.find((t) => get(active_id) === t.id)
     const filename = await path.basename(file_path)
     if(filename !== tab?.title){
         const text = await readTextFile(file_path)
         if(tab){
-            tab.title = filename
-            tab.path = file_path
-            tab.language = get_language_from_file_extension(file_path)
+            update_tab_info(tab, filename, file_path)
             language_handler(tab.id, tab.language)
             console.log(tab.language)
-            view.dispatch({
-                changes: {from: 0, to: view.state.doc.length, insert: text}
-            })
+            content_to_doc(view, text)
         }
 
     }
@@ -52,9 +50,7 @@ export const save_text_file = async(view: EditorView) => {
             title: "Save as"
         })
         if(file_path){
-            tab.title = await path.basename(file_path)
-            tab.path = file_path
-            tab.language = get_language_from_file_extension(file_path)
+            update_tab_info(tab, await path.basename(file_path), file_path)
             language_handler(tab.id, tab.language)
             console.log(tab.language)
             await writeTextFile(file_path, view.state.doc.toString())
@@ -85,7 +81,8 @@ export async function load_directory(directory_path: string){
                 name: entry.name,
                 path: item_path,
                 is_directory: entry.isDirectory,
-                is_collapsed: true
+                is_collapsed: true,
+                children: entry.isDirectory? [] : undefined
             })
         }
         return items.sort((a, b) => {
@@ -93,7 +90,22 @@ export async function load_directory(directory_path: string){
             return a.is_directory ? -1: 1
         })
     } catch(error){
-        console.error("Error loading directory: ", error)
+        console.error("Error loading directory: ", 
+            error,
+            directory_path
+        )
         return []
+    }
+}
+
+export async function extract_tab_info(file_path: string){
+    const filename = await path.basename(file_path)
+    const content = await readTextFile(file_path)
+    const language = get_language_from_file_extension(file_path)
+
+    return {
+        filename,
+        content,
+        language
     }
 }
