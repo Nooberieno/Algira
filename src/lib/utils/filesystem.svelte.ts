@@ -69,6 +69,7 @@ export const open_new_working_directory = async() => {
     })
     if(!dir) return false
     working_directory.update(() => dir)
+    return true
 }
 
 export async function load_directory(directory_path: string){

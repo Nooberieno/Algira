@@ -40,7 +40,7 @@ export function toggle_terminal_focus(){
     return true
 }
 
-export async function toggle_terminal_simple(){
+export function toggle_terminal_simple(){
     const terminal_container = document.getElementById("terminal")
     if(!terminal_container) return false
 
@@ -56,6 +56,7 @@ export async function toggle_terminal_simple(){
         const editor = editor_views.get(get(active_id))
         if(editor) editor.focus()
     }
+    return true
 }
 
 export async function fit_terminal(){

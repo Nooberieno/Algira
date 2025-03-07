@@ -74,6 +74,7 @@ class KeyMapManager{
 
     handle_event = (event: KeyboardEvent) => {
         const key = this.modifiers(event)
+        console.log(key)
         const binding = this.keybindings.get(key)
 
         if (!binding) return
