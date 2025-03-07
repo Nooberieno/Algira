@@ -1,4 +1,6 @@
 <script lang="ts">
+    import "../../../styles/sidebar/directory.css"
+
     import type { FileEntry } from "$lib/ui/directory.svelte";
     import { toggle_directory } from "$lib/ui/directory.svelte";
     import { create_tab_from_file } from "$lib/ui/tabs.svelte";

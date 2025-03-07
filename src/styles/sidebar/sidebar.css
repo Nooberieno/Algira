@@ -71,18 +71,21 @@
 .sidebar.expanded .sidebar-item-content {
     -webkit-transform: translateX(0px);
     transform: translateX(0px);
+    overflow-y: auto;
 } 
 
 #content-container{
-    padding: 0.5rem;
+    padding: 1rem;
 }
 
 .content-button{
     font-family: inherit;
-    background: none;
+    width: 80%;
+    background-color: var(--syntax-operators);
     border: none;
+    border-radius: 2px;
     padding: 0;
     cursor: pointer;
     white-space: pre-wrap;
-    color: var(--text-primary);
+    color: var(--surface-dark);
 }
