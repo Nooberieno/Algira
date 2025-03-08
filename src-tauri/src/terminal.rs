@@ -19,7 +19,7 @@ pub async fn create_shell_process(state: State<'_, TermState>) -> Result<(), Str
         #[cfg(not(target_os = "windows"))]
         {
             let mut cmd = CommandBuilder::new("bash");
-            cmd.env("TERM", "xterm-256-color");
+            cmd.env("TERM", "xterm-256color");
             cmd
         }
         #[cfg(target_os = "windows")]

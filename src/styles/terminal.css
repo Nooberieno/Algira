@@ -3,15 +3,15 @@
     width: 100%;
     padding: 10px;
     background-color: black;
-    transition: height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
     overflow-y: scroll;
     flex-shrink: 0;
     opacity: 1;
 }
 
 .hidden {
-    height: 0 !important;
-    padding: 0 !important;
-    opacity: 0 !important;
-    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out, opacity 0.3s ease-out;
+    max-height: 0;
+    padding: 0;
+    opacity: 0;
 }
