@@ -1,6 +1,8 @@
 import type { KeyBinding } from "./keymap.svelte";
 
-import { tab_switcher } from "../ui/tabs.svelte";
+import Editor from "../../components/Editor.svelte";
+
+import { tab_switcher, create_new_tab } from "../ui/tabs.svelte";
 import { toggle_terminal_focus, toggle_terminal_simple } from "../ui/terminal.svelte";
 import { open_new_working_directory } from "$lib/utils/filesystem.svelte";
 
@@ -26,6 +28,11 @@ export const AlgiraKeymap: readonly KeyBinding[] = [
     {
         key: "Ctrl-k",
         run: () => {open_new_working_directory(); return true},
+        prevent_default: true
+    },
+    {
+        key: "Ctrl-n",
+        run: () => {create_new_tab(Editor); return true},
         prevent_default: true
     }
 ]

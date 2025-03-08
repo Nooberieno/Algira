@@ -32,7 +32,11 @@ export function toggle_terminal_focus(){
         if(document.querySelector(".xterm-helper-textarea") === document.activeElement){
             terminal_container.classList.add("hidden")
             const editor = editor_views.get(get(active_id))
-            if(editor) editor.focus()
+            if(editor){
+                editor.focus()
+            }else{
+                (document.activeElement as HTMLElement).blur()
+            }
         }else{
             term.focus()
         }

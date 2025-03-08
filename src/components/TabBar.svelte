@@ -1,8 +1,7 @@
 <script lang="ts">
     import "../styles/tab.css"
 
-    import { tabs, active_id, set_active_tab, close_tab, create_new_tab } from '../lib/ui/tabs.svelte';
-    import Editor from './Editor.svelte';
+    import { tabs, active_id, set_active_tab, close_tab } from '../lib/ui/tabs.svelte';
 </script>
 
 <div class="tab-bar">
@@ -18,5 +17,4 @@
         <button class="close-tab" onclick={(e: MouseEvent) => { e.stopPropagation(); close_tab(tab.id); }}>x</button>
     </div>
     {/each}
-    <button onclick={() => create_new_tab(Editor)} class="add-tab">+</button>
 </div>

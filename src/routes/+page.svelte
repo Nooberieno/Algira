@@ -4,11 +4,11 @@
   import { onMount, onDestroy } from "svelte";
   import { python } from "@codemirror/lang-python";
 
-  import Editor from "../components/Editor.svelte";
   import TabBar from "../components/TabBar.svelte";
   import TabContent from "../components/TabContent.svelte";
   import Terminal from "../components/Terminal.svelte";
   import Sidebar from "../components/Sidebar.svelte";
+  import Algira from "../components/Algira.svelte";
 
   import { create_new_tab } from "../lib/ui/tabs.svelte";
   import { setup_keymap_listener } from "../lib/keybindings/keymap.svelte";
@@ -16,7 +16,6 @@
   import { AlgiraKeymap } from "../lib/keybindings/algira-keybinds.svelte";
   import { AlgiraKeymapManager } from "../lib/keybindings/keymap.svelte";
 
-  create_new_tab(Editor)
   register_language("py", "python", python())
   
   onMount(() => {
@@ -32,6 +31,7 @@
 <div class="app-container">
   <Sidebar></Sidebar>
   <main class="container">
+    <Algira></Algira>
     <TabBar></TabBar>
     <TabContent></TabContent>
     <Terminal></Terminal>

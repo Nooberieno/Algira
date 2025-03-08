@@ -18,6 +18,8 @@ export interface Tab {
 
 export const tabs: Tab[] = $state([])
 
+let untitled_count: number = $state(0)
+
 export const active_id = writable<string>("")
 
 export function set_active_tab(tab_id: string) {
@@ -40,9 +42,10 @@ export function close_tab(tab_id: string) {
 export function create_new_tab(tab_element: any) {
     const new_tab = {
         id: crypto.randomUUID(),
-        title: `Untitled`,
+        title: `Untitled-${untitled_count}`,
         element: tab_element,
     };
+    untitled_count++
     tabs.push(new_tab)
     active_id.set(new_tab.id);
 }

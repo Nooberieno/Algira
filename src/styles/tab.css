@@ -27,6 +27,14 @@
   color: var(--text-primary);
 }
 
+.tab-content{
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  height: 100%;
+  min-height: 0;
+}
+
 .tab.active{
   font-style: italic;
 }
@@ -51,21 +59,6 @@
   cursor: pointer;
   color: var(--syntax-invalid);
   background-color: var(--surface-tooltip);
-  border-radius: 5px;
-}
-
-.add-tab{
-  font-family: inherit;
-  background: none;
-  border: none;
-  color: var(--text-primary);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.add-tab:hover{
-  color: var(--syntax-invalid);
-  background-color: var(--interactive-hover);
   border-radius: 5px;
 }
 
