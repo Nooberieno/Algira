@@ -6,12 +6,12 @@ import { readTextFile, writeTextFile, readDir } from "@tauri-apps/plugin-fs";
 import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
-import { active_id, tabs, set_active_tab, update_tab_info } from "../ui/tabs.svelte";
+import { active_id, tabs, set_active_tab, update_tab_info, create_tab_from_file } from "../ui/tabs.svelte";
 import { get_language_from_file_extension, language_handler } from "./lang.svelte";
 import { working_directory } from "$lib/ui/directory.svelte";
-import { content_to_doc } from "../ui/editors.svelte";
+import { content_to_doc, editor_views } from "../ui/editors.svelte";
 
-export const open_new_file = async(view: EditorView) => {
+export const open_new_file = async() => {
     console.log("Opening file")
     const file_path = await open({
         multiple: false,
@@ -26,15 +26,19 @@ export const open_new_file = async(view: EditorView) => {
     }
     tab = tabs.find((t) => get(active_id) === t.id)
     const filename = await path.basename(file_path)
-    if(filename !== tab?.title){
-        const text = await readTextFile(file_path)
-        if(tab){
-            update_tab_info(tab, filename, file_path)
-            language_handler(tab.id, tab.language)
-            console.log(tab.language)
-            content_to_doc(view, text)
+    if(tab){
+        if(filename !== tab.title){
+            const text = await readTextFile(file_path)
+            const view = editor_views.get(tab.id)
+            if(view){
+                update_tab_info(tab, filename, file_path)
+                language_handler(tab.id, tab.language)
+                console.log(tab.language)
+                content_to_doc(view, text)
+            }
         }
-
+    }else{
+        create_tab_from_file(file_path)
     }
 }
 

@@ -4,9 +4,14 @@ import Editor from "../../components/Editor.svelte";
 
 import { tab_switcher, create_new_tab } from "../ui/tabs.svelte";
 import { toggle_terminal_focus, toggle_terminal_simple } from "../ui/terminal.svelte";
-import { open_new_working_directory } from "$lib/utils/filesystem.svelte";
+import { open_new_working_directory, open_new_file } from "$lib/utils/filesystem.svelte";
 
 export const AlgiraKeymap: readonly KeyBinding[] = [
+    {
+        key: "Ctrl-o",
+        run: () => {open_new_file(); return true},
+        prevent_default: true
+    },
     {
         //Cannot have a shift since that results in Ctrl-Shift-unidentified for some reason
         key: "Ctrl-Tab",
