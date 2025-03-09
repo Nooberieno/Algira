@@ -1,15 +1,18 @@
 <script lang="ts">
-    import "../styles/sidebar/sidebar.css"
-    
-    import type { Component } from "svelte";
-
-    import Directory from "./sidebar/Directory/Directory.svelte";
-
-    import { toggle_terminal_simple } from '$lib/ui/terminal.svelte';
+  import "../styles/sidebar/sidebar.css"
   
-    let SidebarContent = $state<Component>()
+  import { onMount, type Component } from "svelte";
+  import type { Unsubscriber } from "svelte/store";
 
-    async function toggle_sidebar(component: Component){
+  import Directory from "./sidebar/Directory/Directory.svelte";
+
+  import { toggle_terminal_simple } from '$lib/ui/terminal.svelte';
+  import { working_directory } from "$lib/ui/directory.svelte";
+
+  let SidebarContent = $state<Component>()
+  let unsub_working_dir: Unsubscriber
+
+  async function toggle_sidebar(component: Component){
     const sidebar = document.querySelector(".sidebar")
     const is_expanded = sidebar?.classList.contains("expanded")
 
@@ -25,7 +28,18 @@
         sidebar?.classList.add("expanded")
         SidebarContent = component
     }
-    }
+  }
+
+  onMount(() => {
+    unsub_working_dir = working_directory.subscribe((folder) => {
+      if(folder === undefined) return
+      toggle_sidebar(Directory)
+    })
+
+    return () => {
+      unsub_working_dir()
+    } 
+  })
   
   </script>
   
