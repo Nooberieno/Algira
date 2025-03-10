@@ -2,6 +2,8 @@
     font-family: inherit;
     position: fixed;
     top: 20%;
+    margin: 0;
+    padding-block-start: unset;
     left: 50%;
     transform: translateX(-50%);
     width: 600px;
@@ -10,7 +12,8 @@
     border: 1px solid var(--interactive-border);
     border-radius: 6px;
     padding: 0;
-    overflow: hidden;
+    overflow: visible;
+    z-index: 2;
 }
 
 .command-palette::backdrop{
@@ -27,11 +30,25 @@
     color: var(--text-primary);
     font-size: 14px;
     outline: none;
+    box-sizing: border-box;
 }
 
 .command-list{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--surface-dark);
+    border-top: none;
     max-height: 400px;
     overflow-y: auto;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.command-list.has-results{
+    display: block;
 }
 
 .command-item {

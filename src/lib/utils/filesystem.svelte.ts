@@ -76,19 +76,23 @@ export const open_new_working_directory = async() => {
     return true
 }
 
-export async function load_directory(directory_path: string){
+export async function load_directory(directory_path: string, recursive: boolean = false){
     try{
         const entries = await readDir(directory_path)
         const items: FileEntry[] = []
         for(const entry of entries){
             const item_path = await path.join(directory_path, entry.name)
-            items.push({
+            const item: FileEntry = ({
                 name: entry.name,
                 path: item_path,
                 is_directory: entry.isDirectory,
                 is_collapsed: true,
                 children: entry.isDirectory? [] : undefined
             })
+            if(recursive && entry.isDirectory){
+                item.children = await load_directory(item_path, true)
+            }
+            items.push(item)
         }
         return items.sort((a, b) => {
             if(a.is_directory === b.is_directory) return a.name.localeCompare(b.name)

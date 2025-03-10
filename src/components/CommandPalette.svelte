@@ -16,12 +16,13 @@
     let selected_index = $state(0)
     let search_results: SearchResult[] = $state([])
     let items: PaletteItem[] = $state([])
+    let search_query = $state("")
 
     let is_palette_open = $state(false)
     
     async function load_file_items(){
         if(!$working_directory) return
-        const entries = await load_directory($working_directory)
+        const entries = await load_directory($working_directory, true)
         items = create_file_items(entries)
     }
 
@@ -71,6 +72,7 @@
                 if(search_results[selected_index]){
                     search_results[selected_index].item.action()
                     toggle_palette()
+                    search_query = ""
                 }
                 break
             }   
@@ -81,18 +83,16 @@
     })
 
     $effect(() => {
-        if(input){
-            handle_search(input.value)
-        }
+        handle_search(search_query)
     })
 </script>
 
 {#if is_palette_open}
     <dialog bind:this={dialog} transition:fade class="command-palette" aria-modal="true">
-        <input bind:this={input} onkeydown={handle_keydown} type="text" placeholder="Type a command or search" class="command-input" spellcheck="false"/>
-        <div class="commandlist">
+        <input bind:this={input} bind:value={search_query} onkeydown={handle_keydown} type="text" placeholder="Type a command or search" class="command-input" spellcheck="false"/>
+        <div class="command-list {search_results.length > 0 ? "has-results" : ""}">
             {#each search_results as result, i}
-            <div class="command-item" class:selected={i === selected_index} onclick={() => {result.item.action(); toggle_palette()}} role="button" onkeydown={(event) => {if(event.key === "Enter" || event.key === " "){result.item.action(); toggle_palette()}}} tabindex=0>
+            <div class="command-item" class:selected={i === selected_index} onclick={() => {result.item.action(); toggle_palette(); search_query = ""}} role="button" onkeydown={(event) => {if(event.key === "Enter" || event.key === " "){result.item.action(); toggle_palette(); search_query = ""}}} tabindex=0>
                 <span class="command-label">{result.item.label}</span>
                 {#if result.item.description}
                     <span class="command-description">{result.item.description}</span>

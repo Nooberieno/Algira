@@ -33,6 +33,7 @@
   onMount(() => {
     unsub_working_dir = working_directory.subscribe((folder) => {
       if(folder === undefined) return
+      if(document.querySelector(".sidebar")?.classList.contains("expanded")) return
       toggle_sidebar(Directory)
     })
 
