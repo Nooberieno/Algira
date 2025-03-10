@@ -26,12 +26,13 @@ export const AlgiraKeymap: readonly KeyBinding[] = [
     {
         //This would normally be placed under the shift variation of the previous keybind,
         //  but due to shift changing the backtick ` into ~ that will not work
-        key: "Ctrl-Shift-~",
+        key: "Shift-Ctrl-~",
         run: toggle_terminal_simple,
         prevent_default: true
     },
     {
-        key: "Ctrl-k",
+        //Multistroke keybinds are an array of keystrokes
+        key: ["Ctrl-k", "Ctrl-o"],
         run: () => {open_new_working_directory(); return true},
         prevent_default: true
     },
