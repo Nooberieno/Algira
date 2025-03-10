@@ -9,8 +9,8 @@
   import Terminal from "../components/Terminal.svelte";
   import Sidebar from "../components/Sidebar.svelte";
   import Algira from "../components/Algira.svelte";
+  import CommandPalette from "../components/CommandPalette.svelte";
 
-  import { create_new_tab } from "../lib/ui/tabs.svelte";
   import { setup_keymap_listener } from "../lib/keybindings/keymap.svelte";
   import { register_language } from "$lib/utils/lang.svelte";
   import { AlgiraKeymap } from "../lib/keybindings/algira-keybinds.svelte";
@@ -36,4 +36,5 @@
     <TabContent></TabContent>
     <Terminal></Terminal>
   </main>
+  <CommandPalette></CommandPalette>
 </div>

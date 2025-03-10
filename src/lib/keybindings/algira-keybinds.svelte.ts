@@ -40,5 +40,10 @@ export const AlgiraKeymap: readonly KeyBinding[] = [
         key: "Ctrl-n",
         run: () => {create_new_tab(Editor); return true},
         prevent_default: true
+    },
+    {
+        key: "Ctrl-p",
+        run: () => {document.dispatchEvent(new CustomEvent("toggle-command-palette")); return true},
+        prevent_default: true
     }
 ]
