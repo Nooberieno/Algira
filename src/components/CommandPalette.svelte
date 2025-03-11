@@ -24,27 +24,26 @@
     let search_query = $state("")
 
     let is_palette_open = $state(false)
-    let loading = $state(false)
     
-    async function load_file_items(){
-        if(!$working_directory || loading) return
-
-        loading = true
+    async function load_file_items(): Promise<PaletteItem[]>{
+        if(!$working_directory) return []
 
         try{
+            let items = []
             const files = await invoke<{path: string, name: string}[]>("index_directory", {dirPath: $working_directory})
 
-            items = files.map(file => ({
+            items = [...files.map(file => ({
                 id: file.path,
                 label: file.name,
                 description: file.path,
                 type: "file" as const,
                 action: () => create_tab_from_file(file.path)
-            }))
+            }))]
+
+            return items
         }catch(err){
             console.error("Failed to index directory:", err)
-        }finally{
-            loading = false
+            return []
         }
     }
 
@@ -106,14 +105,26 @@
 
     $effect(() => {
         handle_search(search_query)
+        $inspect(items)
+        $inspect(search_results)
     })
 
     onMount(() => {
-        unsub_working_dir = working_directory.subscribe((work_dir) => {
-            if(work_dir){
+        if($working_directory){
+            load_file_items().then(result => {
+                items = result
+                handle_search("")
+            })
+        }
+        unsub_working_dir = working_directory.subscribe(async (work_dir) => {
+            if(!work_dir){
                 items = []
-                load_file_items()
+                handle_search("")
+                return
             }
+            console.log("Loading new files from directory:", work_dir)
+            items = await load_file_items()
+            handle_search("")
         })
 
         return () => {
