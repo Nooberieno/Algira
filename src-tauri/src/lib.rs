@@ -6,6 +6,8 @@ use tauri::async_runtime::Mutex as AsyncMutex;
 mod terminal;
 use terminal::TermState;
 
+mod dir_map;
+
 pub fn run() {
     let pty_sys = native_pty_system();
 
@@ -38,7 +40,8 @@ pub fn run() {
             terminal::create_shell_process,
             terminal::pty_write,
             terminal::pty_read,
-            terminal::pty_resize
+            terminal::pty_resize,
+            dir_map::index_directory
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

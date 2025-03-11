@@ -15,42 +15,57 @@ export interface SearchResult{
 }
 
 export function fuzzy_search(pattern: string, str: string): number{
-    const text = str.toLowerCase()
-    const search_str = pattern.toLowerCase()
-    let score = 0
-    let prev_match_index = -1
+        // Early exit for empty strings
+    if (!pattern) return 0;
+    if (!str) return 0;
 
-    for(let i = 0; i < search_str.length; i++){
-        const char = search_str[i]
-        const index = text.indexOf(char, prev_match_index + 1)
+    const text = str.toLowerCase();
+    const search_str = pattern.toLowerCase();
+    
+    // Quick reject if first char isn't found
+    if (text.indexOf(search_str[0]) === -1) return 0;
+    
+    let score = 0;
+    let prev_match_index = -1;
+    let consecutive_matches = 0;
 
-        if(index === -1) return 0
+    // Pre-calculate string lengths to avoid repeated property access
+    const pattern_len = search_str.length;
+    const text_len = text.length;
 
-        score += 1
-        if(index === prev_match_index + 1) score += 2
-        if(index === 0 || text[index - 1] === "/" || text[index - 1] === "_") score += 3
-
-        prev_match_index = index
-    }
-    return score
-}
-
-export function create_file_items(entries: FileEntry[], basePath: string = ""): PaletteItem[]{
-    let items: PaletteItem[] = []
-
-    for(const entry of entries){
-        if(!entry.is_directory){
-            items.push({
-                id: entry.path,
-                label: entry.name,
-                description: entry.path,
-                type: "file",
-                action: () => create_tab_from_file(entry.path)
-            })
+    for (let i = 0; i < pattern_len; i++) {
+        const char = search_str[i];
+        let found = false;
+        
+        // Only search the remaining part of the string
+        for (let j = prev_match_index + 1; j < text_len; j++) {
+            if (text[j] === char) {
+                found = true;
+                
+                // Scoring heuristics
+                score += 1;
+                
+                // Bonus for consecutive matches
+                if (j === prev_match_index + 1) {
+                    consecutive_matches++;
+                    score += consecutive_matches;
+                } else {
+                    consecutive_matches = 0;
+                }
+                
+                // Bonus for matches after separators
+                if (j === 0 || text[j - 1] === '/' || text[j - 1] === '_') {
+                    score += 3;
+                }
+                
+                prev_match_index = j;
+                break;
+            }
         }
-        if(entry.children){
-            items = items.concat(create_file_items(entry.children))
-        }
+        
+        // If any character isn't found, reject the match
+        if (!found) return 0;
     }
-    return items
+    
+    return score;
 }

@@ -1,15 +1,20 @@
 <script lang="ts">
     import "../styles/command-palette.css"
 
+    import type { Unsubscriber } from "svelte/store";
+
     import type { SearchResult } from "$lib/ui/command-palette.svelte";
     import type { PaletteItem } from "$lib/ui/command-palette.svelte";
 
-    import { tick } from "svelte";
+    import { onMount, tick } from "svelte";
     import { fade } from "svelte/transition";
+    import { invoke } from "@tauri-apps/api/core";
 
     import { working_directory } from "$lib/ui/directory.svelte";
-    import { load_directory } from "$lib/utils/filesystem.svelte";
-    import { create_file_items, fuzzy_search } from "$lib/ui/command-palette.svelte";
+    import { fuzzy_search } from "$lib/ui/command-palette.svelte";
+    import { create_tab_from_file } from "$lib/ui/tabs.svelte";
+
+    let unsub_working_dir: Unsubscriber
 
     let dialog: HTMLDialogElement | null = $state(null)
     let input: HTMLInputElement | null = $state(null)
@@ -19,11 +24,28 @@
     let search_query = $state("")
 
     let is_palette_open = $state(false)
+    let loading = $state(false)
     
     async function load_file_items(){
-        if(!$working_directory) return
-        const entries = await load_directory($working_directory, true)
-        items = create_file_items(entries)
+        if(!$working_directory || loading) return
+
+        loading = true
+
+        try{
+            const files = await invoke<{path: string, name: string}[]>("index_directory", {dirPath: $working_directory})
+
+            items = files.map(file => ({
+                id: file.path,
+                label: file.name,
+                description: file.path,
+                type: "file" as const,
+                action: () => create_tab_from_file(file.path)
+            }))
+        }catch(err){
+            console.error("Failed to index directory:", err)
+        }finally{
+            loading = false
+        }
     }
 
     function handle_search(query: string){
@@ -47,7 +69,6 @@
             tick().then(() => {
                 dialog?.showModal()
                 input?.focus()
-                load_file_items()
             })
         }else{
             dialog?.close()
@@ -58,6 +79,7 @@
         switch(event.key){
             case "Escape":
                 toggle_palette()
+                search_query = ""
                 break
             case "ArrowDown":
                 event.preventDefault()
@@ -85,6 +107,20 @@
     $effect(() => {
         handle_search(search_query)
     })
+
+    onMount(() => {
+        unsub_working_dir = working_directory.subscribe((work_dir) => {
+            if(work_dir){
+                items = []
+                load_file_items()
+            }
+        })
+
+        return () => {
+            unsub_working_dir()
+        }
+    })
+
 </script>
 
 {#if is_palette_open}
