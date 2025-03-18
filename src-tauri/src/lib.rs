@@ -8,6 +8,8 @@ use terminal::TermState;
 
 mod dir_map;
 
+mod lsp;
+
 pub fn run() {
     let pty_sys = native_pty_system();
 
