@@ -30,6 +30,7 @@ dependencies = [
 name = "algira"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "portable-pty",
  "serde",
  "serde_json",

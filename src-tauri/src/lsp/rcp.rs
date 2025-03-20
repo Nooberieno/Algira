@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use serde_json;
+use serde_json::{self, Value};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct BaseMessage{
@@ -12,7 +12,7 @@ pub fn encode_message<T: Serialize>(msg: T) -> String{
     return format!("Content-Length: {}\r\n\r\n{}", content.len(), content)
 }
 
-pub fn decode_message(msg: &[u8]) -> Result<(String, String), &'static str>{
+pub fn decode_message(msg: &[u8]) -> Result<(String, Value), &'static str>{
     match byte_cut(msg, b"\r\n\r\n"){
         Some((header, content)) => {
             let header_str = String::from_utf8_lossy(header);
@@ -28,8 +28,8 @@ pub fn decode_message(msg: &[u8]) -> Result<(String, String), &'static str>{
 
                 let content_str = String::from_utf8_lossy(&content[..content_length]).to_string();
 
-                let basemessage: BaseMessage = serde_json::from_str(&content_str).expect("Invalid JSON format");
-                Ok((content_str, basemessage.method)) 
+                let message: Value = serde_json::from_str(&content_str).expect("Invalid JSON format");
+                Ok((content_str, message)) 
             }else {
                 Err("Content-Length not found in header")
             }
