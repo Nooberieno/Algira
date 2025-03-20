@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "$lib/lsp/lsp.svelte"
   import "../styles/main.css"
 
   import { onMount, onDestroy } from "svelte";

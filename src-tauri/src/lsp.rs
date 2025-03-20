@@ -1,17 +1,16 @@
 use std::sync::Arc;
-use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use tokio::{
     sync::Mutex,
     time::Duration
 };
-use tauri::Emitter;
+use tauri::{Emitter, State};
 
 mod rcp;
 mod server_handler;
 use server_handler::{InboundMessage, LspClient, LspError, RealLspClient};
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone)]
 pub struct LspState{
     pub client: Arc<Mutex<RealLspClient>>
 }
@@ -58,7 +57,7 @@ pub fn start_lsp_listener(app_handle: tauri::AppHandle, state: LspState){
 pub async fn send_request(
     method: String,
     params: Value,
-    state: LspState
+    state: State<'_, LspState>,
 ) -> Result<(), String>{
     let mut client = state.client.lock().await;
     client.send_request(&method, params).await.map_err(|e| e.to_string())?;
@@ -69,8 +68,9 @@ pub async fn send_request(
 pub async fn send_notification(
     method: String,
     params: Value,
-    state: LspState
+    state: State<'_, LspState>,
 ) -> Result<(), String>{
+    println!("request received with method: {} and params: {}", method, params);
     let mut client = state.client.lock().await;
     client.send_notification(&method, params).await.map_err(|e| e.to_string())?;
     Ok(())

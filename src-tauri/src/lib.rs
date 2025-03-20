@@ -32,6 +32,7 @@ pub fn run() {
             tauri::async_runtime::spawn(async move {
                 match lsp::start_lsp().await {
                     Ok(state) => {
+                        println!("LSP started succesfully");
                         handle.manage(state.clone());
                         lsp::start_lsp_listener(handle, state);
                     }

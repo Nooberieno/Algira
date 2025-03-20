@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
-    process::{self, Stdio},
+    process::Stdio,
     sync::atomic::AtomicUsize,
     time::{Duration, Instant},
 };
@@ -165,7 +165,7 @@ pub enum InboundMessage {
 }
 
 pub async fn start_lsp() -> Result<RealLspClient, LspError> {
-    let mut child = Command::new("pyright-languageserver")
+    let mut child = Command::new("pyright-langserver")
         .arg("--stdio")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
