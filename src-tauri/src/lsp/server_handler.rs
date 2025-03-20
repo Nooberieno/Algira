@@ -1,8 +1,6 @@
 use std::{
     collections::HashMap,
-    env,
     fmt::{self, Display, Formatter},
-    path::PathBuf,
     process::{self, Stdio},
     sync::atomic::AtomicUsize,
     time::{Duration, Instant},
@@ -131,16 +129,16 @@ pub struct ResponseMessage {
 #[derive(Debug)]
 #[allow(unused)]
 pub struct Notification {
-    method: String,
-    params: Value,
+    pub method: String,
+    pub params: Value,
 }
 
 #[derive(Debug)]
 #[allow(unused)]
 pub struct ResponseError {
-    code: i64,
-    message: String,
-    data: Option<Value>,
+    pub code: i64,
+    pub message: String,
+    pub data: Option<Value>,
 }
 
 #[derive(Debug)]
@@ -167,7 +165,8 @@ pub enum InboundMessage {
 }
 
 pub async fn start_lsp() -> Result<RealLspClient, LspError> {
-    let mut child = Command::new("rust-analyzer")
+    let mut child = Command::new("pyright-languageserver")
+        .arg("--stdio")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
@@ -328,7 +327,6 @@ pub async fn start_lsp() -> Result<RealLspClient, LspError> {
 
 #[async_trait::async_trait]
 pub trait LspClient: Send {
-    async fn initialize(&mut self) -> Result<(), LspError>;
     async fn send_request(&mut self, method: &str, params: Value) -> Result<i64, LspError>;
     async fn send_notification(&mut self, method: &str, params: Value) -> Result<(), LspError>;
     async fn recv_response(&mut self)
@@ -401,157 +399,6 @@ impl LspClient for RealLspClient {
             Err(err) => Err(LspError::ProtocolError(err.to_string())),
         }
     }
-
-    async fn initialize(&mut self) -> Result<(), LspError> {
-        // Get the current working directory
-        let workspace_path = env::current_dir()
-            .unwrap_or_else(|_| PathBuf::from("."))
-            .canonicalize()
-            .unwrap_or_else(|_| PathBuf::from("."));
-
-        // Convert to URI format (file:///path/to/workspace)
-        let workspace_uri = format!("file://{}", workspace_path.display()).replace("\\", "/"); // Handle Windows paths if needed
-
-        self.send_request(
-            "initialize",
-            json!({
-                "processId": process::id(),
-                "clientInfo": {
-                    "name": "red",
-                    "version": "0.1.0",
-                },
-                "rootUri": workspace_uri,
-                "workspaceFolders": [{
-                    "uri": workspace_uri,
-                    "name": "red"
-                }],
-                "capabilities": {
-                    "textDocument": {
-                        "completion": {
-                            "completionItem": {
-                                "snippetSupport": true,
-                            }
-                        },
-                        "definition": {
-                            "dynamicRegistration": true,
-                            "linkSupport": false,
-                        },
-                        "synchronization": {
-                            "dynamicRegistration": true,
-                            "willSave": true,
-                            "willSaveWaitUntil": true,
-                            "didSave": true,
-                        },
-                        "hover": {
-                            "dynamicRegistration": true,
-                            "contentFormat": ["plaintext"],
-                        },
-                        "formatting": {
-                            "dynamicRegistration": true,
-                        },
-                        "documentSymbol": {
-                            "dynamicRegistration": true,
-                            "symbolKind": {
-                                "valueSet": [
-                                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-                                    17, 18, 19, 20, 21, 22, 23, 24, 25, 26
-                                ]
-                            },
-                            "hierarchicalDocumentSymbolSupport": true
-                        },
-                        "codeAction": {
-                            "dynamicRegistration": true,
-                            "codeActionLiteralSupport": {
-                                "codeActionKind": {
-                                    "valueSet": [
-                                        "quickfix",
-                                        "refactor",
-                                        "refactor.extract",
-                                        "refactor.inline",
-                                        "refactor.rewrite",
-                                        "source",
-                                        "source.organizeImports"
-                                    ]
-                                }
-                            }
-                        },
-                        "signatureHelp": {
-                            "dynamicRegistration": true,
-                            "signatureInformation": {
-                                "documentationFormat": ["plaintext", "markdown"],
-                                "parameterInformation": {
-                                    "labelOffsetSupport": true
-                                },
-                                "activeParameterSupport": true
-                            }
-                        },
-                        "documentHighlight": {
-                            "dynamicRegistration": true
-                        },
-                        "documentLink": {
-                            "dynamicRegistration": true,
-                            "tooltipSupport": true
-                        },
-                        "colorProvider": {
-                            "dynamicRegistration": true
-                        },
-                        "foldingRange": {
-                            "dynamicRegistration": true,
-                            "lineFoldingOnly": true
-                        },
-                        "semanticTokens": {
-                            "dynamicRegistration": true,
-                            "requests": {
-                                "full": true
-                            },
-                            "tokenTypes": [
-                                "namespace", "type", "class", "enum", "interface",
-                                "struct", "typeParameter", "parameter", "variable",
-                                "property", "enumMember", "event", "function",
-                                "method", "macro", "keyword", "modifier", "comment",
-                                "string", "number", "regexp", "operator"
-                            ],
-                            "tokenModifiers": [
-                                "declaration", "definition", "readonly", "static",
-                                "deprecated", "abstract", "async", "modification",
-                                "documentation", "defaultLibrary"
-                            ],
-                            "formats": ["relative"]
-                        },
-                        "inlayHint": {
-                            "dynamicRegistration": true,
-                            "resolveSupport": {
-                                "properties": ["tooltip", "textEdits", "label.tooltip", "label.location", "label.command"]
-                            }
-                        }
-                    }
-                },
-                "workspace": {
-                    "symbol": {
-                        "dynamicRegistration": true,
-                        "symbolKind": {
-                            "valueSet": [
-                                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-                                17, 18, 19, 20, 21, 22, 23, 24, 25, 26
-                            ]
-                        }
-                    },
-                    "workspaceEdit": {
-                        "documentChanges": true,
-                        "resourceOperations": ["create", "rename", "delete"]
-                    }
-                }
-            }),
-        )
-        .await?;
-
-        // TODO: do we need to do anything with response?
-        _ = self.recv_response().await;
-
-        self.send_notification("initialized", json!({})).await?;
-
-        Ok(())
-    }
 }
 
 pub async fn lsp_send_request(
@@ -590,15 +437,4 @@ pub async fn lsp_send_notification(
 
 pub fn next_id() -> usize {
     ID.fetch_add(1, std::sync::atomic::Ordering::SeqCst)
-}
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_start_lsp() {
-        let mut client = start_lsp().await.unwrap();
-        client.initialize().await.unwrap();
-    }
 }
