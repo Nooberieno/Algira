@@ -165,7 +165,13 @@ pub enum InboundMessage {
 }
 
 pub async fn start_lsp(command: &str) -> Result<RealLspClient, LspError> {
-    let mut child = Command::new(command)
+    let mut program = Command::new(command);
+
+    #[cfg(target_os = "windows")]{
+        program.creation_flags(0x08000000);
+    }
+
+    let mut child = program
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
