@@ -27,9 +27,9 @@ pub fn start_lsp_listener(app_handle: tauri::AppHandle, state: LspState){
     let client = state.client.clone();
 
     tauri::async_runtime::spawn(async move {
-        let mut client = client.lock().await;
-
+        
         loop {
+            let mut client = client.lock().await;
             match client.recv_response().await{
                 Ok(Some((msg, _))) => {
                     let payload = match &msg{
@@ -59,8 +59,13 @@ pub async fn send_request(
     params: Value,
     state: State<'_, LspState>,
 ) -> Result<(), String>{
+    println!("request received with method: {} and params: {}", method, params);
+
+    println!("attempting to acquire lock..");
     let mut client = state.client.lock().await;
+    println!("lock acquired");
     client.send_request(&method, params).await.map_err(|e| e.to_string())?;
+    println!("request sent");
     Ok(())
 }
 
@@ -70,8 +75,9 @@ pub async fn send_notification(
     params: Value,
     state: State<'_, LspState>,
 ) -> Result<(), String>{
-    println!("request received with method: {} and params: {}", method, params);
+    println!("notification received with method: {} and params: {}", method, params);
     let mut client = state.client.lock().await;
     client.send_notification(&method, params).await.map_err(|e| e.to_string())?;
+    println!("notification sent");
     Ok(())
 }

@@ -165,8 +165,7 @@ pub enum InboundMessage {
 }
 
 pub async fn start_lsp() -> Result<RealLspClient, LspError> {
-    let mut child = Command::new("pyright-langserver")
-        .arg("--stdio")
+    let mut child = Command::new("rust-analyzer")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
