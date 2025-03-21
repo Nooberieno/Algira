@@ -164,8 +164,8 @@ pub enum InboundMessage {
     ProcessingError(LspError),
 }
 
-pub async fn start_lsp() -> Result<RealLspClient, LspError> {
-    let mut child = Command::new("rust-analyzer")
+pub async fn start_lsp(command: &str) -> Result<RealLspClient, LspError> {
+    let mut child = Command::new(command)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())

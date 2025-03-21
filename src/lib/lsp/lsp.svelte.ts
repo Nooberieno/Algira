@@ -15,17 +15,21 @@ const init_opts = {
     },
 };
 
-(async () => {
-    try{
-        console.log("sending initialization request...")
-        await invoke("send_request", { method: "initialize", params: init_opts}).catch(err => {
-            console.error("LSP request failed:", err)
-        });
-        console.log("initialization request send")
-    }catch(err){
-        console.error("Failed to send initialization message")
+async function startLspServer(language: string, command: string) {
+    try {
+      await invoke("start_language_server", { language, command });
+      console.log(`Started LSP server for ${language}`);
+      
+      // Initialize the server after starting it
+      await invoke("send_request", { 
+        language,
+        method: "initialize",
+        params: init_opts 
+      });
+    } catch (err) {
+      console.error(`Failed to start LSP server for ${language}:`, err);
     }
-})()
+  }
 
 listen("lsp-message", (event: any) => {
     try{
@@ -34,3 +38,6 @@ listen("lsp-message", (event: any) => {
         console.error("Error handling LSP message: ", err)
     }
 });
+
+startLspServer("rust", "rust-analyzer")
+startLspServer("go", "gopls")
