@@ -4,48 +4,58 @@ import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
 import { tags as t } from "@lezer/highlight";
 
 const
-    surface_primary: string = "#282c34",
-    surface_tooltip: string = "#353a42",
-    surface_highlight: string = "#2c313a",
-    surface_dark: string = "#21252b",
-    text_primary: string = "#abb2bf",
-    text_comment: string = "#7d8799",
-    synxtax_types :string = "#e5c07b",
-    syntax_properties: string = "#e06c75",
-    syntax_operators: string = "#56b6c2",
-    sytnax_strings: string = "#98c379",
-    syntax_functions: string = "#61afef",
-    syntax_constants: string = "#d19a66",
-    syntax_keywords: string = "#c678dd",
-    syntax_invalid: string = "#ffffff",
-    accent_cursor: string = "#528bff",
-    accent_selection: string = "#3E4451",
-    accent_highlight: string = "#6699ff0b",
-    accent_match: string = "#72a1ff59",
-    interacive_active: string = "#56b6c2",
-    interactive_border: string = "#2c313a"
+    surface_primary: string = "var(--surface-primary)",
+    surface_tooltip: string = "var(--surface-tooltip)",
+    surface_highlight: string = "var(--surface-highlight)",
+    surface_dark: string = "var(--surface-dark)",
+    surface_search: string = "var(--surface-search)",
+    text_primary: string = "var(--text-primary)",
+    text_comment: string = "var(--text-comment)",
+    syntax_types :string = "var(--syntax_types)",
+    syntax_properties: string = "var(--syntax-properties)",
+    syntax_operators: string = "var(--syntax-operators)",
+    syntax_strings: string = "var(--syntax-strings)",
+    syntax_functions: string = "var(--syntax-functions)",
+    syntax_constants: string = "var(--syntax-constants)",
+    syntax_keywords: string = "var(--syntax-keywords)",
+    syntax_invalid: string = "var(--syntax-invalid)",
+    syntax_braces: string = "var(--syntax-braces)",
+    accent_cursor: string = "var(--accent-cursor)",
+    accent_selection: string = "var(--accent-selection)",
+    accent_highlight: string = "var(--accent-highlight)",
+    accent_match: string = "var(--accent-match)",
+    accent_search: string = "var(--accent-search)",
+    accent_fold: string = "var(--accent-fold)",
+    interacive_active: string = "var(--interactive-active)",
+    interactive_border: string = "var(--interactive-border)",
+    interactive_selection: string = "var(--interactive-selection)"
 
 export const color = {
     surface_primary,
     surface_tooltip,
     surface_highlight,
     surface_dark,
+    surface_search,
     text_primary,
     text_comment,
-    synxtax_types,
+    syntax_types,
     syntax_properties,
     syntax_operators,
-    sytnax_strings,
+    syntax_strings,
     syntax_functions,
     syntax_constants,
     syntax_keywords,
     syntax_invalid,
+    syntax_braces,
     accent_cursor,
     accent_selection,
     accent_highlight,
     accent_match,
+    accent_search,
+    accent_fold,
     interacive_active,
-    interactive_border
+    interactive_border,
+    interactive_selection
 }
 
 export const AlgiraDarkTheme = EditorView.theme({
@@ -66,17 +76,17 @@ export const AlgiraDarkTheme = EditorView.theme({
 
     ".cm-searchMatch": {
         backgroundColor: accent_match,
-        outline: "1px solid #457dff"
+        outline: `1px solid ${accent_search}`
     },
     ".cm-searchMatch.cm-searchMatch-selected": {
-        backgroundColor: "#6199ff2f"
+        backgroundColor: surface_search
     },
 
     ".cm-activeLine": {backgroundColor: accent_highlight},
-    ".cm-selectionMatch": {backgroundColor: "#aafe661a"},
+    ".cm-selectionMatch": {backgroundColor: interactive_selection},
 
     "&.cm-focused .cm-matchingBracket, &.cm-focused .cm-nonmatchingBracket": {
-        backgroundColor: "#bad0f847"
+        backgroundColor: syntax_braces
     },
 
     ".cm-gutters": {
@@ -92,7 +102,7 @@ export const AlgiraDarkTheme = EditorView.theme({
     ".cm-foldPlaceholder": {
         backgroundColor: "transparent",
         border: "none",
-        color: "#ddd"
+        color: accent_fold
     },
 
     ".cm-tooltip": {
@@ -127,7 +137,7 @@ export const AlgiraDarkHighlightStyle = HighlightStyle.define([
     {tag: [t.definition(t.name), t.separator],
      color: text_primary},
     {tag: [t.typeName, t.className, t.number, t.changed, t.annotation, t.modifier, t.self, t.namespace],
-     color: synxtax_types},
+     color: syntax_types},
     {tag: [t.operator, t.operatorKeyword, t.url, t.escape, t.regexp, t.link, t.special(t.string)],
      color: syntax_operators},
     {tag: [t.meta, t.comment],
@@ -147,7 +157,7 @@ export const AlgiraDarkHighlightStyle = HighlightStyle.define([
     {tag: [t.atom, t.bool, t.special(t.variableName)],
      color: syntax_constants },
     {tag: [t.processingInstruction, t.string, t.inserted],
-     color: sytnax_strings},
+     color: syntax_strings},
     {tag: t.invalid,
      color: syntax_invalid},
   ])

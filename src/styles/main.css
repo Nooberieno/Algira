@@ -17,7 +17,8 @@
     --surface-tooltip: #353a42;      /* Tooltips/popovers */
     --surface-highlight: #2c313a;    /* Highlighted areas */
     --surface-dark: #21252b;         /* Dark panels */
-  
+    --surface-search: #6199ff2f;     /* Search background */
+
     /* Text Colors */
     --text-primary: #abb2bf;         /* Primary text */
     --text-secondary: #7a8490;       /* Secondary/muted text */
@@ -32,18 +33,23 @@
     --syntax-constants: #d19a66;      /* Constants */
     --syntax-keywords: #c678dd;       /* Keywords */
     --syntax-invalid: #ffffff;      /* Invalid code */
+    --syntax-braces: #bad0f847;
   
     /* UI Element Colors */
     --accent-cursor: #528bff;       /* Cursor */
     --accent-selection: #3E4451;    /* Selection background */
     --accent-highlight: #6699ff0b;  /* Active line */ 
     --accent-match: #72a1ff59;      /* Search matches */
-  
+    --accent-search: #457dff;       /* Search outline */
+    --accent-fold: #ddd;
+
+
     /* Interactive Element Colors */
     --interactive-hover: #353a41;    /* Hover states */
     --interactive-active: #56b6c2;   /* Active indicators */
     --interactive-border: #2c313a;   /* Borders */
-  
+    --interactive-selection: #aafe661a;
+
     /* Terminal Colors */
     --terminal-background: #000000;  /* Terminal background */
 }
