@@ -58,7 +58,7 @@ export const color = {
     interactive_selection
 }
 
-export const AlgiraDarkTheme = EditorView.theme({
+export const AlgiraStandardTheme = EditorView.theme({
     "&": {
         color: text_primary,
         backgroundColor: surface_primary
@@ -123,9 +123,9 @@ export const AlgiraDarkTheme = EditorView.theme({
         color: text_primary
         }
     }
-}, {dark: true})
+})
 
-export const AlgiraDarkHighlightStyle = HighlightStyle.define([
+export const AlgiraStandardHighlightStyle = HighlightStyle.define([
     {tag: t.keyword,
      color: syntax_keywords},
     {tag: [t.name, t.deleted, t.character, t.propertyName, t.macroName],
@@ -162,4 +162,4 @@ export const AlgiraDarkHighlightStyle = HighlightStyle.define([
      color: syntax_invalid},
   ])
 
-  export const AlgiraDark: Extension = [AlgiraDarkTheme, syntaxHighlighting(AlgiraDarkHighlightStyle)]
+  export const AlgiraStandard: Extension = [AlgiraStandardTheme, syntaxHighlighting(AlgiraStandardHighlightStyle)]
