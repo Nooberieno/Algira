@@ -11,7 +11,7 @@ const
     surface_search: string = "var(--surface-search)",
     text_primary: string = "var(--text-primary)",
     text_comment: string = "var(--text-comment)",
-    syntax_types :string = "var(--syntax_types)",
+    syntax_types :string = "var(--syntax-types)",
     syntax_properties: string = "var(--syntax-properties)",
     syntax_operators: string = "var(--syntax-operators)",
     syntax_strings: string = "var(--syntax-strings)",

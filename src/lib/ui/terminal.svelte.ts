@@ -13,10 +13,10 @@ export const term = new Terminal({
     fontSize: 10,
     fontWeight: "normal",
     theme: {
-        background: "#353a42",
+        background: "#191919",
         cursor: "528bff",
-        foreground: "#abb2bf",
-        selectionBackground: "#aafe661a"
+        foreground: "#f8f8f2",
+        selectionBackground: "#9696964d"
     }
 });
 

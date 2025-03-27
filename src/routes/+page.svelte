@@ -3,6 +3,7 @@
 
   import { onMount, onDestroy } from "svelte";
   import { python } from "@codemirror/lang-python";
+  import { markdown } from "@codemirror/lang-markdown";
 
   import TabBar from "../components/TabBar.svelte";
   import TabContent from "../components/TabContent.svelte";
@@ -17,6 +18,7 @@
   import { AlgiraKeymapManager } from "../lib/keybindings/keymap.svelte";
 
   register_language("py", "python", python())
+  register_language("md", "markdown", markdown())
   
   onMount(() => {
     setup_keymap_listener()
