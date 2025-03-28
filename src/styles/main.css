@@ -21,7 +21,7 @@
 
     /* Text Colors */
     --text-primary: #f8f8f2;         /* Primary text */
-    --text-secondary: #d7a73a;       /* Secondary/muted text */
+    --text-secondary: #d7813a;       /* Secondary/muted text */
     --text-comment: #707070;          /* Comments, subdued text */
     
     /* Syntax Highlighting */
@@ -52,6 +52,9 @@
 
     /* Terminal Colors */
     --terminal-background: #131313;  /* Terminal background */
+
+    --gradient-1: #d7a73a;
+    --gradient-2: #e74e78;
 }
 
 body{
@@ -101,6 +104,14 @@ body{
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+}
+
+.gradient-text{
+  background: linear-gradient(to right, var(--gradient-1), var(--gradient-2));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
 }
 
 #landing-page {
