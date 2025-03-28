@@ -417,8 +417,7 @@ pub async fn lsp_send_request(
         "method": req.method,
         "params": req.params,
     });
-    let body = serde_json::to_string(&req)?;
-    let req = format!("Content-Length: {}\r\n\r\n{}", body.len(), body);
+    let req = rcp::encode_message(req);
     stdin.write_all(req.as_bytes()).await?;
     stdin.flush().await?;
 

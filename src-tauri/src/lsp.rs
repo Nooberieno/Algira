@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc};
+use std::{collections::HashMap, sync::Arc, process};
 use serde_json::{json, Value};
 use tokio::{
     sync::Mutex,
@@ -99,7 +99,7 @@ pub async fn start_language_server(
     language: String,
     command: String,
     state: State<'_, LspState>
-) -> Result<(), String>{
+) -> Result<u32, String>{
     let mut clients = state.clients.lock().await;
     if clients.contains_key(&language){
         return Err(format!("LSP server for {} is already running", language));
@@ -107,5 +107,5 @@ pub async fn start_language_server(
 
     let client = server_handler::start_lsp(&command).await.map_err(|e| e.to_string())?;
     clients.insert(language, Arc::new(Mutex::new(client)));
-    Ok(())
+    Ok(process::id().into())
 }
