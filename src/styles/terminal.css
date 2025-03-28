@@ -1,6 +1,6 @@
-.terminal {
+.algira-terminal {
     font-family: Hack Mono;
-    width: 100%;
+    width: calc(100% - 2px);
     padding: 10px;
     background-color: var(--terminal-background);
     color: var(--text-primary);
@@ -9,6 +9,8 @@
     flex-shrink: 0;
     opacity: 1;
     z-index: 1;
+    border-top: 1px solid var(--text-secondary);
+    box-sizing: border-box;
 }
 
 .hidden {

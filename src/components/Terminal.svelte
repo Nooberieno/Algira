@@ -17,4 +17,4 @@
     })
 </script>
 
-<div id="terminal" class="terminal hidden"></div>
+<div id="terminal" class="algira-terminal hidden"></div>
