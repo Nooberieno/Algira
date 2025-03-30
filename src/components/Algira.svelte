@@ -5,9 +5,7 @@
 
 {#if tabs.length === 0}
     <div id="landing-page" class="gradient-text">
-        <h1 class="gradient-text">
-            Welcome to Algira
-        </h1>
+        <img alt="Algira's Logo" id="logo"/>
         <p class="gradient-text">press ctrl+k ctrl+o to open a folder </p>
         <p class="gradient-text">press ctrl+n to open a new editor</p>
         <p class="gradient-text">press ctrl+o to open an existing file</p>
