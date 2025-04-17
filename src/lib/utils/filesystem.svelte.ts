@@ -2,7 +2,7 @@ import type { EditorView } from "codemirror";
 import type { FileEntry } from "$lib/ui/directory.svelte";
 
 import { open, save } from "@tauri-apps/plugin-dialog";
-import { readTextFile, writeTextFile, readDir } from "@tauri-apps/plugin-fs";
+import { readTextFile, writeTextFile, readDir, remove } from "@tauri-apps/plugin-fs";
 import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
@@ -10,6 +10,7 @@ import { active_id, tabs, set_active_tab, update_tab_info, create_tab_from_file 
 import { get_language_from_file_extension, language_handler } from "./lang.svelte";
 import { working_directory } from "$lib/ui/directory.svelte";
 import { content_to_doc, editor_views } from "../ui/editors.svelte";
+import { update_workspaces } from "../lsp/notifications.svelte"
 
 export const open_new_file = async() => {
     console.log("Opening file")
@@ -72,8 +73,24 @@ export const open_new_working_directory = async() => {
         title: "Open folder"
     })
     if(!dir) return false
+    const current_dir = get(working_directory)
     working_directory.update(() => dir)
-    return true
+    try{
+        const added = [{
+            uri: `file://${encodeURIComponent(dir)}`,
+            name: await path.basename(dir)
+        }]
+
+        const removed = current_dir ? [{
+            uri: `file://${encodeURIComponent(current_dir)}`,
+            name: await path.basename(current_dir)
+        }] : []
+        await update_workspaces(added, removed)
+        return true
+    } catch(error){
+        console.error("Failed to update workspace")
+        return false
+    }
 }
 
 export async function load_directory(directory_path: string, recursive: boolean = false){
