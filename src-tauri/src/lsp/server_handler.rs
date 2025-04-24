@@ -271,7 +271,7 @@ pub async fn start_lsp(command: &str) -> Result<RealLspClient, LspError> {
                     rtx.send(InboundMessage::Error(ResponseError {
                         code,
                         message,
-                        data: Some(data.expect("no data")),
+                        data
                     }))
                     .await
                     .unwrap();
@@ -417,6 +417,7 @@ pub async fn lsp_send_request(
         "method": req.method,
         "params": req.params,
     });
+    println!("Sending LSP request: {}", req);
     let req = rcp::encode_message(req);
     stdin.write_all(req.as_bytes()).await?;
     stdin.flush().await?;
@@ -433,6 +434,7 @@ pub async fn lsp_send_notification(
         "method": req.method,
         "params": req.params,
     });
+    println!("Sending LSP notification: {}", req);
     let req = rcp::encode_message(req);
     stdin.write_all(req.as_bytes()).await?;
 

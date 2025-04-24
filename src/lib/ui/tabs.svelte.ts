@@ -7,6 +7,8 @@ import { active_extensions } from "../utils/cm-extensions.svelte";
 import { get_language_from_file_extension, check_language, language_handler } from "$lib/utils/lang.svelte";
 import { extract_tab_info } from "$lib/utils/filesystem.svelte";
 import { content_to_doc, editor_views } from "./editors.svelte";
+import { working_directory } from "./directory.svelte";
+import { notify_document_opened } from "$lib/lsp/notifications.svelte";
 
 export interface Tab {
     id: string,
@@ -101,5 +103,14 @@ export async function create_tab_from_file(file_path: string){
     if(editor){
         language_handler(new_tab.id, new_tab.language)
         content_to_doc(editor, file_data.content)
+
+        const directory = get(working_directory)
+        if(directory && file_path.includes(directory) && file_data.language){
+            await notify_document_opened(
+                file_data.language,
+                file_path,
+                file_data.content
+            )
+        }
     }
 }

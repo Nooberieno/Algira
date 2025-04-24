@@ -2,7 +2,7 @@ import type { EditorView } from "codemirror";
 import type { FileEntry } from "$lib/ui/directory.svelte";
 
 import { open, save } from "@tauri-apps/plugin-dialog";
-import { readTextFile, writeTextFile, readDir, remove } from "@tauri-apps/plugin-fs";
+import { readTextFile, writeTextFile, readDir } from "@tauri-apps/plugin-fs";
 import { path } from "@tauri-apps/api";
 import { get } from "svelte/store";
 
@@ -10,7 +10,7 @@ import { active_id, tabs, set_active_tab, update_tab_info, create_tab_from_file 
 import { get_language_from_file_extension, language_handler } from "./lang.svelte";
 import { working_directory } from "$lib/ui/directory.svelte";
 import { content_to_doc, editor_views } from "../ui/editors.svelte";
-import { update_workspaces } from "../lsp/notifications.svelte"
+import { update_workspaces, notify_document_opened } from "../lsp/notifications.svelte"
 
 export const open_new_file = async() => {
     console.log("Opening file")
@@ -36,6 +36,15 @@ export const open_new_file = async() => {
                 language_handler(tab.id, tab.language)
                 console.log(tab.language)
                 content_to_doc(view, text)
+
+                const directory = get(working_directory)
+                if(tab.language && directory && file_path.includes(directory)){
+                    await notify_document_opened(
+                        tab.language,
+                        file_path,
+                        text
+                    )
+                }
             }
         }
     }else{
@@ -77,12 +86,12 @@ export const open_new_working_directory = async() => {
     working_directory.update(() => dir)
     try{
         const added = [{
-            uri: `file://${encodeURIComponent(dir)}`,
+            uri: file_path_to_uri(dir),
             name: await path.basename(dir)
         }]
 
         const removed = current_dir ? [{
-            uri: `file://${encodeURIComponent(current_dir)}`,
+            uri: file_path_to_uri(current_dir),
             name: await path.basename(current_dir)
         }] : []
         await update_workspaces(added, removed)
@@ -134,4 +143,10 @@ export async function extract_tab_info(file_path: string){
         content,
         language
     }
+}
+
+export function file_path_to_uri(file_path: string): string{
+    let path = file_path.replace(/\\/g, "/")
+    if(!path.startsWith("/")) path = "/" + path
+    return `file://${encodeURI(path)}`
 }

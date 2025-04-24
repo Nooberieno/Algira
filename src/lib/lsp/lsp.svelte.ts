@@ -1,4 +1,5 @@
-import * as LSP from "vscode-languageserver-protocol";
+import type { Text } from "@codemirror/state";
+import type * as LSP from "vscode-languageserver-protocol";
 
 import { listen } from "@tauri-apps/api/event";
 
@@ -94,4 +95,21 @@ listen("lsp-message", (event: any) => {
 });
 
 startLspServer("rust", "rust-analyzer")
-startLspServer("go", "gopls")
+
+export function position_to_offset(document: Text, line: number, character: number){
+    if(line >= document.lines) return
+
+    const offset = document.line(line+1).from + character
+    
+    if(offset > document.length) return
+
+    return offset
+}
+
+export function offset_to_position(document: Text, offset: number){
+    const line = document.lineAt(offset)
+    return {
+        character: offset - line.from,
+        line: line.number - 1
+    }
+}
