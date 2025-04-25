@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc, process};
+use std::{collections::HashMap, process, sync::Arc};
 use serde_json::{json, Value};
 use tokio::{
     sync::Mutex,
@@ -15,11 +15,11 @@ pub struct LspState{
     pub clients: Arc<Mutex<HashMap<String, Arc<Mutex<RealLspClient>>>>>
 }
 
-pub async fn start_lsp(servers: HashMap<String, String>) -> Result<LspState, LspError> {
+pub async fn start_lsp(servers: HashMap<String, String>, args: &[String]) -> Result<LspState, LspError> {
     let mut clients = HashMap::new();
 
     for (language, command) in servers {
-        let client = server_handler::start_lsp(&command).await?;
+        let client = server_handler::start_lsp(&command, args).await?;
         clients.insert(language, Arc::new(Mutex::new(client)));
     }
 
@@ -98,6 +98,7 @@ pub async fn send_notification(
 pub async fn start_language_server(
     language: String,
     command: String,
+    args: Vec<String>,
     state: State<'_, LspState>
 ) -> Result<u32, String>{
     let mut clients = state.clients.lock().await;
@@ -105,7 +106,7 @@ pub async fn start_language_server(
         return Err(format!("LSP server for {} is already running", language));
     }
 
-    let client = server_handler::start_lsp(&command).await.map_err(|e| e.to_string())?;
+    let client = server_handler::start_lsp(&command, &args).await.map_err(|e| e.to_string())?;
     clients.insert(language, Arc::new(Mutex::new(client)));
     Ok(process::id().into())
 }

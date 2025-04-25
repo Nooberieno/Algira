@@ -26,6 +26,12 @@ function get_initialization_parameters(process_id: number): LSP.InitializeParams
     rootUri: null,
     capabilities: {
       textDocument: {
+        synchronization: {
+          dynamicRegistration: true,
+          willSave: false,
+          didSave: false,
+          willSaveWaitUntil: false,
+        },
         definition: {
           dynamicRegistration: true,
           linkSupport: true
@@ -63,16 +69,16 @@ function handle_lsp_message(message: any){
   }
 }
 
-async function startLspServer(language: string, command: string) {
+async function startLspServer(language: string, command: string, args: string[]) {
     try {
-      const process: number = await invoke("start_language_server", { language, command });
+      const process: number = await invoke("start_language_server", { language, command, args });
       console.log(process)
       console.log(`Started LSP server for ${language}`);
       servers.push({
         language,
         name: command,
         ready: false,
-        capabilities: undefined
+        capabilities: undefined,
       })
       
       // Initialize the server after starting it
@@ -94,7 +100,7 @@ listen("lsp-message", (event: any) => {
     }
 });
 
-startLspServer("rust", "rust-analyzer")
+startLspServer("python", "pyright-langserver", ["--stdio"])
 
 export function position_to_offset(document: Text, line: number, character: number){
     if(line >= document.lines) return

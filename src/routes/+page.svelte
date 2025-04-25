@@ -3,7 +3,7 @@
   import "../styles/main.css"
 
   import { onMount, onDestroy } from "svelte";
-  import { rust } from "@codemirror/lang-rust"
+  import { python } from "@codemirror/lang-python"
 
   import TabBar from "../components/TabBar.svelte";
   import TabContent from "../components/TabContent.svelte";
@@ -17,7 +17,7 @@
   import { AlgiraKeymap } from "../lib/keybindings/algira-keybinds.svelte";
   import { AlgiraKeymapManager } from "../lib/keybindings/keymap.svelte";
 
-  register_language("rs", "rust", rust())
+  register_language("py", "python", python())
   
   onMount(() => {
     setup_keymap_listener()

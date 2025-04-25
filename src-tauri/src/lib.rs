@@ -31,7 +31,7 @@ pub fn run() {
         .setup(|app| {
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
-                match lsp::start_lsp(HashMap::new()).await {
+                match lsp::start_lsp(HashMap::new(), &[]).await {
                     Ok(state) => {
                         println!("LSP started succesfully");
                         handle.manage(state.clone());

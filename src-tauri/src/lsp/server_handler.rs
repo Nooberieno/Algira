@@ -164,7 +164,7 @@ pub enum InboundMessage {
     ProcessingError(LspError),
 }
 
-pub async fn start_lsp(command: &str) -> Result<RealLspClient, LspError> {
+pub async fn start_lsp(command: &str, args: &[String]) -> Result<RealLspClient, LspError> {
     let mut program = Command::new(command);
 
     #[cfg(target_os = "windows")]{
@@ -172,6 +172,7 @@ pub async fn start_lsp(command: &str) -> Result<RealLspClient, LspError> {
     }
 
     let mut child = program
+        .args(args)
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped())
