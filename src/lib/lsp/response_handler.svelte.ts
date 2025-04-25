@@ -2,10 +2,9 @@ import type * as LSP from "vscode-languageserver-protocol";
 
 import { invoke } from "@tauri-apps/api/core";
 
-import { position_to_offset, servers } from "./lsp.svelte";
+import { position_to_offset, request_stack, servers } from "./lsp.svelte";
 import { tabs, set_active_tab, create_tab_from_file } from "$lib/ui/tabs.svelte";
 import { editor_views } from "$lib/ui/editors.svelte";
-import { file_path_to_uri } from "$lib/utils/filesystem.svelte";
 import { current_platform } from "$lib/keybindings/keymap.svelte";
 
 export async function lsp_initialization(message: any){
@@ -40,16 +39,17 @@ export async function goto_location(message: any){
         if(result[0].uri) open_location(result[0].uri, result[0].range)
         if(result[0].targetUri) open_location(result[0].targetUri, result[0].targetRange)
     }
+    request_stack.delete(message.id)
 }
 
 function open_location(uri: LSP.URI, range: LSP.Range){
-    let path = uri.replace(/^file:\/\/\//, "")
+    let path = uri.replace(/^file:\/\//, "")
                     .replace(/^\/([a-zA-Z]:)/, (_, drive) => drive.toLowerCase())
                     .replace(/%3A/g, ":")
                     .replace(/%5C/g, "\\")
                     .replace(/%20/g, " ")
     if(current_platform === "win"){
-        path = path.replace(/\//g, "\\") 
+        path = path.replace(/\//g, "\\").replace(/^\//, "") 
     }
 
     const tab = tabs.find((tab) => {
@@ -78,7 +78,10 @@ function open_location(uri: LSP.URI, range: LSP.Range){
     const start = position_to_offset(view.state.doc, range.start.line, range.start.character)
     const end = position_to_offset(view.state.doc, range.end.line, range.end.character)
 
-    if(!start || !end) return
+    if(!start || !end){
+        console.log("No definition found")
+        return
+    }
 
     view.dispatch({
         selection:{

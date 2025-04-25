@@ -4,9 +4,11 @@ import * as LSP from "vscode-languageserver-protocol";
 import { listen } from "@tauri-apps/api/event";
 
 import { invoke } from "@tauri-apps/api/core";
-import { goto_location, lsp_initialization } from "./response_handler.svelte";
+import { get } from "svelte/store";
 
-console.log("LSP module loaded")
+import { goto_location, lsp_initialization } from "./response_handler.svelte";
+import { working_directory, get_working_directory_name } from "$lib/ui/directory.svelte";
+import { file_path_to_uri } from "$lib/utils/filesystem.svelte";
 
 interface LspServer{
   language: string,
@@ -17,14 +19,25 @@ interface LspServer{
 
 export const servers: LspServer[] = []
 
-function get_initialization_parameters(process_id: number): LSP.InitializeParams{
+export const request_stack: Map<number, string> = new Map<number, string>()
+
+async function get_initialization_parameters(process_id: number, initialization_options: LSP.LSPAny): Promise<LSP.InitializeParams>{
+  const algira_working_directory = get(working_directory)
+  let workspace_folder: LSP.WorkspaceFolder | undefined;
+  if(algira_working_directory){
+    workspace_folder = {
+      name: await get_working_directory_name(),
+      uri: file_path_to_uri(algira_working_directory)
+    }
+  }
   return{
     processId: process_id,
     clientInfo: {
       name: "Algira",
       version: "0.1.0",
     },
-    rootUri: null,
+    rootUri: workspace_folder ? workspace_folder.uri : null,
+    initializationOptions: initialization_options,
     capabilities: {
       textDocument: {
         synchronization: {
@@ -39,7 +52,7 @@ function get_initialization_parameters(process_id: number): LSP.InitializeParams
         },
       },
     },
-    workspaceFolders: null
+    workspaceFolders: workspace_folder ? [workspace_folder] : null,
   }
 }
 
@@ -48,13 +61,16 @@ function handle_lsp_message(message: any){
     if(message.result){
       if(message.result.capabilities) lsp_initialization(message)
       if(Array.isArray(message.result) || message.result?.uri) goto_location(message)
-    }
+    }else{
+      console.log(`Unknown response for language ${message.language}`, message)
+      handle_unknown_response(message)
+  }
   }else{
     console.log(`Got lsp notification for language ${message.language}`, message)
   }
 }
 
-async function startLspServer(language: string, command: string, args: string[]) {
+async function startLspServer(language: string, command: string, args: string[], initialization_options: LSP.LSPAny = null) {
     try {
       const process: number = await invoke("start_language_server", { language, command, args });
       console.log(process)
@@ -70,7 +86,7 @@ async function startLspServer(language: string, command: string, args: string[])
       await invoke("send_request", { 
         language,
         method: "initialize",
-        params: get_initialization_parameters(process) 
+        params: await get_initialization_parameters(process, initialization_options) 
       });
     } catch (err) {
       console.error(`Failed to start LSP server for ${language}:`, err);
@@ -103,4 +119,13 @@ export function offset_to_position(document: Text, offset: number){
         character: offset - line.from,
         line: line.number - 1
     }
+}
+
+function handle_unknown_response(message: any){
+  const method = request_stack.get(message.id)
+  switch (method){
+    case "textDocument/definition":
+      console.log("No definition found for request with ID", message.id)
+      break
+  }
 }
