@@ -66,15 +66,15 @@ pub async fn send_request(
     method: String,
     params: Value,
     state: State<'_, LspState>,
-) -> Result<(), String> {
+) -> Result<i64, String> {
     let clients = state.clients.lock().await;
     if let Some(client) = clients.get(&language) {
         let mut client = client.lock().await;
-        client.send_request(&method, params).await.map_err(|e| e.to_string())?;
+        let id = client.send_request(&method, params).await.map_err(|e| e.to_string())?;
+        return Ok(id)
     } else {
         return Err(format!("No LSP server found for language: {}", language));
     }
-    Ok(())
 }
 
 #[tauri::command]

@@ -1,9 +1,10 @@
 import type { Text } from "@codemirror/state";
-import type * as LSP from "vscode-languageserver-protocol";
+import * as LSP from "vscode-languageserver-protocol";
 
 import { listen } from "@tauri-apps/api/event";
 
 import { invoke } from "@tauri-apps/api/core";
+import { goto_location, lsp_initialization } from "./response_handler.svelte";
 
 console.log("LSP module loaded")
 
@@ -44,25 +45,9 @@ function get_initialization_parameters(process_id: number): LSP.InitializeParams
 
 function handle_lsp_message(message: any){
   if(message.id){
-    if(message.result.capabilities){
-      console.log(`Got initialization response for language ${message.language}`, message)
-      const server = servers.find((server) => server.language === message.language)
-      if(!server){
-        console.error("Could not find server for repsonse with language: ", message.language)
-        return
-      }
-      server.capabilities = message.result.capabilities
-      server.ready = true
-
-      console.log(server)
-
-      invoke("send_notification", {
-        language: message.language,
-        method: "initialized",
-        params: {}
-      })
-    }else{
-      console.log(`Got lsp response for language ${message.language}`, message)
+    if(message.result){
+      if(message.result.capabilities) lsp_initialization(message)
+      if(Array.isArray(message.result) || message.result?.uri) goto_location(message)
     }
   }else{
     console.log(`Got lsp notification for language ${message.language}`, message)
