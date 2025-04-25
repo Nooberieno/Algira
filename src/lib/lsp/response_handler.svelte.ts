@@ -44,21 +44,19 @@ export async function goto_location(message: any){
 
 function open_location(uri: LSP.URI, range: LSP.Range){
     let path = uri.replace(/^file:\/\//, "")
-                    .replace(/^\/([a-zA-Z]:)/, (_, drive) => drive.toLowerCase())
                     .replace(/%3A/g, ":")
                     .replace(/%5C/g, "\\")
                     .replace(/%20/g, " ")
     if(current_platform === "win"){
-        path = path.replace(/\//g, "\\").replace(/^\//, "") 
+        path = path.replace(/^\//, "").replace(/\//g, "\\").replace(/^([a-zA-Z]:)/, (_, drive) => drive.toUpperCase())
     }
 
     const tab = tabs.find((tab) => {
         if(!tab.path) return false
-        let normalized_tab_path = tab.path.toLowerCase()
-        if(current_platform === "win") normalized_tab_path = normalized_tab_path.replace(/\\/g, "\\")
-        const normalized_path = path.toLowerCase()
-        console.log("Comparing paths: ", normalized_path, normalized_tab_path, (normalized_path === normalized_tab_path))
-        return normalized_path === normalized_tab_path
+        let normalized_tab_path = tab.path
+        if(current_platform === "win") normalized_tab_path = tab.path.replace(/\\/g, "\\")
+        console.log("Comparing paths: ", path, normalized_tab_path, (path === normalized_tab_path))
+        return path === normalized_tab_path
     })
 
     let tab_id
