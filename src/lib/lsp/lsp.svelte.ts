@@ -6,9 +6,10 @@ import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { get } from "svelte/store";
 
-import { goto_location, lsp_initialization } from "./response_handler.svelte";
+import { goto_location, lsp_initialization, response_assigner } from "./response_handler.svelte";
 import { working_directory, get_working_directory_name } from "$lib/ui/directory.svelte";
 import { file_path_to_uri } from "$lib/utils/filesystem.svelte";
+import { notification_assigner } from "./notifcation_handler.svelte";
 
 interface LspServer{
   language: string,
@@ -58,15 +59,9 @@ async function get_initialization_parameters(process_id: number, initialization_
 
 function handle_lsp_message(message: any){
   if(message.id){
-    if(message.result){
-      if(message.result.capabilities) lsp_initialization(message)
-      if(Array.isArray(message.result) || message.result?.uri) goto_location(message)
-    }else{
-      console.log(`Unknown response for language ${message.language}`, message)
-      handle_unknown_response(message)
-  }
+    response_assigner(message)
   }else{
-    console.log(`Got lsp notification for language ${message.language}`, message)
+    notification_assigner(message)
   }
 }
 
@@ -119,13 +114,4 @@ export function offset_to_position(document: Text, offset: number){
         character: offset - line.from,
         line: line.number - 1
     }
-}
-
-function handle_unknown_response(message: any){
-  const method = request_stack.get(message.id)
-  switch (method){
-    case "textDocument/definition":
-      console.log("No definition found for request with ID", message.id)
-      break
-  }
 }

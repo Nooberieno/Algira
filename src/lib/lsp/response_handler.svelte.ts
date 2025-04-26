@@ -5,7 +5,27 @@ import { invoke } from "@tauri-apps/api/core";
 import { position_to_offset, request_stack, servers } from "./lsp.svelte";
 import { tabs, set_active_tab, create_tab_from_file } from "$lib/ui/tabs.svelte";
 import { editor_views } from "$lib/ui/editors.svelte";
-import { current_platform } from "$lib/keybindings/keymap.svelte";
+import { uri_to_file_path } from "$lib/utils/filesystem.svelte";
+
+
+export function response_assigner(message: any){
+    if(!message.result){
+        console.log(`Unknown response for language ${message.language}`, message)
+        handle_unknown_response(message)
+        return 
+    }
+    if(message.result.capabilities) lsp_initialization(message)
+    if(Array.isArray(message.result) || message.result?.uri) goto_location(message)
+}
+
+function handle_unknown_response(message: any){
+    const method = request_stack.get(message.id)
+    switch (method){
+      case "textDocument/definition":
+        console.log("No definition found for request with ID", message.id)
+        break
+    }
+  }
 
 export async function lsp_initialization(message: any){
     const server = servers.find((server) => server.language === message.language)
@@ -43,21 +63,8 @@ export async function goto_location(message: any){
 }
 
 function open_location(uri: LSP.URI, range: LSP.Range){
-    let path = uri.replace(/^file:\/\//, "")
-                    .replace(/%3A/g, ":")
-                    .replace(/%5C/g, "\\")
-                    .replace(/%20/g, " ")
-    if(current_platform === "win"){
-        path = path.replace(/^\//, "").replace(/\//g, "\\").replace(/^([a-zA-Z]:)/, (_, drive) => drive.toUpperCase())
-    }
-
-    const tab = tabs.find((tab) => {
-        if(!tab.path) return false
-        let normalized_tab_path = tab.path
-        if(current_platform === "win") normalized_tab_path = tab.path.replace(/\\/g, "\\")
-        console.log("Comparing paths: ", path, normalized_tab_path, (path === normalized_tab_path))
-        return path === normalized_tab_path
-    })
+    const path = uri_to_file_path(uri)
+    const tab = tabs.find((tab) => tab.path === path)
 
     let tab_id
     if(tab){

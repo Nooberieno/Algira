@@ -11,6 +11,7 @@ import { get_language_from_file_extension, language_handler } from "./lang.svelt
 import { working_directory } from "$lib/ui/directory.svelte";
 import { content_to_doc, editor_views } from "../ui/editors.svelte";
 import { update_workspaces, notify_document_opened } from "../lsp/notifications.svelte"
+import { current_platform } from "$lib/keybindings/keymap.svelte";
 
 export const open_new_file = async() => {
     console.log("Opening file")
@@ -149,4 +150,15 @@ export function file_path_to_uri(file_path: string): string{
     let path = file_path.replace(/\\/g, "/")
     if(!path.startsWith("/")) path = "/" + path
     return `file://${encodeURI(path)}`
+}
+
+export function uri_to_file_path(uri: string): string{
+    let path = uri.replace(/^file:\/\//, "")
+                    .replace(/%3A/g, ":")
+                    .replace(/%5C/g, "\\")
+                    .replace(/%20/g, " ")
+    if(current_platform === "win"){
+        path = path.replace(/^\//, "").replace(/\//g, "\\").replace(/^([a-zA-Z]:)/, (_, drive) => drive.toUpperCase())
+    }
+    return path
 }
