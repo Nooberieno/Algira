@@ -15,6 +15,7 @@ export interface Tab {
     title: string,
     path?: string,
     language?: string,
+    document_version?: number,
     element: any
 }
 
@@ -46,6 +47,7 @@ export function create_new_tab(tab_element: any) {
         id: crypto.randomUUID(),
         title: `Untitled-${untitled_count}`,
         element: tab_element,
+        document_version: 0
     };
     untitled_count++
     tabs.push(new_tab)
@@ -92,6 +94,7 @@ export async function create_tab_from_file(file_path: string){
         title: file_data.filename,
         path: file_path,
         language: file_data.language,
+        document_version: 0,
         element: Editor
     })
     tabs.push(new_tab)
@@ -109,7 +112,8 @@ export async function create_tab_from_file(file_path: string){
             await notify_document_opened(
                 file_data.language,
                 file_path,
-                file_data.content
+                file_data.content,
+                new_tab
             )
         }
     }

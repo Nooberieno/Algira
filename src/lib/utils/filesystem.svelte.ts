@@ -43,7 +43,8 @@ export const open_new_file = async() => {
                     await notify_document_opened(
                         tab.language,
                         file_path,
-                        text
+                        text,
+                        tab
                     )
                 }
             }

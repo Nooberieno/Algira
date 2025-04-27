@@ -42,16 +42,24 @@ async function get_initialization_parameters(process_id: number, initialization_
     capabilities: {
       textDocument: {
         synchronization: {
-          dynamicRegistration: true,
-          willSave: false,
-          didSave: false,
-          willSaveWaitUntil: false,
+          dynamicRegistration: true
         },
         definition: {
           dynamicRegistration: true,
           linkSupport: true
         },
+        publishDiagnostics: {
+          relatedInformation: true,
+          tagSupport: {
+            valueSet: [1,2]
+          }
+        }
       },
+      workspace: {
+        didChangeConfiguration: {
+          dynamicRegistration: true
+        }
+      }
     },
     workspaceFolders: workspace_folder ? [workspace_folder] : null,
   }
