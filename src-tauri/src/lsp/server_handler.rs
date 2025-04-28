@@ -189,23 +189,36 @@ pub async fn start_lsp(command: &str, args: &[String]) -> Result<RealLspClient, 
     let rtx = response_tx.clone();
     tokio::spawn(async move {
         let mut stdin = BufWriter::new(stdin);
-        while let Some(message) = request_rx.recv().await {
-            match message {
-                OutboundMessage::Request(req) => {
-                    if let Err(err) = lsp_send_request(&mut stdin, &req).await {
-                        rtx.send(InboundMessage::ProcessingError(err))
-                            .await
-                            .unwrap();
+        loop {
+            // Process all pending messages
+            while let Ok(message) = request_rx.try_recv() {
+                match message {
+                    OutboundMessage::Request(req) => {
+                        if let Err(err) = lsp_send_request(&mut stdin, &req).await {
+                            rtx.send(InboundMessage::ProcessingError(err))
+                                .await
+                                .unwrap();
+                        }
                     }
-                }
-                OutboundMessage::Notification(req) => {
-                    if let Err(err) = lsp_send_notification(&mut stdin, &req).await {
-                        rtx.send(InboundMessage::ProcessingError(err))
-                            .await
-                            .unwrap();
+                    OutboundMessage::Notification(req) => {
+                        if let Err(err) = lsp_send_notification(&mut stdin, &req).await {
+                            rtx.send(InboundMessage::ProcessingError(err))
+                                .await
+                                .unwrap();
+                        }
                     }
                 }
             }
+
+            // Ensure everything is written
+            if let Err(err) = stdin.flush().await {
+                rtx.send(InboundMessage::ProcessingError(LspError::IoError(err)))
+                    .await
+                    .unwrap();
+            }
+
+            // Small sleep to prevent busy-waiting
+            tokio::time::sleep(Duration::from_millis(10)).await;
         }
     });
 

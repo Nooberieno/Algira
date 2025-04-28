@@ -88,10 +88,10 @@ pub async fn send_notification(
     if let Some(client) = clients.get(&language) {
         let mut client = client.lock().await;
         client.send_notification(&method, params).await.map_err(|e| e.to_string())?;
+        return Ok(())
     } else {
         return Err(format!("No LSP server found for language: {}", language));
     }
-    Ok(())
 }
 
 #[tauri::command]
