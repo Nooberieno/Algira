@@ -2,51 +2,23 @@ import type * as LSP from "vscode-languageserver-protocol";
 
 import { invoke } from "@tauri-apps/api/core";
 
-import { position_to_offset, request_stack, servers } from "./lsp.svelte";
+import { position_to_offset, response_tracker } from "./lsp.svelte";
 import { tabs, set_active_tab, create_tab_from_file } from "$lib/ui/tabs.svelte";
 import { editor_views } from "$lib/ui/editors.svelte";
 import { uri_to_file_path } from "$lib/utils/filesystem.svelte";
 
 
 export function response_assigner(message: any){
-    if(!message.result){
-        console.log(`Unknown response for language ${message.language}`, message)
-        handle_unknown_response(message)
-        return 
-    }
-    if(message.result.capabilities) lsp_initialization(message)
-    if(Array.isArray(message.result) || message.result?.uri) goto_location(message)
-}
-
-function handle_unknown_response(message: any){
-    const method = request_stack.get(message.id)
-    switch (method){
-      case "textDocument/definition":
-        console.log("No definition found for request with ID", message.id)
-        break
-    }
-  }
-
-export async function lsp_initialization(message: any){
-    const server = servers.find((server) => server.language === message.language)
-      if(!server){
-        console.error("Could not find server for repsonse with language: ", message.language)
+    const pending = response_tracker.get(message.id)
+    if(pending){
+        pending.resolve(message.result)
+        response_tracker.delete(message.id)
         return
-      }
-      server.capabilities = message.result.capabilities
-      server.ready = true
-
-      console.log(server)
-
-    await invoke("send_notification", {
-        language: message.language,
-        method: "initialized",
-        params: {}
-      })
+    }
+    console.log(`Unknown response for language ${message.language}`, message)
 }
 
-export async function goto_location(message: any){
-    const result = message.result
+export async function goto_location(result: any){
 
     if(!result){
         console.log("No location found")
@@ -59,7 +31,6 @@ export async function goto_location(message: any){
         if(result[0].uri) open_location(result[0].uri, result[0].range)
         if(result[0].targetUri) open_location(result[0].targetUri, result[0].targetRange)
     }
-    request_stack.delete(message.id)
 }
 
 function open_location(uri: LSP.URI, range: LSP.Range){

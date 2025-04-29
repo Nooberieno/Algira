@@ -6,7 +6,7 @@ import { listen } from "@tauri-apps/api/event";
 import { invoke } from "@tauri-apps/api/core";
 import { get } from "svelte/store";
 
-import { goto_location, lsp_initialization, response_assigner } from "./response_handler.svelte";
+import { response_assigner } from "./response_handler.svelte";
 import { working_directory, get_working_directory_name } from "$lib/ui/directory.svelte";
 import { file_path_to_uri } from "$lib/utils/filesystem.svelte";
 import { notification_assigner } from "./notifcation_handler.svelte";
@@ -20,7 +20,11 @@ interface LspServer{
 
 export const servers: LspServer[] = []
 
-export const request_stack: Map<number, string> = new Map<number, string>()
+export const response_tracker: Map<number, {
+  method: string,
+  resolve: (value: any) => void,
+  reject: (reason: any) => void
+}> = new Map();
 
 async function get_initialization_parameters(process_id: number, initialization_options: LSP.LSPAny): Promise<LSP.InitializeParams>{
   const algira_working_directory = get(working_directory)
@@ -86,15 +90,59 @@ async function startLspServer(language: string, command: string, args: string[],
       })
       
       // Initialize the server after starting it
-      await invoke("send_request", { 
+      const result = await send_request_with_response( 
         language,
-        method: "initialize",
-        params: await get_initialization_parameters(process, initialization_options) 
-      });
+        "initialize",
+        await get_initialization_parameters(process, initialization_options) 
+      )
+      const server = servers.find((server) => server.language === language)
+      if(!server){
+        console.error("Could not find server for repsonse with language: ", language)
+        return
+      }
+      server.capabilities = result.capabilities
+      server.ready = true
+
+      console.log(server)
+
+      await invoke("send_notification", {
+        language: language,
+        method: "initialized",
+        params: {}
+      })
+
     } catch (err) {
       console.error(`Failed to start LSP server for ${language}:`, err);
     }
   }
+
+export async function send_request_with_response(language: string, method: string, params: any): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const id: number = await invoke("send_request", {
+                language,
+                method,
+                params
+            });
+
+            response_tracker.set(id, {
+                method,
+                resolve,
+                reject
+            });
+
+            setTimeout(() => {
+                if (response_tracker.has(id)) {
+                    response_tracker.delete(id);
+                    reject(new Error(`Request ${method} timed out`));
+                }
+            }, 10000);
+
+        } catch (err) {
+            reject(err);
+        }
+    });
+}
 
 listen("lsp-message", (event: any) => {
     try{
