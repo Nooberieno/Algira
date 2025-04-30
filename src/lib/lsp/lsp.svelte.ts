@@ -48,6 +48,17 @@ async function get_initialization_parameters(process_id: number, initialization_
         synchronization: {
           dynamicRegistration: true
         },
+        completion: {
+          dynamicRegistration: true,
+          completionItem: {
+              snippetSupport: false,
+              commitCharactersSupport: true,
+              documentationFormat: ["plaintext", "markdown"],
+              deprecatedSupport: false,
+              preselectSupport: false,
+          },
+          contextSupport: false,
+        },
         definition: {
           dynamicRegistration: true,
           linkSupport: true

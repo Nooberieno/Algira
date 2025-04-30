@@ -6,12 +6,15 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import { basicSetup } from "codemirror";
 import { keymap, ViewPlugin } from "@codemirror/view";
 import { defaultKeymap } from "@codemirror/commands";
+import { autocompletion, CompletionContext, insertCompletionText, type Completion } from "@codemirror/autocomplete";
+import { CompletionTriggerKind, TextEdit } from "vscode-languageserver-protocol";
 
 import { AlgiraEditorKeymap } from "../keybindings/add-cm-keybinds.svelte";
-import { offset_to_position } from "$lib/lsp/lsp.svelte";
+import { offset_to_position, position_to_offset } from "$lib/lsp/lsp.svelte";
 import { tabs, active_id } from "$lib/ui/tabs.svelte";
-import { get_definiton } from "$lib/lsp/requests.svelte";
+import { get_completion, get_definiton } from "$lib/lsp/requests.svelte";
 import { did_change } from "$lib/lsp/notifications.svelte";
+import { get_completion_type, is_lsp_text_edit, match_prefix } from "./completions.svelte";
 
 
 
@@ -67,9 +70,124 @@ const change_updater = EditorView.updateListener.of((update) => {
         did_change(tab.language, tab.path, tab.document_version, changes);
       }
     }
-  })
+})
 
-export const global_extensions: Extension[] = $state([focus_tracker, oneDark, basicSetup, goto_definition, change_updater, keymap.of([...defaultKeymap, ...AlgiraEditorKeymap])])
+const autocomplete = autocompletion({
+  override: [
+    async (context: CompletionContext) => {
+      const tab = tabs.find((tab) => tab.id === get(active_id))
+      if(!tab || !tab.language || !tab.path){
+        console.log("Not enough tab information to provided completions")
+        return null
+      }
+
+
+      const position = offset_to_position(context.state.doc, context.pos)
+      const trigger_chararacter = context.matchBefore(/\w+$/) ? undefined : context.state.sliceDoc(context.pos - 1, context.pos)
+      const trigger_kind = context.explicit ? CompletionTriggerKind.Invoked : CompletionTriggerKind.TriggerCharacter
+
+      const completions = await get_completion(tab.language, tab.path, position, trigger_kind, trigger_chararacter)
+
+      if(!completions){
+        console.log("No completion items")
+        return null
+      } 
+
+      let items = "items" in completions ? completions.items : completions
+
+      const [span, match] = match_prefix(items)
+      const token = context.matchBefore(match)
+
+      let { pos } = context
+      
+      if(token){
+        pos = token.from
+        const word = token.text.toLowerCase()
+        if(/^\w+$/.test(word)){
+          items = items.filter(({ label, filterText}: {label: any, filterText: any}) => {
+            const text = filterText ?? label
+            return text.toLowerCase().startsWith(word)
+          })
+          .sort((a: any, b: any) => {
+            const a_text = a.sortText ?? a.label
+            const b_text = b.sortText ?? b.label
+
+            switch(true){
+              case a_text.startsWith(token.text) && !b_text.startsWith(token.text):
+                return -1
+              case !a_text.startsWith(token.text) && b_text.startsWith(token.text):
+                return 1
+            }
+            return 0
+          })
+        }
+      }
+
+          const options = items.map((item: { detail: string; label: string; kind?: any; textEdit?: any; _documentation?: any; additionalTextEdits?: any }) => {
+            const { detail, label, kind, textEdit, _documentation, additionalTextEdits } = item;
+            const completion: Completion = {
+              label,
+              detail,
+              apply(view: EditorView, completion: Completion, from: number, to: number){
+                if(is_lsp_text_edit(textEdit)){
+                  view.dispatch(
+                    insertCompletionText(
+                      view.state,
+                      textEdit.newText,
+                      position_to_offset(view.state.doc, textEdit.range.start.line, textEdit.range.start.character)!,
+                      position_to_offset(view.state.doc, textEdit.range.end.line, textEdit.range.end.character)!
+                    )
+                  )
+                }else{
+                  view.dispatch(insertCompletionText(view.state, label, from, to))
+                }
+
+                if(!additionalTextEdits) return
+
+                additionalTextEdits
+                  .sort(({ range: {end: a } }: { range: { end: { line: number; character: number } } }, { range: { end: b } }: { range: { end: { line: number; character: number } } }) => {
+                    if (position_to_offset(view.state.doc, a.line, a.character)! < position_to_offset(view.state.doc, b.line, b.character)!) {
+                      return 1;
+                  } else if (position_to_offset(view.state.doc, a.line, a.character)! > position_to_offset(view.state.doc, b.line, b.character)!) {
+                      return -1;
+                  }
+                  return 0;
+              })
+              .forEach((textEdit: { range: { start: { line: number; character: number; }; end: { line: number; character: number; }; }; newText: any; }) => {
+                  view.dispatch(view.state.update({
+                      changes: {
+                          from: position_to_offset(view.state.doc, textEdit.range.start.line, textEdit.range.start.character)!,
+                          to: position_to_offset(view.state.doc, textEdit.range.end.line, textEdit.range.end.character)!,
+                          insert: textEdit.newText,
+                      },
+                  }))
+                })
+              },
+              type: kind && get_completion_type(kind)
+            }
+            return completion
+          })
+          return {
+            from: pos,
+            options,
+            filter: false
+      }
+
+      return {
+        from: context.pos - (context.matchBefore(/\w*/)?.from || 0),
+        options: completions.items.map((item: any) => ({
+          label: item.label,
+          detail: item.detail,
+          info: item.documentation?.toString(),
+          type: item.kind ? get_completion_type(item.kind) : undefined,
+          apply: item.insertText || item.label
+        }))
+      }
+    }
+  ]
+})
+
+export const global_extensions: Extension[] = $state([focus_tracker, oneDark, basicSetup, goto_definition, change_updater, autocomplete, keymap.of([...defaultKeymap, ...AlgiraEditorKeymap])])
 
 export const active_extensions: Record<string, Extension[]> = $state({})
 
