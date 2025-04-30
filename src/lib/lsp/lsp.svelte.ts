@@ -59,6 +59,10 @@ async function get_initialization_parameters(process_id: number, initialization_
           },
           contextSupport: false,
         },
+        hover: {
+          dynamicRegistration: true,
+          contentFormat: ["plaintext", "markdown"]
+        },
         definition: {
           dynamicRegistration: true,
           linkSupport: true
@@ -181,4 +185,13 @@ export function offset_to_position(document: Text, offset: number){
         character: offset - line.from,
         line: line.number - 1
     }
+}
+
+export function format_lsp_contents(contents: LSP.MarkupContent | LSP.MarkedString | LSP.MarkedString[]): string{
+  if((contents as LSP.MarkupContent).kind !== undefined){
+    return (contents as LSP.MarkupContent).value
+  }else if(Array.isArray(contents)){
+    return contents.map((c) => format_lsp_contents(c) + "\n\n").join("")
+  }
+  return contents as string
 }

@@ -1,4 +1,4 @@
-import type { CompletionItem, InsertReplaceEdit, MarkedString, MarkupContent, TextEdit } from "vscode-languageserver-protocol"
+import type { CompletionItem, InsertReplaceEdit, TextEdit } from "vscode-languageserver-protocol"
 
 import { CompletionItemKind } from "vscode-languageserver-protocol"
 

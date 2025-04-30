@@ -4,17 +4,18 @@ import { get } from "svelte/store";
 import { EditorView } from "codemirror";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { basicSetup } from "codemirror";
-import { keymap, ViewPlugin } from "@codemirror/view";
+import { hoverTooltip, keymap, ViewPlugin, type Tooltip } from "@codemirror/view";
 import { defaultKeymap } from "@codemirror/commands";
 import { autocompletion, CompletionContext, insertCompletionText, type Completion } from "@codemirror/autocomplete";
-import { CompletionTriggerKind, TextEdit } from "vscode-languageserver-protocol";
+import { CompletionTriggerKind, Hover, TextEdit } from "vscode-languageserver-protocol";
 
 import { AlgiraEditorKeymap } from "../keybindings/add-cm-keybinds.svelte";
 import { offset_to_position, position_to_offset } from "$lib/lsp/lsp.svelte";
 import { tabs, active_id } from "$lib/ui/tabs.svelte";
-import { get_completion, get_definiton } from "$lib/lsp/requests.svelte";
+import { get_completion, get_definiton, get_tooltips } from "$lib/lsp/requests.svelte";
 import { did_change } from "$lib/lsp/notifications.svelte";
 import { get_completion_type, is_lsp_text_edit, match_prefix } from "./completions.svelte";
+import { transform_lsp_tooltips } from "./tooltips.svelte";
 
 
 
@@ -172,22 +173,17 @@ const autocomplete = autocompletion({
             options,
             filter: false
       }
-
-      return {
-        from: context.pos - (context.matchBefore(/\w*/)?.from || 0),
-        options: completions.items.map((item: any) => ({
-          label: item.label,
-          detail: item.detail,
-          info: item.documentation?.toString(),
-          type: item.kind ? get_completion_type(item.kind) : undefined,
-          apply: item.insertText || item.label
-        }))
-      }
     }
   ]
 })
 
-export const global_extensions: Extension[] = $state([focus_tracker, oneDark, basicSetup, goto_definition, change_updater, autocomplete, keymap.of([...defaultKeymap, ...AlgiraEditorKeymap])])
+const hover_tooltips = hoverTooltip(
+  (view, pos) => {
+    return transform_lsp_tooltips(view, offset_to_position(view.state.doc, pos)) ?? null
+  }
+)
+
+export const global_extensions: Extension[] = $state([focus_tracker, oneDark, basicSetup, goto_definition, change_updater, autocomplete, hover_tooltips,  keymap.of([...defaultKeymap, ...AlgiraEditorKeymap])])
 
 export const active_extensions: Record<string, Extension[]> = $state({})
 
