@@ -12,7 +12,7 @@ export function get_completion_type(kind: CompletionItemKind): string {
       case CompletionItemKind.Interface:
         return "interface"
       case CompletionItemKind.Variable:
-        return "Variable"
+        return "variable"
       case CompletionItemKind.Constant:
         return "constant"
       default:
