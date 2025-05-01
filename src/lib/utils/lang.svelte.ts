@@ -35,3 +35,7 @@ export function language_handler(tab_id: string, language: string | undefined){
 export function check_language(language: string){
     return language_extensions.has(language)
 }
+
+export function get_language_extension_from_language(language: string){
+    return language_extensions.get(language)
+}

@@ -1,0 +1,53 @@
+.documentation{
+    background-color: var(--surface-tooltip);
+    color: var(--text-primary);
+    border: 1px solid var(--interactive-border);
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.cm-tooltip{
+    background-color: var(--surface-tooltip);
+    color: var(--text-primary);
+    border: 1px solid var(--interactive-border);
+}
+
+.tok-punctuation{
+    color: var(--text-primary);
+}
+
+.tok-variableName{
+    color: var(--syntax-constants);
+}
+
+.tok-keyword{
+    color: var(--syntax-keywords);
+}
+
+.tok-operator{
+    color: var(--syntax-operators);
+}
+
+.tok-string{
+    color: var(--syntax-strings);
+}
+
+.tok-bool{
+    color: var(--syntax-constants);
+}
+
+.tok-definition{
+    color: var(--syntax-functions);
+}
+
+.tok-comment{
+    color: var(--text-comment);
+}
+
+.tok-typeName{
+    color: var(--syntax-types);
+}
+
+.tok-propertyName{
+    color: var(--syntax-properties);
+}

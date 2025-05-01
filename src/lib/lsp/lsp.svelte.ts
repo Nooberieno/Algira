@@ -1,15 +1,19 @@
 import type { Text } from "@codemirror/state";
 import * as LSP from "vscode-languageserver-protocol";
+import type { Input } from "@lezer/common";
 
 import { listen } from "@tauri-apps/api/event";
 
 import { invoke } from "@tauri-apps/api/core";
 import { get } from "svelte/store";
+import { marked} from "marked";
+import { highlightCode, classHighlighter } from "@lezer/highlight"
 
 import { response_assigner } from "./response_handler.svelte";
 import { working_directory, get_working_directory_name } from "$lib/ui/directory.svelte";
 import { file_path_to_uri } from "$lib/utils/filesystem.svelte";
 import { notification_assigner } from "./notifcation_handler.svelte";
+import { get_language_extension_from_language } from "$lib/utils/lang.svelte";
 
 interface LspServer{
   language: string,
@@ -53,7 +57,7 @@ async function get_initialization_parameters(process_id: number, initialization_
           completionItem: {
               snippetSupport: false,
               commitCharactersSupport: true,
-              documentationFormat: ["plaintext", "markdown"],
+              documentationFormat: ["markdown", "plaintext"],
               deprecatedSupport: false,
               preselectSupport: false,
           },
@@ -61,7 +65,7 @@ async function get_initialization_parameters(process_id: number, initialization_
         },
         hover: {
           dynamicRegistration: true,
-          contentFormat: ["plaintext", "markdown"]
+          contentFormat: ["markdown", "plaintext"]
         },
         definition: {
           dynamicRegistration: true,
@@ -187,11 +191,51 @@ export function offset_to_position(document: Text, offset: number){
     }
 }
 
-export function format_lsp_contents(contents: LSP.MarkupContent | LSP.MarkedString | LSP.MarkedString[]): string{
+export async function format_lsp_contents(contents: LSP.MarkupContent | LSP.MarkedString | LSP.MarkedString[], language: string): Promise<string>{
+  const renderer = new marked.Renderer();
+
+  renderer.code = ({ text, lang }: { text: string; lang?: any }) => {
+    const code = text;
+    const result = document.createElement("pre");
+    result.className = "cm-editor"
+
+    function emit(text: string, classes?: string) {
+      let node: globalThis.Text | HTMLSpanElement = document.createTextNode(text);
+      if (classes) {
+        let span = document.createElement("span");
+        span.appendChild(node as Node);
+        span.className = classes;
+        node = span;
+      }
+      result.appendChild(node as Node);
+    }
+
+    function emit_break() {
+      result.appendChild(document.createTextNode("\n"));
+    }
+
+    // Get the appropriate language parser
+    const languageParser = get_language_extension_from_language(lang || language);
+    if (languageParser) {
+      highlightCode(code, languageParser.language.parser.parse(code), classHighlighter, emit, emit_break);
+    } else {
+      // Fallback for unsupported languages
+      emit(code);
+    }
+
+    return result.outerHTML;
+  }
+
+  marked.setOptions({renderer})
+
   if((contents as LSP.MarkupContent).kind !== undefined){
-    return (contents as LSP.MarkupContent).value
+    let value = (contents as LSP.MarkupContent).value
+    if((contents as LSP.MarkupContent).kind === "markdown"){
+      value = await marked.parse(value)
+    }
+    return value
   }else if(Array.isArray(contents)){
-    return contents.map((c) => format_lsp_contents(c) + "\n\n").join("")
+    return contents.map((c) => format_lsp_contents(c, language) + "\n\n").join("")
   }
   return contents as string
 }

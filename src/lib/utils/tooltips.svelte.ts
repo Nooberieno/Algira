@@ -35,7 +35,7 @@ export async function transform_lsp_tooltips(view: EditorView, { line, character
 
     dom.classList.add("documentation")
 
-    dom.innerHTML = format_lsp_contents(contents)
+    dom.innerHTML = await format_lsp_contents(contents, tab.language)
 
     return {
         pos: position,
