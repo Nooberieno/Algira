@@ -12,42 +12,72 @@
     border: 1px solid var(--interactive-border);
 }
 
-.tok-punctuation{
-    color: var(--text-primary);
+.tok-link{
+    color: var(--text-comment);
+    text-decoration: underline;
 }
-
-.tok-variableName{
-    color: var(--syntax-constants);
+.tok-heading{
+    color: var(--syntax-properties);
+    font-weight: bold;
 }
-
+.tok-emphasis{
+    font-style: italic;
+}
+.tok-strong{
+    font-weight: bold;
+}
 .tok-keyword{
     color: var(--syntax-keywords);
 }
-
-.tok-operator{
+.tok-atom,
+.tok-bool,
+.tok-variableName2{
+    color: var(--syntax-constants);
+}
+.tok-url{
     color: var(--syntax-operators);
 }
-
+.tok-labelName{
+    color: var(--syntax-functions);
+}
+.tok-inserted{
+    color: var(--syntax-strings);
+}
+.tok-deleted{
+    color: var(--syntax-properties);
+}
+.tok-literal,
 .tok-string{
     color: var(--syntax-strings);
 }
-
-.tok-bool{
-    color: var(--syntax-constants);
-}
-
-.tok-definition{
-    color: var(--syntax-functions);
-}
-
-.tok-comment{
-    color: var(--text-comment);
-}
-
-.tok-typeName{
+.tok-number{
     color: var(--syntax-types);
 }
-
+.tok-variableName{
+    color: var(--syntax-properties);
+}
+.tok-typeName,
+.tok-namespace,
+.tok-className{
+    color: var(--syntax-types);
+}
+.tok-macroName,
 .tok-propertyName{
     color: var(--syntax-properties);
+}
+.tok-operator{
+    color: var(--syntax-operators);
+}
+.tok-comment,
+.tok-meta{
+    color: var(--text-comment);
+}
+.tok-invalid{
+    color: var(--syntax-invalid);
+}
+.tok-string2{
+    color: var(--syntax-operators);
+}
+.tok-definition{
+    color: var(--syntax-functions);
 }
