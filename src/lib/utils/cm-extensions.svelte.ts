@@ -82,9 +82,13 @@ const autocomplete = autocompletion({
         return null
       }
 
+      const character_before = context.state.sliceDoc(context.pos - 1, context.pos)
+      if(character_before === "("){
+        return null
+      }
 
       const position = offset_to_position(context.state.doc, context.pos)
-      const trigger_chararacter = context.matchBefore(/\w+$/) ? undefined : context.state.sliceDoc(context.pos - 1, context.pos)
+      const trigger_chararacter = context.matchBefore(/\w+$/) ? undefined : character_before
       const trigger_kind = context.explicit ? CompletionTriggerKind.Invoked : CompletionTriggerKind.TriggerCharacter
 
       const completions = await get_completion(tab.language, tab.path, position, trigger_kind, trigger_chararacter)
