@@ -100,21 +100,21 @@ export async function create_tab_from_file(file_path: string){
     tabs.push(new_tab)
     set_active_tab(new_tab.id)
 
+    const directory = get(working_directory)
+    if(directory && file_path.includes(directory) && file_data.language){
+        await notify_document_opened(
+            file_data.language,
+            file_path,
+            file_data.content,
+            new_tab
+        )
+    }
+
     await tick()
 
     const editor = editor_views.get(new_tab.id)
     if(editor){
         language_handler(new_tab.id, new_tab.language)
         content_to_doc(editor, file_data.content)
-
-        const directory = get(working_directory)
-        if(directory && file_path.includes(directory) && file_data.language){
-            await notify_document_opened(
-                file_data.language,
-                file_path,
-                file_data.content,
-                new_tab
-            )
-        }
     }
 }

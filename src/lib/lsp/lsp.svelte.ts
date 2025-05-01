@@ -84,7 +84,7 @@ async function get_initialization_parameters(process_id: number, initialization_
         }
       }
     },
-    workspaceFolders: workspace_folder ? [workspace_folder] : null,
+    workspaceFolders: workspace_folder ? [workspace_folder] : null
   }
 }
 
@@ -155,7 +155,7 @@ export async function send_request_with_response(language: string, method: strin
                     response_tracker.delete(id);
                     reject(new Error(`Request ${method} timed out`));
                 }
-            }, 10000);
+            }, 30000);
 
         } catch (err) {
             reject(err);
@@ -171,7 +171,7 @@ listen("lsp-message", (event: any) => {
     }
 });
 
-startLspServer("python", "pyright-langserver", ["--stdio"])
+startLspServer("python", "pylsp", [])
 
 export function position_to_offset(document: Text, line: number, character: number){
     if(line >= document.lines) return

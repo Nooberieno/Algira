@@ -256,7 +256,13 @@ pub async fn start_lsp(command: &str, args: &[String]) -> Result<RealLspClient, 
                     }
                 };
 
-                reader.read_line(&mut line).await.unwrap(); // empty line
+                let mut content_type = String::new();
+                reader.read_line(&mut content_type).await.unwrap();
+                
+                if !content_type.trim().is_empty(){
+                    reader.read_line(&mut line).await.unwrap(); // empty line
+                }
+
 
                 let mut body = vec![0; len];
                 if let Err(err) = reader.read_exact(&mut body).await {
@@ -267,6 +273,7 @@ pub async fn start_lsp(command: &str, args: &[String]) -> Result<RealLspClient, 
                 };
 
                 let body = String::from_utf8_lossy(&body);
+                println!("LSP Response: {}", body);
                 let res = match serde_json::from_str::<serde_json::Value>(&body) {
                     Ok(res) => res,
                     Err(err) => {
@@ -323,6 +330,7 @@ pub async fn start_lsp(command: &str, args: &[String]) -> Result<RealLspClient, 
         let mut line = String::new();
         while let Ok(read) = reader.read_line(&mut line).await {
             if read > 0 {
+                println!("LSP stderr: {}", line);
                 match rtx
                     .send(InboundMessage::ProcessingError(LspError::ServerError(
                         line.clone(),
@@ -431,8 +439,8 @@ pub async fn lsp_send_request(
         "method": req.method,
         "params": req.params,
     });
-    println!("Sending LSP request: {}", req);
     let req = rcp::encode_message(req);
+    println!("Sending LSP request: {}", req);
     stdin.write_all(req.as_bytes()).await?;
     stdin.flush().await?;
 
@@ -448,8 +456,8 @@ pub async fn lsp_send_notification(
         "method": req.method,
         "params": req.params,
     });
-    println!("Sending LSP notification: {}", req);
     let req = rcp::encode_message(req);
+    println!("Sending LSP notification: {}", req);
     stdin.write_all(req.as_bytes()).await?;
 
     Ok(())

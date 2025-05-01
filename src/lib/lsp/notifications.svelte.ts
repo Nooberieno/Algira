@@ -8,7 +8,7 @@ import type { Tab } from "$lib/ui/tabs.svelte";
 
 export async function update_workspaces(added: LSP.WorkspaceFolder[], removed: LSP.WorkspaceFolder[]){
     for(let i=0; i<servers.length; i++){
-        if(!servers[i].ready) continue
+        if(!servers[i].ready || !servers[i].capabilities?.workspace?.workspaceFolders?.supported) continue
         try{
             await invoke("send_notification", {
                 language: servers[i].language,
