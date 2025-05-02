@@ -20,6 +20,10 @@
     max-width: 25rem;
     display: flex;
     flex-direction: column;
+
+    & .cm-tooltip-lint{
+        order: -1;
+    }
 }
 
 .cm-tooltip-hover .documentation {
