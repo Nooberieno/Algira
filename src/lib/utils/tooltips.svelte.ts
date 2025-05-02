@@ -22,6 +22,11 @@ export async function transform_lsp_tooltips(view: EditorView, { line, character
 
     const { contents, range } = tooltips
 
+    if(!contents){
+      console.log("No tooltips availlable")
+      return null
+    }
+
     let position = position_to_offset( view.state.doc, line, character)!
     let end: number = position
 

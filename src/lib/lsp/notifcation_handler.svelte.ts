@@ -1,6 +1,6 @@
 import * as LSP from "vscode-languageserver-protocol";
 
-import { setDiagnostics } from "@codemirror/lint";
+import { setDiagnostics, type Diagnostic } from "@codemirror/lint";
 import { get } from "svelte/store";
 
 import { tabs } from "$lib/ui/tabs.svelte";
@@ -37,7 +37,7 @@ function handle_diagnostics(diagnostic_params: LSP.PublishDiagnosticsParams){
         return
     }
 
-    const diagnostics = diagnostic_params.diagnostics.map(({ range, message, severity }) => ({
+    const diagnostics: Diagnostic[] = diagnostic_params.diagnostics.map(({ range, message, severity, source }) => ({
         from: position_to_offset(view.state.doc, range.start.line, range.start.character)!,
         to: position_to_offset(view.state.doc, range.end.line, range.end.character)!,
         severity: ({
@@ -46,7 +46,9 @@ function handle_diagnostics(diagnostic_params: LSP.PublishDiagnosticsParams){
             [LSP.DiagnosticSeverity.Information]: "info",
             [LSP.DiagnosticSeverity.Hint]: "info",
         } as const)[severity!],
-        message 
+        message: message,
+        source: source,
+        above: true 
     }))
     .filter(({from, to}) => from !== null && to !== null && from !== undefined && to !== undefined)
     .sort((a, b) => {
