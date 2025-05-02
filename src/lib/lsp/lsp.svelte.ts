@@ -197,7 +197,7 @@ export async function format_lsp_contents(contents: LSP.MarkupContent | LSP.Mark
   renderer.code = ({ text, lang }: { text: string; lang?: any }) => {
     const code = text;
     const result = document.createElement("pre");
-    result.className = "cm-editor"
+    result.className = "function-signature"
 
     function emit(text: string, classes?: string) {
       let node: globalThis.Text | HTMLSpanElement = document.createTextNode(text);
