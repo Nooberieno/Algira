@@ -171,7 +171,7 @@ listen("lsp-message", (event: any) => {
     }
 });
 
-startLspServer("python", "pylsp", [])
+startLspServer("python", "pyright-langserver", ["--stdio"])
 
 export function position_to_offset(document: Text, line: number, character: number){
     if(line >= document.lines) return
@@ -215,9 +215,9 @@ export async function format_lsp_contents(contents: LSP.MarkupContent | LSP.Mark
     }
 
     // Get the appropriate language parser
-    const languageParser = get_language_extension_from_language(lang || language);
-    if (languageParser) {
-      highlightCode(code, languageParser.language.parser.parse(code), classHighlighter, emit, emit_break);
+    const language_parser = get_language_extension_from_language(lang || language);
+    if (language_parser) {
+      highlightCode(code, language_parser.language.parser.parse(code), classHighlighter, emit, emit_break);
     } else {
       // Fallback for unsupported languages
       emit(code);
