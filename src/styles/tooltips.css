@@ -1,0 +1,126 @@
+.documentation{
+    background-color: var(--surface-tooltip);
+    color: var(--text-primary);
+    border: 1px solid var(--interactive-border);
+    border-radius: 4px;
+    padding: 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.cm-tooltip{
+    background-color: var(--surface-tooltip);
+    color: var(--text-primary);
+    border: 1px solid var(--interactive-border);
+}
+
+.cm-tooltip-hover {
+    max-width: 25rem;
+    display: flex;
+    flex-direction: column;
+
+    & .cm-tooltip-lint{
+        order: -1;
+    }
+}
+
+.cm-tooltip-hover .documentation {
+    max-height: 15rem;
+    overflow-y: auto;
+    border-top: 1px solid var(--interactive-border);
+}
+
+.cm-tooltip.cm-tooltip-lint {
+    max-width: 25rem;
+    max-height: none;
+}
+
+.cm-tooltip.cm-tooltip-lint .cm-diagnostic {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.function-signature {
+    max-width: 100%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+}
+
+.cm-diagnosticSource{
+    color: var(--text-comment);
+    font-style: italic;
+    padding-right: 0.5rem;
+}
+
+.tok-link{
+    color: var(--text-comment);
+    text-decoration: underline;
+}
+.tok-heading{
+    color: var(--syntax-properties);
+    font-weight: bold;
+}
+.tok-emphasis{
+    font-style: italic;
+}
+.tok-strong{
+    font-weight: bold;
+}
+.tok-keyword{
+    color: var(--syntax-keywords);
+}
+.tok-atom,
+.tok-bool,
+.tok-variableName2{
+    color: var(--syntax-constants);
+}
+.tok-url{
+    color: var(--syntax-operators);
+}
+.tok-labelName{
+    color: var(--syntax-functions);
+}
+.tok-inserted{
+    color: var(--syntax-strings);
+}
+.tok-deleted{
+    color: var(--syntax-properties);
+}
+.tok-literal,
+.tok-string{
+    color: var(--syntax-strings);
+}
+.tok-number{
+    color: var(--syntax-types);
+}
+.tok-variableName{
+    color: var(--syntax-properties);
+}
+.tok-typeName,
+.tok-namespace,
+.tok-className{
+    color: var(--syntax-types);
+}
+.tok-macroName,
+.tok-propertyName{
+    color: var(--syntax-properties);
+}
+.tok-operator{
+    color: var(--syntax-operators);
+}
+.tok-comment,
+.tok-meta{
+    color: var(--text-comment);
+}
+.tok-invalid{
+    color: var(--syntax-invalid);
+}
+.tok-string2{
+    color: var(--syntax-operators);
+}
+.tok-definition{
+    color: var(--syntax-functions);
+}

@@ -70,7 +70,6 @@ body{
   /* Track */
   ::-webkit-scrollbar-track {
     background: var(--surface-highlight); /* highlightBackground */
-    border-radius: 5px;
   }
   
   /* Handle */

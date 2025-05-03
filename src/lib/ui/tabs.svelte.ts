@@ -7,12 +7,15 @@ import { active_extensions } from "../utils/cm-extensions.svelte";
 import { get_language_from_file_extension, check_language, language_handler } from "$lib/utils/lang.svelte";
 import { extract_tab_info } from "$lib/utils/filesystem.svelte";
 import { content_to_doc, editor_views } from "./editors.svelte";
+import { working_directory } from "./directory.svelte";
+import { notify_document_opened } from "$lib/lsp/notifications.svelte";
 
 export interface Tab {
     id: string,
     title: string,
     path?: string,
     language?: string,
+    document_version?: number,
     element: any
 }
 
@@ -44,6 +47,7 @@ export function create_new_tab(tab_element: any) {
         id: crypto.randomUUID(),
         title: `Untitled-${untitled_count}`,
         element: tab_element,
+        document_version: 0
     };
     untitled_count++
     tabs.push(new_tab)
@@ -90,10 +94,21 @@ export async function create_tab_from_file(file_path: string){
         title: file_data.filename,
         path: file_path,
         language: file_data.language,
+        document_version: 0,
         element: Editor
     })
     tabs.push(new_tab)
     set_active_tab(new_tab.id)
+
+    const directory = get(working_directory)
+    if(directory && file_path.includes(directory) && file_data.language){
+        await notify_document_opened(
+            file_data.language,
+            file_path,
+            file_data.content,
+            new_tab
+        )
+    }
 
     await tick()
 

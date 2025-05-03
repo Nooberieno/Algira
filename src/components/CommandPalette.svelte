@@ -105,8 +105,6 @@
 
     $effect(() => {
         handle_search(search_query)
-        $inspect(items)
-        $inspect(search_results)
     })
 
     onMount(() => {

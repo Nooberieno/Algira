@@ -28,7 +28,7 @@ function get_platform(){
     }
 }
 
-const current_platform: PlatformName = get_platform()
+export const current_platform: PlatformName = get_platform()
 
 class KeyMapManager{
     private keybindings: Map<string, KeyBinding> = new Map<string, KeyBinding>()
