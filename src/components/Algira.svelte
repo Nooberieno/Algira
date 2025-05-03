@@ -4,12 +4,10 @@
 
 
 {#if tabs.length === 0}
-    <div id="landing-page">
-        <h1>
-            Welcome to Algira
-        </h1>
-        <p>press ctrl+k ctrl+o to open a folder </p>
-        <p>press ctrl+n to open a new editor</p>
-        <p>press ctrl+o to open an existing file</p>
+    <div id="landing-page" class="gradient-text">
+        <img alt="Algira's Logo" id="logo"/>
+        <p class="gradient-text">press ctrl+k ctrl+o to open a folder </p>
+        <p class="gradient-text">press ctrl+n to open a new editor</p>
+        <p class="gradient-text">press ctrl+o to open an existing file</p>
     </div>
 {/if}

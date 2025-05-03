@@ -81,7 +81,7 @@
 .content-button{
     font-family: inherit;
     width: 80%;
-    background-color: var(--syntax-operators);
+    background-color: var(--text-comment);
     border: none;
     border-radius: 2px;
     padding: 0;

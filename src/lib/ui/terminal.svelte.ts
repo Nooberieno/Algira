@@ -12,6 +12,12 @@ export const term = new Terminal({
     fontFamily: "Hack Mono",
     fontSize: 10,
     fontWeight: "normal",
+    theme: {
+        background: "#131313",
+        cursor: "528bff",
+        foreground: "#f8f8f2",
+        selectionBackground: "#9696964d"
+    }
 });
 
 export const fit = new FitAddon()

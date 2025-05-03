@@ -11,41 +11,50 @@
     -webkit-text-size-adjust: 100%;
 
     /* Base Surface Colors */  
-    --surface-primary: #282c34;      /* Main background */
-    --surface-secondary: #22252c;    /* Sidebar/secondary panels */
-    --surface-tertiary: #1d1f25;     /* Deepest backgrounds */
-    --surface-tooltip: #353a42;      /* Tooltips/popovers */
-    --surface-highlight: #2c313a;    /* Highlighted areas */
-    --surface-dark: #21252b;         /* Dark panels */
-  
+    --surface-primary: #191919;      /* Main background */
+    --surface-secondary: #222222;    /* Sidebar/secondary panels */
+    --surface-tertiary: #202020;     /* Deepest backgrounds */
+    --surface-tooltip: #282828;      /* Tooltips/popovers */
+    --surface-highlight: #2d2d2d;    /* Highlighted areas */
+    --surface-dark: #191919;         /* Dark panels */
+    --surface-search: #6199ff2f;     /* Search background */
+
     /* Text Colors */
-    --text-primary: #abb2bf;         /* Primary text */
-    --text-secondary: #7a8490;       /* Secondary/muted text */
-    --text-comment: #7d8799;          /* Comments, subdued text */
+    --text-primary: #f8f8f2;         /* Primary text */
+    --text-secondary: #d7813a;       /* Secondary/muted text */
+    --text-comment: #707070;          /* Comments, subdued text */
     
     /* Syntax Highlighting */
-    --syntax-types: #e5c07b;       /* Types, classes, namespaces */
-    --syntax-properties: #e06c75;        /* Properties, deleted */
-    --syntax-operators: #56b6c2;         /* Operators, URLs */
-    --syntax-strings: #98c379;         /* Strings */
-    --syntax-functions: #61afef;       /* Functions */
-    --syntax-constants: #d19a66;      /* Constants */
-    --syntax-keywords: #c678dd;       /* Keywords */
+    --syntax-types: #d7a73a;       /* Types, classes, namespaces */
+    --syntax-properties: #9abbed;        /* Properties, deleted */
+    --syntax-operators: #bd93f9;         /* Operators, URLs */
+    --syntax-strings: #7fa55f;         /* Strings */
+    --syntax-functions: #99bd43;       /* Functions */
+    --syntax-constants: #ff6666;      /* Constants */
+    --syntax-keywords: #e74e78;       /* Keywords */
     --syntax-invalid: #ffffff;      /* Invalid code */
+    --syntax-braces: #9696964d;
   
     /* UI Element Colors */
     --accent-cursor: #528bff;       /* Cursor */
-    --accent-selection: #3E4451;    /* Selection background */
-    --accent-highlight: #6699ff0b;  /* Active line */ 
-    --accent-match: #72a1ff59;      /* Search matches */
-  
+    --accent-selection: #ffffff1a;    /* Selection background */
+    --accent-highlight:  #ffffff1a;   /* Active line */ 
+    --accent-match: #ffffff33;     /* Search matches */
+    --accent-search: #457dff;       /* Search outline */
+    --accent-fold: #ddd;
+
+
     /* Interactive Element Colors */
-    --interactive-hover: #353a41;    /* Hover states */
+    --interactive-hover: #2c2c2c;    /* Hover states */
     --interactive-active: #56b6c2;   /* Active indicators */
     --interactive-border: #2c313a;   /* Borders */
-  
+    --interactive-selection: #9696964d;
+
     /* Terminal Colors */
-    --terminal-background: #000000;  /* Terminal background */
+    --terminal-background: #131313;  /* Terminal background */
+
+    --gradient-1: #d7a73a;
+    --gradient-2: #e74e78;
 }
 
 body{
@@ -96,6 +105,14 @@ body{
   overflow: hidden;
 }
 
+.gradient-text{
+  background: linear-gradient(to right, var(--gradient-1), var(--gradient-2));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
 #landing-page {
   position: absolute;
   top: 0;
@@ -107,10 +124,26 @@ body{
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   background-color: var(--surface-primary);
   z-index: 0;
   padding: 20px;
+}
+
+#logo{
+  position: relative;
+  /* TODO make a logo and put it in the 2 url functions (preferred format: svg) */
+  -webkit-mask-image: url();
+  mask-image: url();
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  background: linear-gradient(to right, var(--gradient-1), var(--gradient-2));
+  width: 250px;
+  height: 250px;
 }
 
 @font-face {

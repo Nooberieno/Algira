@@ -2,7 +2,6 @@ import type { Extension } from "@codemirror/state";
 
 import { get } from "svelte/store";
 import { EditorView } from "codemirror";
-import { oneDark } from "@codemirror/theme-one-dark";
 import { basicSetup } from "codemirror";
 import { hoverTooltip, keymap, ViewPlugin, type Tooltip } from "@codemirror/view";
 import { defaultKeymap } from "@codemirror/commands";
@@ -10,6 +9,7 @@ import { autocompletion, CompletionContext, insertCompletionText, type Completio
 import { CompletionTriggerKind, Hover, TextEdit } from "vscode-languageserver-protocol";
 
 import { AlgiraEditorKeymap } from "../keybindings/add-cm-keybinds.svelte";
+import { AlgiraStandard } from "$lib/ui/base-theme.svelte";
 import { offset_to_position, position_to_offset } from "$lib/lsp/lsp.svelte";
 import { tabs, active_id } from "$lib/ui/tabs.svelte";
 import { get_completion, get_definiton, get_tooltips } from "$lib/lsp/requests.svelte";
@@ -187,7 +187,7 @@ const hover_tooltips = hoverTooltip(
   }
 )
 
-export const global_extensions: Extension[] = $state([focus_tracker, oneDark, basicSetup, goto_definition, change_updater, autocomplete, hover_tooltips,  keymap.of([...defaultKeymap, ...AlgiraEditorKeymap])])
+export const global_extensions: Extension[] = $state([focus_tracker, AlgiraStandard, basicSetup, goto_definition, change_updater, autocomplete, hover_tooltips,  keymap.of([...defaultKeymap, ...AlgiraEditorKeymap])])
 
 export const active_extensions: Record<string, Extension[]> = $state({})
 
