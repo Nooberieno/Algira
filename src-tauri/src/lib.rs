@@ -1,7 +1,9 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use portable_pty::{native_pty_system, PtySize};
+use std::collections::HashMap;
 use std::{io::BufReader, sync::Arc};
 use tauri::async_runtime::Mutex as AsyncMutex;
+use tauri::Manager;
 
 mod terminal;
 use terminal::TermState;
@@ -26,6 +28,22 @@ pub fn run() {
     let writer = pty_pair.master.take_writer().unwrap();
 
     tauri::Builder::default()
+        .setup(|app| {
+            let handle = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
+                match lsp::start_lsp(HashMap::new(), &[]).await {
+                    Ok(state) => {
+                        println!("LSP started succesfully");
+                        handle.manage(state.clone());
+                        lsp::start_lsp_listener(handle, state);
+                    }
+                    Err(err) => {
+                        eprintln!("Failed to start LSP: {}", err);
+                    }
+                }
+            });
+            Ok(())
+        })
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_fs::init())
@@ -43,7 +61,10 @@ pub fn run() {
             terminal::pty_write,
             terminal::pty_read,
             terminal::pty_resize,
-            dir_map::index_directory
+            dir_map::index_directory,
+            lsp::send_notification,
+            lsp::send_request,
+            lsp::start_language_server,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

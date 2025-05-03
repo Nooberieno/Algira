@@ -1,8 +1,10 @@
 <script lang="ts">
+  import "$lib/lsp/lsp.svelte"
   import "../styles/main.css"
+  import "../styles/tooltips.css"
 
   import { onMount, onDestroy } from "svelte";
-  import { python } from "@codemirror/lang-python";
+  import { python } from "@codemirror/lang-python"
 
   import TabBar from "../components/TabBar.svelte";
   import TabContent from "../components/TabContent.svelte";
