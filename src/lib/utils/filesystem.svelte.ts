@@ -37,9 +37,8 @@ export const open_new_file = async() => {
                 language_handler(tab.id, tab.language)
                 console.log(tab.language)
                 content_to_doc(view, text)
-
-                const directory = get(working_directory)
-                if(tab.language && directory && file_path.includes(directory)){
+                
+                if(tab.language){
                     await notify_document_opened(
                         tab.language,
                         file_path,
@@ -69,7 +68,16 @@ export const save_text_file = async(view: EditorView) => {
             update_tab_info(tab, await path.basename(file_path), file_path)
             language_handler(tab.id, tab.language)
             console.log(tab.language)
-            await writeTextFile(file_path, view.state.doc.toString())
+            const text = view.state.doc.toString()
+            await writeTextFile(file_path, text)
+            if(tab.language){
+                await notify_document_opened(
+                    tab.language,
+                    file_path,
+                    text,
+                    tab
+                )
+            }
             return true
         }
     }

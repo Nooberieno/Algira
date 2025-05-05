@@ -31,8 +31,8 @@ export async function notify_document_opened(language: string, file_path: string
     const uri = file_path_to_uri(file_path)
     try{
         const server = servers.find((server) => server.language === language)
-        if(!server || !server.ready || !server.capabilities?.workspace?.workspaceFolders?.changeNotifications){
-            console.log("failed to update workspaces for server", server?.name)
+        if(!server || !server.ready){
+            console.log(`failed to notify server: ${server?.name} about file`, file_path)
             return
         } 
         if(!tab.document_version){

@@ -1,5 +1,5 @@
 .tab-bar{
-  background-color: var(--surface-secondary);
+  background-color: var(--surface-tertiary);
   color: var(--text-primary);
   top: 0;
   display: flex;
