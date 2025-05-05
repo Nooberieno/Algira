@@ -4,7 +4,7 @@
 
 
 {#if tabs.length === 0}
-    <div id="landing-page" class="gradient-text">
+    <div id="landing-page">
         <img alt="Algira's Logo" id="logo"/>
         <p class="gradient-text">press ctrl+k ctrl+o to open a folder </p>
         <p class="gradient-text">press ctrl+n to open a new editor</p>

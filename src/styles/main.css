@@ -57,9 +57,9 @@
     --gradient-2: #e74e78;
 }
 
-body{
+/* body{
     background-color: var(--surface-secondary);
-}
+} */
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
