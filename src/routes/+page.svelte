@@ -7,12 +7,12 @@
   import { python } from "@codemirror/lang-python";
   import { markdown } from "@codemirror/lang-markdown";
 
-  import TabBar from "../components/TabBar.svelte";
-  import TabContent from "../components/TabContent.svelte";
-  import Terminal from "../components/Terminal.svelte";
+  import TabBar from "../components/tabs/TabBar.svelte";
+  import TabContent from "../components/tabs/TabContent.svelte";
   import Sidebar from "../components/Sidebar.svelte";
   import Algira from "../components/Algira.svelte";
   import CommandPalette from "../components/CommandPalette.svelte";
+  import TerminalBar from "../components/terminals/TerminalBar.svelte";
 
   import { setup_keymap_listener } from "../lib/keybindings/keymap.svelte";
   import { register_language } from "$lib/utils/lang.svelte";
@@ -38,7 +38,7 @@
     <Algira></Algira>
     <TabBar></TabBar>
     <TabContent></TabContent>
-    <Terminal></Terminal>
+    <TerminalBar></TerminalBar>
   </main>
   <CommandPalette></CommandPalette>
 </div>

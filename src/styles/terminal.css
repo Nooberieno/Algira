@@ -1,23 +1,104 @@
 .algira-terminal {
     font-family: Hack Mono;
     width: 100%;
-    padding: 10px;
+    height: 100%;
     background-color: var(--terminal-background);
     color: var(--text-primary);
-    transition: max-height 0.3s ease, padding 0.3s ease;
-    overflow: hidden;
-    flex-shrink: 0;
+    display: block;
+    flex: 1, 1, auto;
     opacity: 1;
     z-index: 1;
-    border-top: 1px solid var(--text-secondary);
-    box-sizing: border-box;
-    margin: 0;
+}
+
+.terminal-hidden{
+    display: none;
 }
 
 .hidden {
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-    max-height: 0;
-    padding: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out, border-top 0.3s ease-out;
+    max-height: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
     opacity: 0;
-    border-top: none;
+    border-top: none !important;
+    overflow: hidden;
+}
+
+#terminal-tab-bar{
+    font-family: Hack Mono;
+    width: 150px;
+    height: 100%;
+    gap: 5px;
+    background-color: var(--terminal-background);
+    color: var(--text-primary);
+    border-left: 1px solid var(--text-secondary);
+    z-index: 1;
+    box-sizing: border-box;
+    top: 0;
+    right: 0;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+
+#terminal-container{
+font-family: inherit;
+    position: relative;
+    width: calc(100% - 20px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.2s ease-in;
+    flex: 1, 1, auto;
+    min-width: 0;
+}
+
+#terminal-tab-container{
+    font-family: Hack Mono;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out, border-top 0.3s ease-out;
+    width: 100%;
+    height: 300px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: var(--terminal-background);
+    color: var(--text-primary);
+    overflow: hidden;
+    border-top: 1px solid var(--text-secondary);
+    opacity: 1;
+    z-index: 1;
+    display: flex;
+}
+
+.terminal-tab{
+    font-family: inherit;
+    font-size: 80%;
+    color: var(--text-primary);
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.terminal-button{
+    width: 25px;
+    height: 25px;
+    color: var(--text-primary);
+    background: none;
+    border: 1px solid var(--text-secondary);
+    border-radius: 5px;
+}
+
+.tab-container-terminal{
+    width: 100%;
+    padding-right: 10px;
+    min-height: fit-content;
+}
+
+.tab-container-terminal.active{
+    background-color: var(--surface-secondary);
 }

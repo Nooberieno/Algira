@@ -1,7 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-use portable_pty::{native_pty_system, PtySize};
 use std::collections::HashMap;
-use std::{io::BufReader, sync::Arc};
+use std::sync::Arc;
 use tauri::async_runtime::Mutex as AsyncMutex;
 use tauri::Manager;
 
@@ -13,20 +12,6 @@ mod dir_map;
 mod lsp;
 
 pub fn run() {
-    let pty_sys = native_pty_system();
-
-    let pty_pair = pty_sys
-        .openpty(PtySize {
-            rows: 24,
-            cols: 80,
-            pixel_width: 0,
-            pixel_height: 0,
-        })
-        .unwrap();
-
-    let reader = pty_pair.master.try_clone_reader().unwrap();
-    let writer = pty_pair.master.take_writer().unwrap();
-
     tauri::Builder::default()
         .setup(|app| {
             let handle = app.handle().clone();
@@ -52,15 +37,14 @@ pub fn run() {
         .plugin(tauri_plugin_persisted_scope::init())
 
         .manage(TermState {
-            pty_pair: Arc::new(AsyncMutex::new(pty_pair)),
-            writer: Arc::new(AsyncMutex::new(writer)),
-            reader: Arc::new(AsyncMutex::new(BufReader::new(reader))),
+            pty_pair: Arc::new(AsyncMutex::new(HashMap::new())),
+            writer: Arc::new(AsyncMutex::new(HashMap::new())),
         })
         .invoke_handler(tauri::generate_handler![
             terminal::create_shell_process,
             terminal::pty_write,
-            terminal::pty_read,
             terminal::pty_resize,
+            terminal::close_terminal,
             dir_map::index_directory,
             lsp::send_notification,
             lsp::send_request,

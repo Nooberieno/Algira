@@ -37,7 +37,7 @@
     justify-content: center;
 }
 
-.sidebar-button:focus{
+.sidebar-button:active, .sidebar-button:hover{
     color: var(--text-primary);
 }
 

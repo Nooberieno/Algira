@@ -1,7 +1,7 @@
 <script lang="ts">
-    import "../styles/tab.css"
+    import "../../styles/tab.css"
 
-    import { tabs, active_id, set_active_tab, close_tab } from '../lib/ui/tabs.svelte';
+    import { tabs, active_id, set_active_tab, close_tab } from '../../lib/ui/tabs.svelte';
 </script>
 
 <div class="tab-bar">

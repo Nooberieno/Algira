@@ -1,8 +1,9 @@
 <script lang="ts">
   import "../styles/sidebar/sidebar.css"
-  
-  import { onMount, type Component } from "svelte";
+
   import type { Unsubscriber } from "svelte/store";
+
+  import { onMount, tick, type Component } from "svelte";
 
   import Directory from "./sidebar/Directory/Directory.svelte";
 
@@ -14,20 +15,25 @@
 
   async function toggle_sidebar(component: Component){
     const sidebar = document.querySelector(".sidebar")
+    const container = document.querySelector(".container")
     const is_expanded = sidebar?.classList.contains("expanded")
 
     if (SidebarContent === component){
         if(is_expanded){
         sidebar?.classList.remove("expanded")
+        container?.classList.remove("sidebar-expanded")
         await new Promise(r => setTimeout(r, 300))
         SidebarContent = undefined
         }else{
         sidebar?.classList.add("expanded")
+        container?.classList.add("sidebar-expanded")
         }
     }else{
         sidebar?.classList.add("expanded")
+        container?.classList.add("sidebar-expanded")
         SidebarContent = component
     }
+    await new Promise(r => setTimeout(() => window.dispatchEvent(new Event("resize")), 300))
   }
 
   onMount(() => {
