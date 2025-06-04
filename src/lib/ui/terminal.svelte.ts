@@ -24,7 +24,7 @@ export function set_active_terminal(id: string){
     fit_terminal(active_terminal_instance)
 }
 
-export function toggle_terminal_focus(){
+export async function toggle_terminal_focus(){
     const active_term_id = get(active_terminal)
     let active_term_instance: TerminalInstance | undefined = terminals.find((t) => t.id === active_term_id)
     const terminal_container = document.getElementById("terminal-tab-container")
@@ -33,7 +33,7 @@ export function toggle_terminal_focus(){
     if(terminal_container.classList.contains("hidden")){
         terminal_container.classList.remove("hidden")
         if(terminals.length === 0){
-            add_terminal_instance()
+            await add_terminal_instance()
             const active_term_id = get(active_terminal)
             active_term_instance = terminals.find((t) => t.id === active_term_id) 
         }
@@ -57,7 +57,7 @@ export function toggle_terminal_focus(){
     return true
 }
 
-export function toggle_terminal_simple(){
+export async function toggle_terminal_simple(){
     const active_term_id = get(active_terminal)
     let active_term_instance = terminals.find((t) => t.id === active_term_id)
     const terminal_container = document.getElementById("terminal-tab-container")
@@ -66,7 +66,7 @@ export function toggle_terminal_simple(){
     if(terminal_container.classList.contains("hidden")){
         terminal_container.classList.remove("hidden")
         if(terminals.length === 0){
-            add_terminal_instance()
+            await add_terminal_instance()
             active_term_instance = terminals[terminals.length - 1]
         }
         if(!active_term_instance) return false
@@ -158,10 +158,20 @@ export async function add_terminal_instance(){
 export function close_terminal(id: string){
     const index = terminals.findIndex((t) => t.id === id)
     if(index === -1) return
+
+    const terminal = terminals[index]
+    terminal.terminal.dispose()
+    terminal.fit.dispose()
+
+
     terminals.splice(index, 1)
 
     if(terminals.length > 0){
-        active_terminal.set(terminals[Math.min(index, terminals.length - 1)].id)
+        const next_term = terminals[Math.min(index, terminals.length - 1)]
+        active_terminal.set(next_term.id)
+        if(next_term){
+            fit_terminal(next_term)
+        }
     }else{
         toggle_terminal_simple()
         active_terminal.set("")

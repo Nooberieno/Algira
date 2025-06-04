@@ -1,5 +1,7 @@
 import type { EditorView } from "codemirror";
 
+import { StateEffect, Transaction } from "@codemirror/state";
+
 import { tabs} from "$lib/ui/tabs.svelte";
 
 export const editor_views = new Map<string, EditorView>()
@@ -13,8 +15,11 @@ export function unregister_editor(tab_id: string){
     editor_views.delete(tab_id)
 }
 
+export const ignore_changes = StateEffect.define<boolean>()
+
 export function content_to_doc(view: EditorView, content: string){
     view.dispatch({
-        changes: {from: 0, to: view.state.doc.length, insert: content}
+        changes: {from: 0, to: view.state.doc.length, insert: content},
+        effects: [ignore_changes.of(true)]
     })
 }

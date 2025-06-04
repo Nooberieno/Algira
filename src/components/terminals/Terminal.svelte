@@ -41,4 +41,9 @@
     })
 </script>
 
-<div id="terminal-{term_instance.id}" class="algira-terminal {term_instance.id !== $active_terminal ? "terminal-hidden": ""}"></div>
+<div
+    id="terminal-{term_instance.id}" 
+    class="algira-terminal"
+    class:terminal-hidden={term_instance.id !== $active_terminal}
+    style="display: {term_instance.id === $active_terminal ? 'block' : 'none'}">
+</div>

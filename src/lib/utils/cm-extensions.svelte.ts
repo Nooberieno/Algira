@@ -3,19 +3,20 @@ import type { Extension } from "@codemirror/state";
 import { get } from "svelte/store";
 import { EditorView } from "codemirror";
 import { basicSetup } from "codemirror";
-import { hoverTooltip, keymap, ViewPlugin, type Tooltip } from "@codemirror/view";
+import { hoverTooltip, keymap, ViewPlugin } from "@codemirror/view";
 import { defaultKeymap } from "@codemirror/commands";
 import { autocompletion, CompletionContext, insertCompletionText, type Completion } from "@codemirror/autocomplete";
-import { CompletionTriggerKind, Hover, TextEdit } from "vscode-languageserver-protocol";
+import { CompletionTriggerKind } from "vscode-languageserver-protocol";
 
 import { AlgiraEditorKeymap } from "../keybindings/add-cm-keybinds.svelte";
 import { AlgiraStandard } from "$lib/ui/base-theme.svelte";
 import { offset_to_position, position_to_offset } from "$lib/lsp/lsp.svelte";
 import { tabs, active_id } from "$lib/ui/tabs.svelte";
-import { get_completion, get_definiton, get_tooltips } from "$lib/lsp/requests.svelte";
+import { get_completion, get_definiton } from "$lib/lsp/requests.svelte";
 import { did_change } from "$lib/lsp/notifications.svelte";
 import { get_completion_type, is_lsp_text_edit, match_prefix } from "./completions.svelte";
 import { transform_lsp_tooltips } from "./tooltips.svelte";
+import { ignore_changes } from "$lib/ui/editors.svelte";
 
 
 
@@ -49,6 +50,10 @@ const goto_definition = ViewPlugin.fromClass(class {
 
 const change_updater = EditorView.updateListener.of((update) => {
     if (update.docChanged) {
+
+      const ignore = update.transactions.some(tr => tr.effects.some(e => e.is(ignore_changes)))
+      if(ignore) return
+
       const tab = tabs.find((t) => t.id === get(active_id));
       if (!tab || !tab.path || !tab.language || tab.document_version === undefined) return;
   
