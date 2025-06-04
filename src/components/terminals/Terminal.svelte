@@ -11,7 +11,6 @@
     import { init_shell, fit_terminal, write_to_pty, write_to_terminal, close_terminal, active_terminal } from "../../lib/ui/terminal.svelte"
 
     let { term_instance} : { term_instance: TerminalInstance} = $props()
-    console.log(term_instance.id)
 
     listen("terminal-data", (event: any) => {
         if(event.payload.id !== term_instance.id){

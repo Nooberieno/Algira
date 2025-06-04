@@ -28,10 +28,12 @@ export async function toggle_terminal_focus(){
     const active_term_id = get(active_terminal)
     let active_term_instance: TerminalInstance | undefined = terminals.find((t) => t.id === active_term_id)
     const terminal_container = document.getElementById("terminal-tab-container")
+    const terminal_tab_bar = document.getElementById("terminal-tab-bar")
     if(!terminal_container || ((terminals.length > 0) && !active_term_instance) || (active_term_instance && (terminals.length <= 0))) return false
 
     if(terminal_container.classList.contains("hidden")){
         terminal_container.classList.remove("hidden")
+        terminal_tab_bar?.classList.remove("hidden")
         if(terminals.length === 0){
             await add_terminal_instance()
             const active_term_id = get(active_terminal)
@@ -43,6 +45,8 @@ export async function toggle_terminal_focus(){
         if(!active_term_instance) return false
         if(document.querySelector(".xterm-helper-textarea") === document.activeElement){
             terminal_container.classList.add("hidden")
+            terminal_tab_bar?.classList.add("hidden")
+
             const editor = editor_views.get(get(active_id))
             if(editor){
                 editor.focus()
@@ -61,10 +65,12 @@ export async function toggle_terminal_simple(){
     const active_term_id = get(active_terminal)
     let active_term_instance = terminals.find((t) => t.id === active_term_id)
     const terminal_container = document.getElementById("terminal-tab-container")
+    const terminal_tab_bar = document.getElementById("terminal-tab-bar")
     if(!terminal_container || ((terminals.length > 0) && !active_term_instance) || (active_term_instance && (terminals.length <= 0))) return false
 
     if(terminal_container.classList.contains("hidden")){
         terminal_container.classList.remove("hidden")
+        terminal_tab_bar?.classList.remove("hidden")
         if(terminals.length === 0){
             await add_terminal_instance()
             active_term_instance = terminals[terminals.length - 1]
@@ -77,6 +83,7 @@ export async function toggle_terminal_simple(){
         active_term_instance.terminal.focus()
     }else{
         terminal_container.classList.add("hidden")
+        terminal_tab_bar?.classList.add("hidden")
         const editor = editor_views.get(get(active_id))
         if(editor) editor.focus()
     }
@@ -138,7 +145,6 @@ export async function init_shell(id: string){
     if(!active_dir){
         active_dir = null
     }
-
     await invoke("create_shell_process", {id, dir: active_dir}).catch((error) => {
         console.error("Error creating shell:", error)
     })
@@ -153,6 +159,7 @@ export async function add_terminal_instance(){
     await tick()
     active_terminal.set(term_instance.id)
     console.log(get(active_terminal))
+    // await new Promise((res) => setTimeout(res, 500));
 }
 
 export function close_terminal(id: string){
@@ -171,6 +178,7 @@ export function close_terminal(id: string){
         active_terminal.set(next_term.id)
         if(next_term){
             fit_terminal(next_term)
+            next_term.terminal.focus()
         }
     }else{
         toggle_terminal_simple()

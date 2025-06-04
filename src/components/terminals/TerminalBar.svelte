@@ -11,7 +11,7 @@
         <Terminal term_instance={terminal}></Terminal>
     {/each}
     </div>
-    <div id="terminal-tab-bar">
+    <div id="terminal-tab-bar" class="hidden">
         <button class="terminal-button" onclick={add_terminal_instance}>+</button>
         {#each terminals as terminal (terminal.id)}
         <div 

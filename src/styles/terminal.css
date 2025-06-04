@@ -31,14 +31,14 @@
 #terminal-tab-bar{
     font-family: Hack Mono;
     width: 150px;
-    height: 300px;
+    height: calc(25% - 10px);
     gap: 5px;
     background-color: var(--terminal-background);
     color: var(--text-primary);
     border-left: 1px solid var(--text-secondary);
     z-index: 1;
-    box-sizing: border-box;
     right: 0;
+    bottom: 0;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -46,12 +46,13 @@
     overflow-x: hidden;
     overflow-y: auto;
     white-space: nowrap;
+    padding-bottom: 10px;
 }
 
 #terminal-container{
 font-family: inherit;
     position: relative;
-    width: calc(100% - 20px);
+    width: calc(100% - 170px);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -63,8 +64,8 @@ font-family: inherit;
 #terminal-tab-container{
     font-family: Hack Mono;
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s ease-out, border-top 0.3s ease-out;
-    width: calc(100% - 150px);
-    height: 300px;
+    width: 100%;
+    height: 25%;
     padding-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
@@ -75,6 +76,7 @@ font-family: inherit;
     opacity: 1;
     z-index: 1;
     display: flex;
+    flex-shrink: 0;
 }
 
 .terminal-tab{

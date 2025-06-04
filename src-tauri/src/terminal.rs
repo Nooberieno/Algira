@@ -61,20 +61,20 @@ pub async fn create_shell_process(id: String, dir: Option<String>, state: State<
     let app_clone = app.clone();
     let pty_pair_arc = state.pty_pair.clone();
     let writer_arc = state.writer.clone();
-    tokio::spawn(async move {
+    tokio::task::spawn_blocking(move || {
         match child.wait() {
             Ok(status) => {
                 if !status.success() {
                     eprintln!("Shell process exited with status: {}", status);
                 }
-                drop_pty_resources(id_clone, writer_arc, pty_pair_arc, app_clone).await;
+                tauri::async_runtime::spawn(drop_pty_resources(id_clone, writer_arc, pty_pair_arc, app_clone));
             }
             Err(e) => eprintln!("Error waiting for shell process: {}", e),
         }
     });
 
     let id_clone = id.clone();
-    tauri::async_runtime::spawn(async move {
+    tokio::task::spawn_blocking( move || {
         let mut reader = BufReader::new(reader);
         loop {
             let mut buf = [0; 1024];
