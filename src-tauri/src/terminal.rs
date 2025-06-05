@@ -55,13 +55,14 @@ pub async fn create_shell_process(id: String, dir: Option<String>, state: State<
     let mut child = pty_pair
         .slave
         .spawn_command(cmd)
-        .map_err(|e| e.to_string())?;
+        .unwrap();
+        // .map_err(|e| e.to_string())?;
 
     let id_clone = id.clone();
     let app_clone = app.clone();
     let pty_pair_arc = state.pty_pair.clone();
     let writer_arc = state.writer.clone();
-    tokio::task::spawn_blocking(move || {
+    std::thread::spawn(move || {
         match child.wait() {
             Ok(status) => {
                 if !status.success() {
@@ -74,14 +75,14 @@ pub async fn create_shell_process(id: String, dir: Option<String>, state: State<
     });
 
     let id_clone = id.clone();
-    tokio::task::spawn_blocking( move || {
+    std::thread::spawn( move || {
         let mut reader = BufReader::new(reader);
         loop {
             let mut buf = [0; 1024];
             match reader.read(&mut buf){
                 Ok(n) if n > 0 => {
                     let output = String::from_utf8_lossy(&buf[..n]).to_string();
-                    app.emit("terminal-data", serde_json::json!({"id": id_clone, "data": output})).unwrap();
+                    app.emit(&format!("terminal-data-{}", id_clone), serde_json::json!({"id": id_clone, "data": output})).unwrap();
                 },
                 _ => {
                     break;
@@ -91,6 +92,7 @@ pub async fn create_shell_process(id: String, dir: Option<String>, state: State<
     });
     state.pty_pair.lock().await.insert(id.clone(), pty_pair);
     state.writer.lock().await.insert(id.clone(), writer);
+    println!("{}", state.pty_pair.lock().await.len());
     Ok(())
 }
 
@@ -121,7 +123,9 @@ async fn drop_pty_resources(id: String, writer_arc: Arc<AsyncMutex<HashMap<Strin
     if let Some(pty_pair) = pty_pair_arc.lock().await.remove(&id){
         drop(pty_pair);
     }
-    writer_arc.lock().await.remove(&id);
+    if let Some(writer) = writer_arc.lock().await.remove(&id){
+        drop(writer);
+    }
     app.emit("terminal-exit", serde_json::json!({"id": id})).unwrap();
 }
 

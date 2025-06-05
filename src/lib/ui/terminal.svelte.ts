@@ -159,6 +159,7 @@ export async function add_terminal_instance(){
     await tick()
     active_terminal.set(term_instance.id)
     console.log(get(active_terminal))
+    console.log(terminals.length)
     // await new Promise((res) => setTimeout(res, 500));
 }
 
@@ -172,6 +173,7 @@ export function close_terminal(id: string){
 
 
     terminals.splice(index, 1)
+    console.log(terminals.length)
 
     if(terminals.length > 0){
         const next_term = terminals[Math.min(index, terminals.length - 1)]
@@ -189,4 +191,10 @@ export function close_terminal(id: string){
 
 export async function exit_terminal_with_pty_cleanup(id: string){
     await invoke("close_terminal", {id})
+}
+
+export async function terminal_stress_test() {
+    for(let i = 0; i < 1024; i++){
+        await add_terminal_instance()
+    }
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
     import "../../styles/terminal.css"
 
-    import { terminals, add_terminal_instance, active_terminal, set_active_terminal, exit_terminal_with_pty_cleanup } from "$lib/ui/terminal.svelte";
+    import { terminals, add_terminal_instance, active_terminal, set_active_terminal, exit_terminal_with_pty_cleanup, terminal_stress_test } from "$lib/ui/terminal.svelte";
     import Terminal from "./Terminal.svelte";
 </script>
 
@@ -13,6 +13,7 @@
     </div>
     <div id="terminal-tab-bar" class="hidden">
         <button class="terminal-button" onclick={add_terminal_instance}>+</button>
+        <button class="terminal-button" onclick={terminal_stress_test}>+</button>
         {#each terminals as terminal (terminal.id)}
         <div 
         class="tab-container-terminal" 

@@ -12,7 +12,7 @@
 
     let { term_instance} : { term_instance: TerminalInstance} = $props()
 
-    listen("terminal-data", (event: any) => {
+    listen(`terminal-data-${term_instance.id}`, (event: any) => {
         if(event.payload.id !== term_instance.id){
             return
         }
